@@ -1,4 +1,5 @@
 package myAdapter;
-public interface HIterator {
+public interface HIterator 
+{
     
 }
