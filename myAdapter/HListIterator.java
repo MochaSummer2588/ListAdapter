@@ -1,3 +1,4 @@
+package myAdapter;
 public interface HListIterator extends HIterator 
 {
     /**
