@@ -43,8 +43,6 @@ public class ListIterator implements HListIterator
         this.cursor = index; // Inizia alla posizione specificata
         this.lastReturned = -1; // Nessun elemento restituito ancora
     }
-    
-    // ===== Metodi da HIterator =====
 
     /**
      * Restituisce true se l'iterazione ha più elementi.
@@ -53,7 +51,7 @@ public class ListIterator implements HListIterator
     {
         return cursor < list.size();
     }
-    
+
     /**
      * Restituisce l'elemento successivo nell'iterazione.
      */
@@ -67,6 +65,55 @@ public class ListIterator implements HListIterator
         Object nextElement = list.get(cursor);
         cursor++;
         return nextElement;
+    }
+
+    /**
+     * Restituisce true se questo iteratore di lista ha più elementi quando
+     * attraversa la lista in direzione inversa.
+     */
+    public boolean hasPrevious() 
+    {
+        return cursor > 0; // Controlla se il cursore è oltre l'inizio della lista
+    }
+
+    /**
+     * Restituisce l'elemento precedente nella lista.
+     */
+    public Object previous() 
+    {
+        if (!hasPrevious()) 
+        {
+            throw new java.util.NoSuchElementException("Nessun elemento precedente disponibile.");
+        }
+        cursor--; // Sposta il cursore indietro
+        lastReturned = cursor; // Aggiorna l'ultimo elemento restituito
+        return list.get(cursor);
+    }
+
+    /**
+     * Restituisce l'indice dell'elemento che verrebbe restituito da una
+     * successiva chiamata a next().
+     */
+    public int nextIndex() 
+    {
+        if (cursor >= list.size()) 
+        {
+            return list.size(); // Restituisce la dimensione della lista se alla fine
+        }
+        return cursor; // Restituisce l'indice corrente del cursore
+    }
+
+    /**
+     * Restituisce l'indice dell'elemento che verrebbe restituito da una
+     * successiva chiamata a previous().
+     */
+    public int previousIndex() 
+    {
+        if (cursor <= 0) 
+        {
+            return -1; // Restituisce -1 se l'iteratore è all'inizio della lista
+        }
+        return cursor - 1; // Restituisce l'indice dell'elemento precedente
     }
     
     /**
@@ -87,57 +134,18 @@ public class ListIterator implements HListIterator
         }
         lastReturned = -1; // Resetta l'ultimo elemento restituito
     }
-    
-    // ===== Metodi da HListIterator =====
-    
-    /**
-     * Restituisce true se questo iteratore di lista ha più elementi quando
-     * attraversa la lista in direzione inversa.
-     */
-    public boolean hasPrevious() 
-    {
-        // Implementazione da fornire
-        return false;
-    }
-    
-    /**
-     * Restituisce l'elemento precedente nella lista.
-     */
-    public Object previous() 
-    {
-        if (!hasPrevious()) 
-        {
-            throw new java.util.NoSuchElementException("Nessun elemento precedente disponibile.");
-        }
-        cursor--; // Sposta il cursore indietro
-        lastReturned = cursor; // Aggiorna l'ultimo elemento restituito
-        return list.get(cursor);
-    }
-    
-    /**
-     * Restituisce l'indice dell'elemento che verrebbe restituito da una
-     * successiva chiamata a next().
-     */
-    public int nextIndex() {
-        // Implementazione da fornire
-        return 0;
-    }
-    
-    /**
-     * Restituisce l'indice dell'elemento che verrebbe restituito da una
-     * successiva chiamata a previous().
-     */
-    public int previousIndex() {
-        // Implementazione da fornire
-        return 0;
-    }
-    
+
     /**
      * Sostituisce l'ultimo elemento restituito da next() o previous() con
      * l'elemento specificato.
      */
-    public void set(Object o) {
-        // Implementazione da fornire
+    public void set(Object o) 
+    {
+        if (lastReturned == -1) 
+        {
+            throw new IllegalStateException("next() o previous() non sono stati chiamati, oppure remove() o add() sono stati chiamati dopo l'ultima chiamata a next() o previous().");
+        }
+        list.set(lastReturned, o); // Sostituisce l'elemento alla posizione dell'ultimo elemento restituito
     }
     
     /**
