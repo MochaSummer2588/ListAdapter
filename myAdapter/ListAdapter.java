@@ -125,9 +125,9 @@ public class ListAdapter implements HList
     /**
      * Restituisce l'elemento nella posizione specificata in questa lista.
      */
-    public Object get(int index) {
-        // Implementazione da fornire
-        return null;
+    public Object get(int index) 
+    {
+        return vector.elementAt(index);
     }
     
     /**
@@ -142,9 +142,9 @@ public class ListAdapter implements HList
      * Restituisce l'indice della prima occorrenza dell'elemento specificato
      * in questa lista, o -1 se questa lista non contiene l'elemento.
      */
-    public int indexOf(Object o) {
-        // Implementazione da fornire
-        return -1;
+    public int indexOf(Object o) 
+    {
+        return vector.indexOf(o); // Restituisce l'indice della prima occorrenza dell'elemento
     }
     
     /**
@@ -237,9 +237,9 @@ public class ListAdapter implements HList
     /**
      * Restituisce il numero di elementi in questa collezione.
      */
-    public int size() {
-        // Implementazione da fornire
-        return 0;
+    public int size() 
+    {
+        return vector.size();
     }
 
     /**

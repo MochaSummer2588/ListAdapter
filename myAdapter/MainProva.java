@@ -11,6 +11,7 @@ public class MainProva
         list.add(0, "Primo");
         list.add(1, "Secondo");
         list.add(2, "Terzo");
+        list.add("HELL NAH MAN!");
         
         // Stampa degli elementi della lista
         for (int i = 0; i < list.size(); i++) 
