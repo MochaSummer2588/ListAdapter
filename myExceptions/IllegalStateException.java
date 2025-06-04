@@ -13,7 +13,8 @@ public class IllegalStateException extends RuntimeException
     /**
      * Costruisce una nuova IllegalStateException senza messaggio.
      */
-    public IllegalStateException() {
+    public IllegalStateException() 
+    {
         super();
     }
     
@@ -25,25 +26,5 @@ public class IllegalStateException extends RuntimeException
     public IllegalStateException(String message) 
     {
         super(message);
-    }
-    
-    /**
-     * Costruisce una nuova IllegalStateException con messaggio e causa.
-     * 
-     * @param message il messaggio che descrive l'errore
-     * @param cause la causa dell'eccezione
-     */
-    public IllegalStateException(String message, Throwable cause) 
-    {
-        super(message, cause);
-    }
-    
-    /**
-     * Costruisce una nuova IllegalStateException con la causa specificata.
-     * 
-     * @param cause la causa dell'eccezione
-     */
-    public IllegalStateException(Throwable cause) {
-        super(cause);
     }
 }

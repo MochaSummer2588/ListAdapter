@@ -4,14 +4,16 @@ package myAdapter;
  * Questa classe implementa sia HIterator che HListIterator.
  */
 
+import myExceptions.IllegalStateException;
+
 public class ListIterator implements HListIterator
 {
-    // Riferimento alla lista sottostante
-    private ListAdapter list;
-    // Posizione corrente del cursore
-    private int cursor;
-    // Indice dell'ultimo elemento restituito (-1 se nessuno)
-    private int lastReturned;
+
+    //===== VARIABILI DI ISTANZA =====
+    
+    private ListAdapter list;       // Riferimento alla lista sottostante
+    private int cursor;             // Indice del cursore corrente (posizione dell'elemento successivo)
+    private int lastReturned;       // Indice dell'ultimo elemento restituito (-1 se nessuno)
     
     /**
      * Costruttore che crea un ListIteratorAdapter per la lista specificata.
@@ -21,8 +23,8 @@ public class ListIterator implements HListIterator
     public ListIterator(ListAdapter list) 
     {
         this.list = list;
-        this.cursor = 0; // Inizia all'inizio della lista
-        this.lastReturned = -1; // Nessun elemento restituito ancora
+        this.cursor = 0;            // Inizia all'inizio della lista
+        this.lastReturned = -1;     // Nessun elemento restituito ancora
     }
     
     /**
@@ -40,9 +42,11 @@ public class ListIterator implements HListIterator
             throw new IndexOutOfBoundsException("Indice fuori dai limiti: " + index);
         }
         this.list = list;
-        this.cursor = index; // Inizia alla posizione specificata
-        this.lastReturned = -1; // Nessun elemento restituito ancora
+        this.cursor = index;        // Inizia alla posizione specificata
+        this.lastReturned = -1;     // Nessun elemento restituito ancora
     }
+
+    // ===== METODI ListIterator =====
 
     /**
      * Restituisce true se l'iterazione ha più elementi.
@@ -73,7 +77,7 @@ public class ListIterator implements HListIterator
      */
     public boolean hasPrevious() 
     {
-        return cursor > 0; // Controlla se il cursore è oltre l'inizio della lista
+        return cursor > 0;      // Controlla se il cursore è oltre l'inizio della lista
     }
 
     /**
@@ -85,8 +89,8 @@ public class ListIterator implements HListIterator
         {
             throw new java.util.NoSuchElementException("Nessun elemento precedente disponibile.");
         }
-        cursor--; // Sposta il cursore indietro
-        lastReturned = cursor; // Aggiorna l'ultimo elemento restituito
+        cursor--;                   // Sposta il cursore indietro
+        lastReturned = cursor;      // Aggiorna l'ultimo elemento restituito
         return list.get(cursor);
     }
 
@@ -98,9 +102,9 @@ public class ListIterator implements HListIterator
     {
         if (cursor >= list.size()) 
         {
-            return list.size(); // Restituisce la dimensione della lista se alla fine
+            return list.size();         // Restituisce la dimensione della lista se alla fine
         }
-        return cursor; // Restituisce l'indice corrente del cursore
+        return cursor;                  // Restituisce l'indice corrente del cursore
     }
 
     /**
@@ -111,9 +115,9 @@ public class ListIterator implements HListIterator
     {
         if (cursor <= 0) 
         {
-            return -1; // Restituisce -1 se l'iteratore è all'inizio della lista
+            return -1;              // Restituisce -1 se l'iteratore è all'inizio della lista
         }
-        return cursor - 1; // Restituisce l'indice dell'elemento precedente
+        return cursor - 1;          // Restituisce l'indice dell'elemento precedente
     }
     
     /**
@@ -130,9 +134,9 @@ public class ListIterator implements HListIterator
         // Aggiorna il cursore e l'ultimo elemento restituito
         if (lastReturned < cursor) 
         {
-            cursor--; // Sposta il cursore indietro se necessario
+            cursor--;           // Sposta il cursore indietro se necessario
         }
-        lastReturned = -1; // Resetta l'ultimo elemento restituito
+        lastReturned = -1;      // Resetta l'ultimo elemento restituito
     }
 
     /**
@@ -145,13 +149,16 @@ public class ListIterator implements HListIterator
         {
             throw new IllegalStateException("next() o previous() non sono stati chiamati, oppure remove() o add() sono stati chiamati dopo l'ultima chiamata a next() o previous().");
         }
-        list.set(lastReturned, o); // Sostituisce l'elemento alla posizione dell'ultimo elemento restituito
+        list.set(lastReturned, o);       // Sostituisce l'elemento alla posizione dell'ultimo elemento restituito
     }
     
     /**
      * Inserisce l'elemento specificato nella lista.
      */
-    public void add(Object o) {
-        // Implementazione da fornire
+    public void add(Object o) 
+    {
+        list.add(cursor, o);        // Aggiunge l'elemento alla posizione corrente del cursore
+        lastReturned = -1;          // Resetta l'ultimo elemento restituito
+        cursor++;                   // Sposta il cursore avanti dopo l'inserimento
     }
 }
