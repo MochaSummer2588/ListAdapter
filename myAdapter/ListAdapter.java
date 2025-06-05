@@ -7,6 +7,8 @@ package myAdapter;
 //===== IMPORTAZIONI =====
 import java.util.Vector;
 
+//NB: LA MIA LISTA NON ACCETTA ELEMENTI NULL
+
 public class ListAdapter implements HList
 {
     //===== VARIABILI DI ISTANZA =====
@@ -52,8 +54,15 @@ public class ListAdapter implements HList
     /**
      * Inserisce l'elemento specificato nella posizione specificata in questa lista.
      */
-    public void add(int index, Object element) 
+    public void add(int index, Object element)                  //TESTATO IN MAINPROVA
     {
+        // Controlla se l'elemento è null
+        if(element == null) 
+        {
+            throw new NullPointerException("Element cannot be null");
+        }
+
+        // Prova a inserire l'elemento nella posizione specificata
         try 
         {
             vector.insertElementAt(element, index);
@@ -67,8 +76,15 @@ public class ListAdapter implements HList
     /**
      * Aggiunge l'elemento specificato alla fine di questa lista.
      */
-    public boolean add(Object o) 
+    public boolean add(Object o)                            //TESTATO IN MAINPROVA
     {
+        // Controlla se l'elemento è null
+        if(o == null) 
+        {
+            throw new NullPointerException("Element cannot be null");
+        }
+
+        // Aggiunge l'elemento alla fine della lista
         vector.addElement(o);
         return true;
     }
@@ -76,16 +92,39 @@ public class ListAdapter implements HList
     /**
      * Aggiunge tutti gli elementi della collezione specificata a questa collezione.
      */
-    public boolean addAll(HCollection c) 
+    public boolean addAll(HCollection c)                            //TESTATO IN MAINPROVA
     {
-        return false; // Implementazione da fornire
+        if(c == null) 
+        {
+            throw new NullPointerException("Collection cannot be null");
+        }
+
+        if(c.isEmpty()) 
+        {
+            return false; // Se la collezione è vuota, non aggiunge nulla
+        }
+
+        Object[] arrayObject = c.toArray();
+
+        for (int i = 0; i < arrayObject.length; i++) 
+        {
+            // Controlla se l'elemento è null
+            if (arrayObject[i] == null) 
+            {
+                throw new NullPointerException("Element in collection cannot be null");
+            }
+            vector.addElement(arrayObject[i]);
+        }
+
+        return true;
     }
 
     /**
      * Inserisce tutti gli elementi della collezione specificata in questa lista,
      * iniziando dalla posizione specificata.
      */
-    public boolean addAll(int index, HCollection c) {
+    public boolean addAll(int index, HCollection c) 
+    {
         // Implementazione da fornire
         return false;
     }
@@ -125,9 +164,18 @@ public class ListAdapter implements HList
     /**
      * Restituisce l'elemento nella posizione specificata in questa lista.
      */
-    public Object get(int index) 
+    public Object get(int index)                                    //TESTATO IN MAINPROVA
     {
-        return vector.elementAt(index);
+        // Controlla se l'indice è valido
+        if (index < 0 || index >= vector.size()) 
+        {
+            throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+        }
+        
+        // Restituisce l'elemento alla posizione specificata
+        {
+            return vector.elementAt(index);
+        }
     }
     
     /**
@@ -142,8 +190,13 @@ public class ListAdapter implements HList
      * Restituisce l'indice della prima occorrenza dell'elemento specificato
      * in questa lista, o -1 se questa lista non contiene l'elemento.
      */
-    public int indexOf(Object o) 
+    public int indexOf(Object o)                    //TESTATO IN MAINPROVA  
     {
+        // Controlla se l'elemento è null
+        if (o == null) 
+        {
+            throw new NullPointerException("Element cannot be null");
+        }
         return vector.indexOf(o); // Restituisce l'indice della prima occorrenza dell'elemento
     }
     
@@ -254,9 +307,14 @@ public class ListAdapter implements HList
     /**
      * Restituisce un array contenente tutti gli elementi di questa collezione.
      */
-    public Object[] toArray() {
-        // Implementazione da fornire
-        return null;
+    public Object[] toArray()                           //TESTATO IN MAINPROVA
+    {
+        Object[] array = new Object[vector.size()];
+        for (int i = 0; i < vector.size(); i++) 
+        {
+            array[i] = vector.elementAt(i);
+        }
+        return array;
     }
     
     /**

@@ -12,7 +12,8 @@ package myAdapter;
  * Questa interfaccia è compatibile con Java 2 Collections Framework versione 1.4.2
  * ed è progettata per funzionare in ambiente CLDC 1.1.
  */
-public interface HIterator {
+public interface HIterator 
+{
     
     /**
      * Restituisce true se l'iterazione ha più elementi. (In altre parole,
