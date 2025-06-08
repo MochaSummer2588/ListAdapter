@@ -178,24 +178,47 @@ public class ListAdapter implements HList
      */
     public boolean equals(Object o) 
     {
-        // Controlla se l'oggetto è null o non è un'istanza di ListAdapter
-        if (o == null || !(o instanceof ListAdapter)) 
+        if (this == o) 
+        {
+            return true;
+        }
+        
+        if (!(o instanceof HList)) 
         {
             return false;
         }
-
-        //Se sono qui, significa che o è un'istanza di ListAdapter, percio' confronto i vettori
-        ListAdapter other = (ListAdapter) o;
-        for (int i = 0; i < vector.size(); i++) 
+        
+        HList other = (HList) o;
+        
+        if (this.size() != other.size()) 
         {
-            // Confronta gli elementi alla stessa posizione
-            if (!vector.elementAt(i).equals(other.vector.elementAt(i))) 
+            return false;
+        }
+        
+        // CONFRONTO POSIZIONE PER POSIZIONE
+        for (int i = 0; i < this.size(); i++) 
+        {
+            Object thisElement = this.get(i);        // Elemento alla posizione i
+            Object otherElement = other.get(i);      // Elemento alla posizione i
+            
+            // Confronto usando la regola standard
+            if (thisElement == null) 
             {
-                return false; // Se un elemento non corrisponde, restituisce false
+                if (otherElement != null) 
+                {
+                    return false;
+                }
+            } 
+            else 
+            {
+                if (!thisElement.equals(otherElement)) 
+                {
+                    return false;
+                }
             }
         }
-
-        return true; // Tutti gli elementi corrispondono
+        
+        return true;
     }
 
     /**
@@ -237,11 +260,7 @@ public class ListAdapter implements HList
      */
     public int indexOf(Object o)                    //TESTATO IN MAINPROVA  
     {
-        // Controlla se l'elemento è null
-        if (o == null) 
-        {
-            throw new NullPointerException("Element cannot be null");
-        }
+
         return vector.indexOf(o); // Restituisce l'indice della prima occorrenza dell'elemento
     }
     
