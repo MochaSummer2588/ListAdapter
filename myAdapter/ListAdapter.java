@@ -7,7 +7,7 @@ package myAdapter;
 //===== IMPORTAZIONI =====
 import java.util.Vector;
 
-//NB: LA MIA LISTA NON ACCETTA ELEMENTI NULL
+//NB: LA MIA LISTA ACCETTA ELEMENTI NULL
 
 public class ListAdapter implements HList
 {
@@ -56,12 +56,6 @@ public class ListAdapter implements HList
      */
     public void add(int index, Object element)                  //TESTATO IN MAINPROVA
     {
-        // Controlla se l'elemento è null
-        if(element == null) 
-        {
-            throw new NullPointerException("Element cannot be null");
-        }
-
         // Prova a inserire l'elemento nella posizione specificata
         try 
         {
@@ -78,12 +72,6 @@ public class ListAdapter implements HList
      */
     public boolean add(Object o)                            //TESTATO IN MAINPROVA
     {
-        // Controlla se l'elemento è null
-        if(o == null) 
-        {
-            throw new NullPointerException("Element cannot be null");
-        }
-
         // Aggiunge l'elemento alla fine della lista
         vector.addElement(o);
         return true;
@@ -108,11 +96,6 @@ public class ListAdapter implements HList
 
         for (int i = 0; i < arrayObject.length; i++) 
         {
-            // Controlla se l'elemento è null
-            if (arrayObject[i] == null) 
-            {
-                throw new NullPointerException("Element in collection cannot be null");
-            }
             vector.addElement(arrayObject[i]);
         }
 
@@ -125,40 +108,94 @@ public class ListAdapter implements HList
      */
     public boolean addAll(int index, HCollection c) 
     {
-        // Implementazione da fornire
-        return false;
+        if (c == null) 
+        {
+            throw new NullPointerException("Collection cannot be null");
+        }
+
+        if (index < 0 || index > vector.size()) 
+        {
+            throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+        }
+
+        Object[] arrayObject = c.toArray();
+
+        if (arrayObject.length == 0) 
+        {
+            return false; // Se la collezione è vuota, non aggiunge nulla
+        }
+
+        for (int i = 0; i < arrayObject.length; i++) 
+        {
+            vector.insertElementAt(arrayObject[i], index + i);
+        }
+
+        return true;
     }
     
     /**
      * Rimuove tutti gli elementi da questa collezione.
      */
-    public void clear() {
-        // Implementazione da fornire
+    public void clear() 
+    {
+        vector.removeAllElements();             // Rimuove tutti gli elementi dal Vector    
     }
     
     /**
      * Restituisce true se questa collezione contiene l'elemento specificato.
      */
-    public boolean contains(Object o) {
-        // Implementazione da fornire
-        return false;
+    public boolean contains(Object o) 
+    {
+        return vector.contains(o);              // Restituisce true se l'elemento è presente nel Vector
     }
     
     /**
      * Restituisce true se questa collezione contiene tutti gli elementi
      * della collezione specificata.
      */
-    public boolean containsAll(HCollection c) {
-        // Implementazione da fornire
-        return false;
+    public boolean containsAll(HCollection c) 
+    {
+        if (c == null) 
+        {
+            throw new NullPointerException("Collection cannot be null");
+        }
+
+        Object[] arrayObject = c.toArray();
+        
+        for (int i = 0; i < arrayObject.length; i++) 
+        {
+            if (!vector.contains(arrayObject[i])) 
+            {
+                return false; // Se un elemento non è presente, restituisce false
+            }
+        }
+        
+        return true; // Tutti gli elementi sono presenti
     }
     
     /**
      * Confronta l'oggetto specificato con questa collezione per l'uguaglianza.
      */
-    public boolean equals(Object o) {
-        // Implementazione da fornire
-        return false;
+    public boolean equals(Object o) 
+    {
+        // Controlla se l'oggetto è null o non è un'istanza di ListAdapter
+        if (o == null || !(o instanceof ListAdapter)) 
+        {
+            return false;
+        }
+
+        //Se sono qui, significa che o è un'istanza di ListAdapter, percio' confronto i vettori
+        ListAdapter other = (ListAdapter) o;
+        for (int i = 0; i < vector.size(); i++) 
+        {
+            // Confronta gli elementi alla stessa posizione
+            if (!vector.elementAt(i).equals(other.vector.elementAt(i))) 
+            {
+                return false; // Se un elemento non corrisponde, restituisce false
+            }
+        }
+
+        return true; // Tutti gli elementi corrispondono
     }
 
     /**
@@ -181,10 +218,18 @@ public class ListAdapter implements HList
     /**
      * Restituisce il valore hash code per questa collezione.
      */
-    public int hashCode() {
-        // Implementazione da fornire
-        return 0;
+    public int hashCode() 
+    {
+        int hashCode = 1;
+        HIterator i = this.iterator();
+        while (i.hasNext()) 
+        {
+            Object obj = i.next();
+            hashCode = 31*hashCode + (obj==null ? 0 : obj.hashCode());
+        }
+        return hashCode; // Calcola l'hash code basato sugli elementi della lista
     }
+    
 
     /**
      * Restituisce l'indice della prima occorrenza dell'elemento specificato
@@ -203,70 +248,101 @@ public class ListAdapter implements HList
     /**
      * Restituisce true se questa collezione non contiene elementi.
      */
-    public boolean isEmpty() {
-        // Implementazione da fornire
-        return false;
+    public boolean isEmpty() 
+    {
+        return vector.isEmpty(); // Restituisce true se il Vector è vuoto
     }
     
     /**
      * Restituisce un iteratore sugli elementi di questa collezione.
      */
-    public HIterator iterator() {
-        // Implementazione da fornire
-        return null;
+    public HIterator iterator() 
+    {
+        return new ListIterator(this);
     }
 
     /**
      * Restituisce l'indice dell'ultima occorrenza dell'elemento specificato
      * in questa lista, o -1 se questa lista non contiene l'elemento.
      */
-    public int lastIndexOf(Object o) {
-        // Implementazione da fornire
-        return -1;
+    public int lastIndexOf(Object o) 
+    {
+        return vector.lastIndexOf(o);                           // Restituisce l'indice dell'ultima occorrenza dell'elemento
     }
 
     /**
      * Restituisce un iteratore di lista sugli elementi di questa lista
      * (in sequenza appropriata).
      */
-    public HListIterator listIterator() {
-        // Implementazione da fornire
-        return null;
+    public HListIterator listIterator() 
+    {
+        return new ListIterator(this);                          // Restituisce un nuovo ListIterator per questa lista
     }
     
     /**
      * Restituisce un iteratore di lista sugli elementi di questa lista
      * (in sequenza appropriata), iniziando dalla posizione specificata nella lista.
      */
-    public HListIterator listIterator(int index) {
-        // Implementazione da fornire
-        return null;
+    public HListIterator listIterator(int index) 
+    {
+        if (index < 0 || index > vector.size()) 
+        {
+            throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+        }
+        return new ListIterator(this, index);                   // Restituisce un nuovo ListIterator per questa lista a partire dall'indice specificato
     }
 
     /**
      * Rimuove l'elemento nella posizione specificata in questa lista.
      */
-    public Object remove(int index) {
-        // Implementazione da fornire
-        return null;
+    public Object remove(int index) 
+    {
+        // Controlla se l'indice è valido
+        if (index < 0 || index >= vector.size()) 
+        {
+            throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+        }
+        
+        // Rimuove l'elemento alla posizione specificata e lo restituisce
+        Object removedElement = vector.elementAt(index);
+        vector.removeElementAt(index);
+        return removedElement;
     }
     
     /**
      * Rimuove una singola istanza dell'elemento specificato da questa collezione,
      * se è presente.
      */
-    public boolean remove(Object o) {
-        // Implementazione da fornire
-        return false;
+    public boolean remove(Object o) 
+    {
+        boolean removed = vector.removeElement(o);                  // Rimuove l'elemento specificato dalla collezione
+        return removed;                                             // Restituisce true se l'elemento è stato rimosso, false altrimenti
     }
     
     /**
      * Rimuove da questa collezione tutti gli elementi che sono contenuti
      * nella collezione specificata.
      */
-    public boolean removeAll(HCollection c) {
-        // Implementazione da fornire
-        return false;
+    public boolean removeAll(HCollection c) 
+    {
+        if (c == null) 
+        {
+            throw new NullPointerException("Collection cannot be null");
+        }
+
+        boolean modified = false;
+        Object[] arrayObject = c.toArray();
+
+        for (int i = 0; i < arrayObject.length; i++) 
+        {
+            // Continua a rimuovere finché l'elemento è presente
+            while (vector.removeElement(arrayObject[i])) 
+            {
+                modified = true;
+            }
+        }
+
+        return modified;
     }
     
     /**
@@ -274,8 +350,27 @@ public class ListAdapter implements HList
      * nella collezione specificata.
      */
     public boolean retainAll(HCollection c) {
-        // Implementazione da fornire
-        return false;
+        if (c == null) 
+        {
+            throw new NullPointerException("Collection cannot be null");
+        }
+
+        boolean modified = false;
+        
+        // Scorre dal fondo per evitare problemi con gli indici che cambiano
+        for (int i = vector.size() - 1; i >= 0; i--) 
+        {
+            Object element = vector.elementAt(i);
+            
+            // Se l'elemento NON è contenuto nella collezione c, lo rimuove
+            if (!c.contains(element)) 
+            {
+                vector.removeElementAt(i);
+                modified = true;
+            }
+        }
+        
+        return modified;
     }
 
     /**
