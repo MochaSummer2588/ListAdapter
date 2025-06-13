@@ -52,11 +52,18 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#size()}.
-     *  Verifica la dimensione iniziale della sottolista.
-     * Test Case Design:  Assicurarsi che la `SubList` calcoli correttamente la sua dimensione
+     * <p>
+     * Summary: Il test testa il metodo {@code size()} della sottolista su una sottolista non vuota.
+     * <p>
+     * Test Case Design: Assicurarsi che la `SubList` calcoli correttamente la sua dimensione in modo tale che abbia il numero di elementi corretto
      * in base agli indici `fromIndex` e `toIndex` forniti.
-     * Preconditions:  La sottolista è inizializzata per coprire 3 elementi.
-     * Postconditions:  La dimensione della sottolista è 3.
+     * <p>
+     * Test Description: Verifica che la sottolista abbia una dimensione pari a 3 in quanto lastindex - firstindex = 4 - 1 = 3 chiamando il metodo {@code size()} sulla sottolista.
+     * <p>
+     * Preconditions: La sottolista è inizializzata con i 3 elementi della lista padre, ossia ["uno", "due", "tre"].
+     * <p>
+     * Postconditions: La sottolista rimane invariata.
+     * <p>
      * Expected Result: {@code size()} deve restituire 3.
      */
     @Test
@@ -67,10 +74,18 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#isEmpty()}.
-     *  Verifica che una sottolista inizialmente non vuota non sia considerata vuota.
-     * Test Case Design:  Garantire che `isEmpty()` rifletta correttamente lo stato di non-vuoto della sottolista.
-     * Preconditions:  La sottolista è inizializzata con 3 elementi.
-     * Postconditions:  La sottolista non è vuota.
+     * <p>
+     * Summary: Il test testa il metodo {@code isEmpty()} della sottolista su una sottolista non vuota.
+     * <p>
+     * Test Case Design: La motivazione dietro a questo test e' garantire che `isEmpty()` rifletta correttamente 
+     * lo stato di non-vuoto della sottolista
+     * <p>
+     * Test Description: 
+     * <p>
+     * Preconditions: La sottolista è inizializzata con 3 elementi ossia ["uno", "due", "tre"].
+     * <p>
+     * Postconditions: La sottolista non è vuota.
+     * <p>
      * Expected Result: {@code isEmpty()} deve restituire false.
      */
     @Test
@@ -81,11 +96,21 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#isEmpty()}.
-     *  Verifica che una sottolista creata vuota o svuotata sia correttamente considerata vuota.
-     * Test Case Design:  Assicurarsi che `isEmpty()` restituisca true quando la sottolista non contiene elementi.
-     * Preconditions:  La sottolista è vuota (creata con fromIndex == toIndex).
-     * Postconditions:  La sottolista è vuota.
-     * Expected Result: {@code isEmpty()} deve restituire true.
+     * <p>
+     * Sumary: Verifica che una sottolista creata vuota o svuotata sia correttamente considerata vuota.
+     * <p>
+     * Test Case Design: La motivazione dietro a questo test e' assicurarsi che `isEmpty()` restituisca true quando 
+     * la sottolista non contiene elementi.
+     * <p>
+     * Test Description: Viene creata una sottolista vuota (dimensione nulla) tramite la chiamata del metodo subList(1,1) 
+     * e si verifica che `isEmpty()` restituisca true.
+     * Successivamente si svuota la sottolista esistente e si verifica nuovamente `isEmpty()`.
+     * <p>
+     * Preconditions: Una sottolista esistente con 3 elementi ossia ["uno", "due", "tre"] e un altra sottolista vuota creata con subList(1,1).
+     * <p>
+     * Postconditions: Sia la sottolista vuota che quella esistente sono considerate vuote.
+     * <p>
+     * Expected Result: {@code isEmpty()} deve restituire true da entrambi .
      */
     @Test
     public void testIsEmptyTrue() 
@@ -99,11 +124,17 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#get(int)}.
-     *  Verifica il recupero di un elemento all'inizio della sottolista.
-     * Test Case Design:  Assicurarsi che il mapping degli indici dalla sottolista alla lista padre
-     * (tramite l'offset) funzioni correttamente per il primo elemento.
-     * Preconditions:  La sottolista contiene ["uno", "due", "tre"].
-     * Postconditions:  L'elemento all'indice 0 della sottolista è "uno".
+     * <p>
+     * Summary: Verifica il recupero di un elemento all'inizio della sottolista.
+     * <p>
+     * Test Case Design: Il motivo dietro a questo test e' garantire che il metodo `get(int index)` recuperi l'elemento iniziale della sottolista 
+     * <p>
+     * Test Description: Verifica che il primo elemento della sottolista sia "uno" (indice 0).
+     * <p>
+     * Preconditions: La sottolista contiene ["uno", "due", "tre"].
+     * <p>
+     * Postconditions: La sottolista contiene ancora gli stessi elementi.
+     * <p>
      * Expected Result: {@code get(0)} deve restituire "uno".
      */
     @Test
@@ -114,10 +145,15 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#get(int)}.
-     *  Verifica il recupero di un elemento alla fine della sottolista.
+     * <p>
+     * Verifica il recupero di un elemento alla fine della sottolista.
+     * <p>
      * Test Case Design:  Assicurarsi che il mapping degli indici funzioni correttamente anche per l'ultimo elemento.
+     * <p>
      * Preconditions:  La sottolista contiene ["uno", "due", "tre"].
+     * <p>
      * Postconditions:  L'elemento all'indice 2 della sottolista è "tre".
+     * <p>
      * Expected Result: {@code get(2)} deve restituire "tre".
      */
     @Test
