@@ -52,7 +52,7 @@ public class ListAdapter implements HList
     // =============== METODI LISTADAPTER ===============
     
     /**
-     * Inserisce l'elemento specificato nella posizione specificata in questa lista.
+     * {@inheritDoc}
      */
     public void add(int index, Object element)                  //TESTATO IN MAINPROVA
     {
@@ -68,7 +68,7 @@ public class ListAdapter implements HList
     }
 
     /**
-     * Aggiunge l'elemento specificato alla fine di questa lista.
+     * {@inheritDoc}
      */
     public boolean add(Object o)                            //TESTATO IN MAINPROVA
     {
@@ -78,7 +78,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Aggiunge tutti gli elementi della collezione specificata a questa collezione.
+     * {@inheritDoc}
      */
     public boolean addAll(HCollection c)                            //TESTATO IN MAINPROVA
     {
@@ -96,15 +96,14 @@ public class ListAdapter implements HList
 
         for (int i = 0; i < arrayObject.length; i++) 
         {
-            vector.addElement(arrayObject[i]);
+            this.add(arrayObject[i]);
         }
 
         return true;
     }
 
     /**
-     * Inserisce tutti gli elementi della collezione specificata in questa lista,
-     * iniziando dalla posizione specificata.
+     * {@inheritDoc}
      */
     public boolean addAll(int index, HCollection c) 
     {
@@ -127,14 +126,14 @@ public class ListAdapter implements HList
 
         for (int i = 0; i < arrayObject.length; i++) 
         {
-            vector.insertElementAt(arrayObject[i], index + i);
+            this.add(index + i, arrayObject[i]);
         }
 
         return true;
     }
     
     /**
-     * Rimuove tutti gli elementi da questa collezione.
+     * {@inheritDoc}
      */
     public void clear() 
     {
@@ -142,7 +141,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Restituisce true se questa collezione contiene l'elemento specificato.
+     * {@inheritDoc}
      */
     public boolean contains(Object o) 
     {
@@ -150,8 +149,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Restituisce true se questa collezione contiene tutti gli elementi
-     * della collezione specificata.
+     * {@inheritDoc}
      */
     public boolean containsAll(HCollection c) 
     {
@@ -164,7 +162,7 @@ public class ListAdapter implements HList
         
         for (int i = 0; i < arrayObject.length; i++) 
         {
-            if (!vector.contains(arrayObject[i])) 
+            if (!this.contains(arrayObject[i])) 
             {
                 return false; // Se un elemento non è presente, restituisce false
             }
@@ -174,7 +172,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Confronta l'oggetto specificato con questa collezione per l'uguaglianza.
+     * {@inheritDoc}
      */
     public boolean equals(Object o) 
     {
@@ -198,8 +196,8 @@ public class ListAdapter implements HList
         // CONFRONTO POSIZIONE PER POSIZIONE
         for (int i = 0; i < this.size(); i++) 
         {
-            Object thisElement = this.get(i);        // Elemento alla posizione i
-            Object otherElement = other.get(i);      // Elemento alla posizione i
+            Object thisElement = this.get(i);        // Elemento alla posizione i della mia lista
+            Object otherElement = other.get(i);      // Elemento alla posizione i della collezione da confrontare
             
             // Confronto usando la regola standard
             if (thisElement == null) 
@@ -222,7 +220,7 @@ public class ListAdapter implements HList
     }
 
     /**
-     * Restituisce l'elemento nella posizione specificata in questa lista.
+     * {@inheritDoc}
      */
     public Object get(int index)                                    //TESTATO IN MAINPROVA
     {
@@ -233,13 +231,11 @@ public class ListAdapter implements HList
         }
         
         // Restituisce l'elemento alla posizione specificata
-        {
-            return vector.elementAt(index);
-        }
+        return vector.elementAt(index);
     }
     
     /**
-     * Restituisce il valore hash code per questa collezione.
+     * {@inheritDoc}
      */
     public int hashCode() 
     {
@@ -255,8 +251,7 @@ public class ListAdapter implements HList
     
 
     /**
-     * Restituisce l'indice della prima occorrenza dell'elemento specificato
-     * in questa lista, o -1 se questa lista non contiene l'elemento.
+     * {@inheritDoc}
      */
     public int indexOf(Object o)                    //TESTATO IN MAINPROVA  
     {
@@ -264,7 +259,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Restituisce true se questa collezione non contiene elementi.
+     * {@inheritDoc}
      */
     public boolean isEmpty() 
     {
@@ -272,7 +267,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Restituisce un iteratore sugli elementi di questa collezione.
+     * {@inheritDoc}
      */
     public HIterator iterator() 
     {
@@ -280,8 +275,7 @@ public class ListAdapter implements HList
     }
 
     /**
-     * Restituisce l'indice dell'ultima occorrenza dell'elemento specificato
-     * in questa lista, o -1 se questa lista non contiene l'elemento.
+     *{@inheritDoc}
      */
     public int lastIndexOf(Object o) 
     {
@@ -289,8 +283,7 @@ public class ListAdapter implements HList
     }
 
     /**
-     * Restituisce un iteratore di lista sugli elementi di questa lista
-     * (in sequenza appropriata).
+     * {@inheritDoc}
      */
     public HListIterator listIterator() 
     {
@@ -298,8 +291,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Restituisce un iteratore di lista sugli elementi di questa lista
-     * (in sequenza appropriata), iniziando dalla posizione specificata nella lista.
+     * {@inheritDoc}
      */
     public HListIterator listIterator(int index) 
     {
@@ -311,7 +303,7 @@ public class ListAdapter implements HList
     }
 
     /**
-     * Rimuove l'elemento nella posizione specificata in questa lista.
+     * {@inheritDoc}
      */
     public Object remove(int index) 
     {
@@ -328,8 +320,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Rimuove una singola istanza dell'elemento specificato da questa collezione,
-     * se è presente.
+     * {@inheritDoc}
      */
     public boolean remove(Object o) 
     {
@@ -338,8 +329,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Rimuove da questa collezione tutti gli elementi che sono contenuti
-     * nella collezione specificata.
+     * {@inheritDoc}
      */
     public boolean removeAll(HCollection c) 
     {
@@ -354,7 +344,7 @@ public class ListAdapter implements HList
         for (int i = 0; i < arrayObject.length; i++) 
         {
             // Continua a rimuovere finché l'elemento è presente
-            while (vector.removeElement(arrayObject[i])) 
+            while (this.remove(arrayObject[i])) 
             {
                 modified = true;
             }
@@ -364,10 +354,10 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Mantiene solo gli elementi di questa collezione che sono contenuti
-     * nella collezione specificata.
+     * {@inheritDoc}
      */
-    public boolean retainAll(HCollection c) {
+    public boolean retainAll(HCollection c) 
+    {
         if (c == null) 
         {
             throw new NullPointerException("Collection cannot be null");
@@ -375,7 +365,6 @@ public class ListAdapter implements HList
 
         boolean modified = false;
         
-        // Scorre dal fondo per evitare problemi con gli indici che cambiano
         for (int i = vector.size() - 1; i >= 0; i--) 
         {
             Object element = vector.elementAt(i);
@@ -383,7 +372,7 @@ public class ListAdapter implements HList
             // Se l'elemento NON è contenuto nella collezione c, lo rimuove
             if (!c.contains(element)) 
             {
-                vector.removeElementAt(i);
+                this.remove(i);
                 modified = true;
             }
         }
@@ -392,16 +381,23 @@ public class ListAdapter implements HList
     }
 
     /**
-     * Sostituisce l'elemento nella posizione specificata in questa lista
-     * con l'elemento specificato.
+     * {@inheritDoc}
      */
-    public Object set(int index, Object element) {
-        // Implementazione da fornire
-        return null;
+    public Object set(int index, Object element) 
+    {
+        // Controlla se l'indice è valido
+        if (index < 0 || index >= vector.size()) 
+        {
+            throw new IndexOutOfBoundsException("Index out of bounds: " + index);
+        }
+        // Sostituisce l'elemento alla posizione specificata e restituisce il vecchio elemento
+        Object oldElement = this.get(index);
+        vector.setElementAt(element, index);
+        return oldElement;
     }
     
     /**
-     * Restituisce il numero di elementi in questa collezione.
+     * {@inheritDoc}
      */
     public int size() 
     {
@@ -409,16 +405,27 @@ public class ListAdapter implements HList
     }
 
     /**
-     * Restituisce una vista della porzione di questa lista tra gli indici
-     * specificati fromIndex, inclusive, e toIndex, esclusivo.
+     * {@inheritDoc}
      */
-    public HList subList(int fromIndex, int toIndex) {
-        // Implementazione da fornire
-        return null;
+    public HList subList(int fromIndex, int toIndex) 
+    {
+        // Controlla se gli indici sono validi
+        if (fromIndex < 0 || toIndex > this.size() || fromIndex > toIndex) 
+        {
+            throw new IndexOutOfBoundsException("Invalid subList indices: " + fromIndex + ", " + toIndex);
+        }
+
+        // Crea una nuova ListAdapter per la sottolista
+        ListAdapter subList = new ListAdapter();
+        for (int i = fromIndex; i < toIndex; i++) 
+        {
+            subList.add(this.get(i)); // Aggiunge gli elementi della sottolista
+        }
+        return subList;
     }
     
     /**
-     * Restituisce un array contenente tutti gli elementi di questa collezione.
+     * {@inheritDoc}
      */
     public Object[] toArray()                           //TESTATO IN MAINPROVA
     {
@@ -431,12 +438,33 @@ public class ListAdapter implements HList
     }
     
     /**
-     * Restituisce un array contenente tutti gli elementi di questa collezione;
-     * il tipo runtime dell'array restituito è quello dell'array specificato.
+     * {@inheritDoc}
      */
     public Object[] toArray(Object[] a) 
     {
-        // Implementazione da fornire
-        return null;
+        if (a == null) 
+        {
+            throw new NullPointerException("Input array is null");
+        }
+
+        int size = vector.size();
+        Object[] result = a;
+
+        if (a.length < size) 
+        {
+            result = new Object[size];
+        }
+
+        for (int i = 0; i < size; i++) 
+        {
+            result[i] = vector.elementAt(i);
+        }
+
+        if (result.length > size) 
+        {
+            result[size] = null;
+        }
+
+        return result;
     }
 }
