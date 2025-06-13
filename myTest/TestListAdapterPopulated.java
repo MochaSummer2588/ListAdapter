@@ -32,45 +32,6 @@ public class TestListAdapterPopulated
         list.add("quattro");
     }
 
-    /*
-     *
-     * Test del metodo {@link myAdapter.ListAdapter#get(int) get}.
-     * 
-     * @summary Verifica che il metodo {@code get()} restituisca l'elemento corretto.
-     * 
-     * @design Verifica che l'elemento alla posizione specificata sia quello atteso.
-     * 
-     * @description 1. Verifica che gli elementi siano corretti per gli indici 0, 1, 2 e 3.<br />
-     *              2. Verifica che l'eccezione venga lanciata per un indice fuori dai limiti.
-     * 
-     * @precondition La lista è stata popolata con 4 elementi.
-     * 
-     * @postcondition La lista non cambia.
-     * 
-     * @result {@code get()} deve restituire l'elemento corretto o lanciare un'eccezione per indici non validi.
-     */
-    /** @Test
-        public void testListGet() 
-        {
-            // Verifica gli elementi per indici validi
-            assertEquals("uno", list.get(0));
-            assertEquals("due", list.get(1));
-            assertEquals("tre", list.get(2));
-            assertEquals("quattro", list.get(3));
-            
-            // Verifica l'eccezione per indice fuori dai limiti
-            try 
-            {
-                list.get(4);
-                fail("Dovrebbe lanciare IndexOutOfBoundsException");
-            } 
-            catch (IndexOutOfBoundsException e) 
-            {
-                // Eccezione attesa
-            }
-        }
-     */
-
     //------- TEST DEL METODO add(Object) ----------
 
     /**
@@ -101,6 +62,8 @@ public class TestListAdapterPopulated
         assertEquals("cinque", list.get(list.size() - 1));
     }
 
+    //------- FINE TEST DEL METODO add(Object) ----------
+
     //------- TEST DEL METODO add(int, Object) ----------
 
     /**
@@ -124,7 +87,7 @@ public class TestListAdapterPopulated
         // Aggiunge "A" all'inizio della lista
         list.add(0, elemento);
         // Verifica che l'elemento sia stato aggiunto correttamente
-        assertEquals(sizeOriginale + 5, list.size());
+        assertEquals(sizeOriginale + 1, list.size());
         assertEquals(elemento, list.get(0));
     }
 
@@ -218,4 +181,81 @@ public class TestListAdapterPopulated
         list.add(list.size() + 1, "A");
     }
 
+    //------- FINE TEST DEL METODO add(int, Object) ----------
+
+    //------- TEST DEL METODO size() ----------
+
+    /**
+     * Test del metodo {@link myAdapter.ListAdapter#size() size}.
+     * 
+     * @summary Verifica che il metodo {@code size()} restituisca correttamente la dimensione della lista.
+     * 
+     * @design Verifica che {@code size()} si appoggi correttamente al metodo size del Vector sottostante.
+     * 
+     * @description 1. Controlla che la dimensione della lista corrisponda al valore atteso dopo il popolamento.<br />
+     *              2. Rimuove un elemento e verifica che la dimensione diminuisca di 1.<br />
+     *              3. Svuota la lista e verifica che la dimensione diventi 0.
+     * 
+     * @precondition La lista è stata popolata con 4 elementi.
+     * 
+     * @postcondition La lista è stata svuotata.
+     * 
+     * @result {@code size()} deve restituire il numero di elementi nella lista.
+     */
+    @Test
+    public void testListSize() 
+    {
+        // Verifica la dimensione iniziale
+        assertEquals(4, list.size());
+        
+        // Rimuove un elemento e verifica la dimensione
+        list.remove(0);
+        assertEquals(3, list.size());
+        
+        // Svuota la lista e verifica la dimensione
+        list.clear();
+        assertEquals(0, list.size());
+    }
+    //------- FINE TEST DEL METODO size() ----------
+
+    //------- TEST DEL METODO addAll(HCollection) ----------
+    /**
+     * Test del metodo {@link HList#addAll(HCollection)}.
+     * 
+     * @summary Verifica che il metodo {@code addAll()} aggiunga correttamente tutti gli elementi di una collezione alla lista.
+     * 
+     * @design Verifica che gli elementi della collezione siano aggiunti in fondo alla lista e che la dimensione aumenti di 3.
+     * 
+     * @description 1. Crea una collezione con 3 elementi e li aggiunge alla lista.<br />
+     *              2. Verifica che la dimensione sia aumentata di 3.<br />
+     *              3. Verifica che gli elementi siano stati aggiunti in fondo.
+     * 
+     * @precondition La lista è stata popolata con 4 elementi, la collezione con 3.
+     * 
+     * @postcondition La lista ha 3 elementi in più.
+     * 
+     * @result {@code addAll(HCollection)} deve aggiungere gli elementi della collezione in fondo alla lista e restituire true.
+     */
+    @Test
+    public void testListAddAll() 
+    {
+        int sizeOriginale = list.size();
+        
+        // Crea una collezione con 3 elementi
+        HCollection collection = new ListAdapter();
+        collection.add("cinque");
+        collection.add("sei");
+        collection.add("sette");
+        
+        // Aggiunge gli elementi della collezione alla lista
+        assertTrue(list.addAll(collection));
+        
+        // Verifica che la dimensione sia aumentata di 3
+        assertEquals(sizeOriginale + 3, list.size());
+        
+        // Verifica che gli elementi siano stati aggiunti in fondo
+        assertEquals("cinque", list.get(sizeOriginale));
+        assertEquals("sei", list.get(sizeOriginale + 1));
+        assertEquals("sette", list.get(sizeOriginale + 2));
+    }
 }
