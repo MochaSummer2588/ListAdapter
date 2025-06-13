@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     TestListAdapterEmpty.class,
     TestListAdapterPopulated.class,
+    TestSubListAdapter.class,
     //TestListIterator.class
     //Aggiungo queste classi di test quando le creo
 })
