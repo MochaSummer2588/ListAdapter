@@ -13,3 +13,14 @@ javac -cp "JUnit\junit-4.13.2.jar;JUnit\hamcrest-core-1.3.jar" -d bin myAdapter\
 
 COMANDO PER ESEGUIRE I TEST:
 java -cp "bin;JUnit\junit-4.13.2.jar;JUnit\hamcrest-core-1.3.jar" myTest.TestRunner
+
+
+// --- nomeTest() ---
+    /*
+     * <p><b>Summary:</b> <p>
+     * <p><b>Test Case Design:<b> <p>
+     * <p><b>Test Description:<b> <p>
+     * <p><b>Preconditions:<b> <p>
+     * <p><b>Postconditions:<b> <p>
+     * <p><b>Expected Result:<b> <p>
+     */

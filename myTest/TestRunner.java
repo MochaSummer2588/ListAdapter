@@ -18,14 +18,7 @@ public class TestRunner
         
         long startTime = System.currentTimeMillis();
         
-        // Esegui tutti i test
-        JUnitCore junit = new JUnitCore();
-        Result result = junit.run(
-            TestListAdapterCore.class
-            // Aggiungi qui altre classi di test quando le crei
-            // TestListIterator.class,
-            // TestListAdapterAdvanced.class
-        );
+        Result result = JUnitCore.runClasses(AllTestsSuite.class);
         
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
