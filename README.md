@@ -6,3 +6,10 @@ JAR files included in the JUnit/ directory:
 
 All tests can be compiled and run from command line using these libraries.
 No build tools like Maven or Gradle were used.
+
+
+COMANDO PER COMPILARE I TEST:
+javac -cp "JUnit\junit-4.13.2.jar;JUnit\hamcrest-core-1.3.jar" -d bin myAdapter\*.java myTest\*.java myExceptions\*.java
+
+COMANDO PER ESEGUIRE I TEST:
+java -cp "bin;JUnit\junit-4.13.2.jar;JUnit\hamcrest-core-1.3.jar" myTest.TestRunner

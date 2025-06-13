@@ -54,7 +54,7 @@ public class ListAdapter implements HList
     /**
      * {@inheritDoc}
      */
-    public void add(int index, Object element)                  //TESTATO IN MAINPROVA
+    public void add(int index, Object element)                  
     {
         // Prova a inserire l'elemento nella posizione specificata
         try 
