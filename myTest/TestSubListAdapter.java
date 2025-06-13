@@ -52,7 +52,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#size()}.
-     * @summary Verifica la dimensione iniziale della sottolista.
+     *  Verifica la dimensione iniziale della sottolista.
      * @motivation Assicurarsi che la `SubList` calcoli correttamente la sua dimensione
      * in base agli indici `fromIndex` e `toIndex` forniti.
      * @pre La sottolista è inizializzata per coprire 3 elementi.
@@ -67,7 +67,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#isEmpty()}.
-     * @summary Verifica che una sottolista inizialmente non vuota non sia considerata vuota.
+     *  Verifica che una sottolista inizialmente non vuota non sia considerata vuota.
      * @motivation Garantire che `isEmpty()` rifletta correttamente lo stato di non-vuoto della sottolista.
      * @pre La sottolista è inizializzata con 3 elementi.
      * @post La sottolista non è vuota.
@@ -81,7 +81,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#isEmpty()}.
-     * @summary Verifica che una sottolista creata vuota o svuotata sia correttamente considerata vuota.
+     *  Verifica che una sottolista creata vuota o svuotata sia correttamente considerata vuota.
      * @motivation Assicurarsi che `isEmpty()` restituisca true quando la sottolista non contiene elementi.
      * @pre La sottolista è vuota (creata con fromIndex == toIndex).
      * @post La sottolista è vuota.
@@ -99,7 +99,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#get(int)}.
-     * @summary Verifica il recupero di un elemento all'inizio della sottolista.
+     *  Verifica il recupero di un elemento all'inizio della sottolista.
      * @motivation Assicurarsi che il mapping degli indici dalla sottolista alla lista padre
      * (tramite l'offset) funzioni correttamente per il primo elemento.
      * @pre La sottolista contiene ["uno", "due", "tre"].
@@ -114,7 +114,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#get(int)}.
-     * @summary Verifica il recupero di un elemento alla fine della sottolista.
+     *  Verifica il recupero di un elemento alla fine della sottolista.
      * @motivation Assicurarsi che il mapping degli indici funzioni correttamente anche per l'ultimo elemento.
      * @pre La sottolista contiene ["uno", "due", "tre"].
      * @post L'elemento all'indice 2 della sottolista è "tre".
@@ -128,7 +128,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#get(int)}.
-     * @summary Verifica che `get` lanci `IndexOutOfBoundsException` per indice negativo.
+     *  Verifica che `get` lanci `IndexOutOfBoundsException` per indice negativo.
      * @motivation Assicurare la conformità alla Javadoc di `List.get()`, che specifica
      * il lancio di `IndexOutOfBoundsException` per indici negativi.
      * @pre La sottolista contiene ["uno", "due", "tre"].
@@ -143,7 +143,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#get(int)}.
-     * @summary Verifica che `get` lanci `IndexOutOfBoundsException` per indice fuori limite (maggiore o uguale alla dimensione).
+     *  Verifica che `get` lanci `IndexOutOfBoundsException` per indice fuori limite (maggiore o uguale alla dimensione).
      * @motivation Assicurare la conformità alla Javadoc di `List.get()`, che specifica
      * il lancio di `IndexOutOfBoundsException` per indici fuori range.
      * @pre La sottolista contiene ["uno", "due", "tre"].
@@ -158,7 +158,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#indexOf(Object)}.
-     * @summary Verifica la ricerca di un elemento esistente nella sottolista.
+     *  Verifica la ricerca di un elemento esistente nella sottolista.
      * @motivation Assicurarsi che `indexOf()` trovi correttamente la posizione relativa di un elemento.
      * @pre La sottolista contiene ["uno", "due", "tre"].
      * @post L'indice di "due" è 1.
@@ -172,7 +172,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#indexOf(Object)}.
-     * @summary Verifica la ricerca di un elemento non esistente nella sottolista (ma esistente nella lista padre fuori range).
+     *  Verifica la ricerca di un elemento non esistente nella sottolista (ma esistente nella lista padre fuori range).
      * @motivation Garantire che `indexOf()` si limiti a cercare solo all'interno della vista della sottolista.
      * @pre La sottolista contiene ["uno", "due", "tre"]. La lista padre contiene "quattro" all'indice 4.
      * @post L'indice di "quattro" nella sottolista è -1.
@@ -186,7 +186,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#indexOf(Object)}.
-     * @summary Verifica la ricerca di un elemento non presente né nella sottolista né nella lista padre.
+     *  Verifica la ricerca di un elemento non presente né nella sottolista né nella lista padre.
      * @motivation Assicurarsi che `indexOf()` restituisca -1 per elementi completamente assenti.
      * @pre La sottolista contiene ["uno", "due", "tre"].
      * @post L'indice di "non_esiste" è -1.
@@ -200,7 +200,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#indexOf(Object)}.
-     * @summary Verifica la ricerca di un elemento null.
+     *  Verifica la ricerca di un elemento null.
      * @motivation Assicurarsi che la ricerca di valori null sia gestita correttamente.
      * @pre La sottolista contiene ["uno", "due", "tre"]. Un elemento null viene aggiunto.
      * @post L'indice del primo elemento null è corretto.
@@ -215,7 +215,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#lastIndexOf(Object)}.
-     * @summary Verifica la ricerca dell'ultima occorrenza di un elemento esistente.
+     *  Verifica la ricerca dell'ultima occorrenza di un elemento esistente.
      * @motivation Assicurarsi che `lastIndexOf()` trovi l'ultima posizione relativa di un elemento duplicato.
      * @pre La sottolista contiene ["uno", "due", "tre"]. Aggiunto "uno" per testare.
      * @post L'indice dell'ultima occorrenza di "uno" è 3.
@@ -230,7 +230,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#lastIndexOf(Object)}.
-     * @summary Verifica la ricerca dell'ultima occorrenza di un elemento non presente.
+     *  Verifica la ricerca dell'ultima occorrenza di un elemento non presente.
      * @motivation Assicurarsi che `lastIndexOf()` restituisca -1 per elementi assenti.
      * @pre La sottolista contiene ["uno", "due", "tre"].
      * @post L'indice dell'ultima occorrenza di "non_esiste" è -1.
@@ -244,7 +244,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#lastIndexOf(Object)}.
-     * @summary Verifica la ricerca dell'ultima occorrenza di un elemento null.
+     *  Verifica la ricerca dell'ultima occorrenza di un elemento null.
      * @motivation Assicurarsi che la ricerca dell'ultima occorrenza di valori null sia gestita correttamente.
      * @pre La sottolista contiene ["uno", "due", "tre"]. Più elementi null vengono aggiunti.
      * @post L'indice dell'ultimo elemento null è corretto.
@@ -261,7 +261,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#contains(Object)}.
-     * @summary Verifica che la sottolista contenga un elemento presente.
+     *  Verifica che la sottolista contenga un elemento presente.
      * @motivation Assicurarsi che `contains()` deleghi correttamente la ricerca all'interno del proprio range.
      * @pre La sottolista contiene ["uno", "due", "tre"].
      * @post `contains("due")` è true.
@@ -275,7 +275,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#contains(Object)}.
-     * @summary Verifica che la sottolista non contenga un elemento non presente.
+     *  Verifica che la sottolista non contenga un elemento non presente.
      * @motivation Assicurarsi che `contains()` non dia falsi positivi per elementi fuori dal suo range.
      * @pre La sottolista contiene ["uno", "due", "tre"].
      * @post `contains("sette")` è false.
@@ -289,7 +289,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#containsAll(HCollection)}.
-     * @summary Verifica che la sottolista contenga tutti gli elementi di una collezione data.
+     *  Verifica che la sottolista contenga tutti gli elementi di una collezione data.
      * @motivation Assicurarsi che `containsAll()` verifichi correttamente la presenza di tutti gli elementi
      * della collezione specificata all'interno della sottolista.
      * @pre La sottolista contiene ["uno", "due", "tre"]. Collezione con "uno", "tre".
@@ -307,7 +307,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#containsAll(HCollection)}.
-     * @summary Verifica che la sottolista non contenga tutti gli elementi di una collezione data.
+     *  Verifica che la sottolista non contenga tutti gli elementi di una collezione data.
      * @motivation Assicurarsi che `containsAll()` restituisca false se anche solo un elemento
      * della collezione specificata non è presente nella sottolista.
      * @pre La sottolista contiene ["uno", "due", "tre"]. Collezione con "uno", "sette".
@@ -325,7 +325,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#containsAll(HCollection)}.
-     * @summary Verifica il comportamento di `containsAll` con una collezione vuota.
+     *  Verifica il comportamento di `containsAll` con una collezione vuota.
      * @motivation Assicurarsi che `containsAll` restituisca true per una collezione vuota,
      * in quanto una lista contiene "tutti" gli elementi di una collezione vuota per definizione.
      * @pre La sottolista è ["uno", "due", "tre"]. Collezione vuota.
@@ -341,7 +341,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#containsAll(HCollection)}.
-     * @summary Verifica che `containsAll` lanci `NullPointerException` se la collezione è null.
+     *  Verifica che `containsAll` lanci `NullPointerException` se la collezione è null.
      * @motivation Assicurare la conformità alla Javadoc di `Collection.containsAll()`, che specifica
      * il lancio di `NullPointerException` se la collezione è null.
      * @pre La sottolista è ["uno", "due", "tre"]. La collezione è null.
@@ -358,7 +358,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#add(Object)}.
-     * @summary Verifica l'aggiunta di un elemento alla fine della sottolista.
+     *  Verifica l'aggiunta di un elemento alla fine della sottolista.
      * @motivation Assicurarsi che l'aggiunta di un elemento si rifletta correttamente
      * sia nella sottolista (aggiornando la sua dimensione) che nella lista padre
      * (inserendo l'elemento nella posizione corretta e spostando i successivi).
@@ -381,7 +381,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
-     * @summary Verifica l'aggiunta di un elemento in una posizione specifica della sottolista.
+     *  Verifica l'aggiunta di un elemento in una posizione specifica della sottolista.
      * @motivation Garantire che l'inserimento in posizione intermedia sposti correttamente
      * gli elementi e mantenga la coerenza tra sottolista e lista padre.
      * @pre La sottolista è ["uno", "due", "tre"].
@@ -409,7 +409,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
-     * @summary Verifica che `add(int, Object)` lanci `IndexOutOfBoundsException` per indice negativo.
+     *  Verifica che `add(int, Object)` lanci `IndexOutOfBoundsException` per indice negativo.
      * @motivation Assicurare la conformità alla Javadoc di `List.add(int, Object)`, che specifica
      * il lancio di `IndexOutOfBoundsException` per indici negativi.
      * @pre La sottolista contiene elementi.
@@ -424,7 +424,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
-     * @summary Verifica che `add(int, Object)` lanci `IndexOutOfBoundsException` per indice maggiore della dimensione.
+     *  Verifica che `add(int, Object)` lanci `IndexOutOfBoundsException` per indice maggiore della dimensione.
      * @motivation Assicurare la conformità alla Javadoc di `List.add(int, Object)`, che specifica
      * il lancio di `IndexOutOfBoundsException` se l'indice è maggiore della dimensione.
      * @pre La sottolista contiene 3 elementi.
@@ -439,7 +439,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#remove(int)}.
-     * @summary Verifica la rimozione di un elemento dalla sottolista.
+     *  Verifica la rimozione di un elemento dalla sottolista.
      * @motivation Assicurarsi che la rimozione di un elemento si rifletta correttamente
      * sia nella sottolista (aggiornando la sua dimensione) che nella lista padre
      * (rimuovendo l'elemento dalla posizione corretta e spostando i successivi).
@@ -466,7 +466,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#remove(int)}.
-     * @summary Verifica che `remove(int)` lanci `IndexOutOfBoundsException` per indice negativo.
+     *  Verifica che `remove(int)` lanci `IndexOutOfBoundsException` per indice negativo.
      * @motivation Assicurare la conformità alla Javadoc di `List.remove(int)`, che specifica
      * il lancio di `IndexOutOfBoundsException` per indici negativi.
      * @pre La sottolista contiene elementi.
@@ -481,7 +481,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#remove(int)}.
-     * @summary Verifica che `remove(int)` lanci `IndexOutOfBoundsException` per indice fuori limite (maggiore o uguale alla dimensione).
+     *  Verifica che `remove(int)` lanci `IndexOutOfBoundsException` per indice fuori limite (maggiore o uguale alla dimensione).
      * @motivation Assicurare la conformità alla Javadoc di `List.remove(int)`, che specifica
      * il lancio di `IndexOutOfBoundsException` per indici fuori range.
      * @pre La sottolista contiene 3 elementi.
@@ -496,7 +496,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#remove(Object)}.
-     * @summary Verifica la rimozione della prima occorrenza di un elemento specifico dalla sottolista.
+     *  Verifica la rimozione della prima occorrenza di un elemento specifico dalla sottolista.
      * @motivation Assicurarsi che `remove(Object)` trovi e rimuova correttamente l'elemento,
      * e che la rimozione si propaghi alla lista padre.
      * @pre La sottolista è ["uno", "due", "tre"].
@@ -521,7 +521,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#remove(Object)}.
-     * @summary Verifica che `remove(Object)` non modifichi la lista se l'elemento non è presente.
+     *  Verifica che `remove(Object)` non modifichi la lista se l'elemento non è presente.
      * @motivation Assicurarsi che il metodo gestisca correttamente il caso di un elemento assente.
      * @pre La sottolista è ["uno", "due", "tre"].
      * @post La sottolista rimane invariata.
@@ -537,7 +537,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#remove(Object)}.
-     * @summary Verifica la rimozione di un elemento `null`.
+     *  Verifica la rimozione di un elemento `null`.
      * @motivation Assicurarsi che `remove(Object)` gestisca correttamente gli elementi null.
      * @pre La sottolista contiene un elemento null.
      * @post L'elemento null viene rimosso.
@@ -557,7 +557,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#set(int, Object)}.
-     * @summary Verifica la modifica di un elemento nella sottolista.
+     *  Verifica la modifica di un elemento nella sottolista.
      * @motivation Assicurarsi che `set()` aggiorni correttamente l'elemento nella posizione specificata
      * e che questa modifica si rifletta nella lista padre.
      * @pre La sottolista è ["uno", "due", "tre"].
@@ -578,7 +578,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#set(int, Object)}.
-     * @summary Verifica che `set` lanci `IndexOutOfBoundsException` per indice negativo.
+     *  Verifica che `set` lanci `IndexOutOfBoundsException` per indice negativo.
      * @motivation Assicurare la conformità alla Javadoc di `List.set()`, che specifica
      * il lancio di `IndexOutOfBoundsException` per indici negativi.
      * @pre La sottolista contiene elementi.
@@ -593,7 +593,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#set(int, Object)}.
-     * @summary Verifica che `set` lanci `IndexOutOfBoundsException` per indice fuori limite.
+     *  Verifica che `set` lanci `IndexOutOfBoundsException` per indice fuori limite.
      * @motivation Assicurare la conformità alla Javadoc di `List.set()`, che specifica
      * il lancio di `IndexOutOfBoundsException` per indici fuori range.
      * @pre La sottolista contiene 3 elementi.
@@ -609,7 +609,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#clear()}.
-     * @summary Verifica che la `clear()` svuoti la sottolista e rimuova gli elementi dalla lista padre.
+     *  Verifica che la `clear()` svuoti la sottolista e rimuova gli elementi dalla lista padre.
      * @motivation Garantire che `clear()` rimuova tutti gli elementi nel range della sottolista dalla lista padre,
      * e che la sottolista diventi effettivamente vuota.
      * @pre La sottolista contiene ["uno", "due", "tre"]. La lista padre è ["zero", "uno", "due", "tre", "quattro", "cinque"].
@@ -633,7 +633,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#addAll(HCollection)}.
-     * @summary Verifica l'aggiunta di una collezione alla fine della sottolista.
+     *  Verifica l'aggiunta di una collezione alla fine della sottolista.
      * @motivation Assicurarsi che `addAll(HCollection)` deleghi correttamente l'aggiunta multipla,
      * mantenendo l'ordine e aggiornando le dimensioni.
      * @pre La sottolista è ["uno", "due", "tre"]. Collezione con "x", "y".
@@ -660,7 +660,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#addAll(HCollection)}.
-     * @summary Verifica che `addAll` restituisca false se la collezione è vuota.
+     *  Verifica che `addAll` restituisca false se la collezione è vuota.
      * @motivation Assicurarsi che non venga modificata la lista e che venga restituito false
      * se non ci sono elementi da aggiungere.
      * @pre La sottolista contiene elementi. La collezione è vuota.
@@ -677,7 +677,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#addAll(HCollection)}.
-     * @summary Verifica che `addAll` lanci `NullPointerException` se la collezione è null.
+     *  Verifica che `addAll` lanci `NullPointerException` se la collezione è null.
      * @motivation Assicurare la conformità alla Javadoc di `Collection.addAll()`, che specifica
      * il lancio di `NullPointerException` se la collezione è null.
      * @pre La sottolista contiene elementi. La collezione è null.
@@ -692,7 +692,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#addAll(int, HCollection)}.
-     * @summary Verifica l'aggiunta di una collezione in una posizione specifica della sottolista.
+     *  Verifica l'aggiunta di una collezione in una posizione specifica della sottolista.
      * @motivation Assicurarsi che l'inserimento multiplo in posizione intermedia funzioni correttamente,
      * spostando gli elementi esistenti e aggiornando le dimensioni.
      * @pre La sottolista è ["uno", "due", "tre"]. Collezione con "x", "y".
@@ -724,7 +724,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#addAll(int, HCollection)}.
-     * @summary Verifica che `addAll(int, HCollection)` lanci `IndexOutOfBoundsException` per indice negativo.
+     *  Verifica che `addAll(int, HCollection)` lanci `IndexOutOfBoundsException` per indice negativo.
      * @motivation Assicurare la conformità alla Javadoc di `List.addAll(int, HCollection)`, che specifica
      * il lancio di `IndexOutOfBoundsException` per indici negativi.
      * @pre La sottolista contiene elementi.
@@ -741,7 +741,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#addAll(int, HCollection)}.
-     * @summary Verifica che `addAll(int, HCollection)` lanci `IndexOutOfBoundsException` per indice maggiore della dimensione.
+     *  Verifica che `addAll(int, HCollection)` lanci `IndexOutOfBoundsException` per indice maggiore della dimensione.
      * @motivation Assicurare la conformità alla Javadoc di `List.addAll(int, HCollection)`, che specifica
      * il lancio di `IndexOutOfBoundsException` se l'indice è maggiore della dimensione.
      * @pre La sottolista contiene 3 elementi.
@@ -758,7 +758,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#removeAll(HCollection)}.
-     * @summary Verifica la rimozione di tutti gli elementi di una collezione dalla sottolista.
+     *  Verifica la rimozione di tutti gli elementi di una collezione dalla sottolista.
      * @motivation Assicurarsi che `removeAll()` rimuova correttamente solo gli elementi
      * presenti nella collezione specificata e che si trovino nella sottolista,
      * propagando le modifiche alla lista padre.
@@ -785,7 +785,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#removeAll(HCollection)}.
-     * @summary Verifica che `removeAll` non modifichi la lista se nessun elemento della collezione è presente.
+     *  Verifica che `removeAll` non modifichi la lista se nessun elemento della collezione è presente.
      * @motivation Assicurarsi che il metodo restituisca false e non modifichi la lista se non ci sono intersezioni.
      * @pre La sottolista contiene ["uno", "due", "tre"]. Collezione con "sette", "otto".
      * @post La sottolista rimane invariata.
@@ -803,7 +803,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#removeAll(HCollection)}.
-     * @summary Verifica che `removeAll` lanci `NullPointerException` se la collezione è null.
+     *  Verifica che `removeAll` lanci `NullPointerException` se la collezione è null.
      * @motivation Assicurare la conformità alla Javadoc di `Collection.removeAll()`, che specifica
      * il lancio di `NullPointerException` se la collezione è null.
      * @pre La sottolista contiene elementi. La collezione è null.
@@ -818,7 +818,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#retainAll(HCollection)}.
-     * @summary Verifica il mantenimento solo degli elementi di una collezione nella sottolista.
+     *  Verifica il mantenimento solo degli elementi di una collezione nella sottolista.
      * @motivation Assicurarsi che `retainAll()` rimuova correttamente tutti gli elementi della sottolista
      * che NON sono presenti nella collezione specificata, propagando le modifiche alla lista padre.
      * @pre La sottolista è ["uno", "due", "tre"]. Collezione con "due", "quattro".
@@ -846,7 +846,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#retainAll(HCollection)}.
-     * @summary Verifica che `retainAll` non modifichi la lista se tutti gli elementi sono da mantenere.
+     *  Verifica che `retainAll` non modifichi la lista se tutti gli elementi sono da mantenere.
      * @motivation Assicurarsi che il metodo restituisca false se non ci sono modifiche da apportare.
      * @pre La sottolista contiene ["uno", "due", "tre"]. Collezione con "uno", "due", "tre", "sette".
      * @post La sottolista rimane invariata.
@@ -869,7 +869,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#retainAll(HCollection)}.
-     * @summary Verifica che `retainAll` svuoti la sottolista se nessun elemento della collezione è presente.
+     *  Verifica che `retainAll` svuoti la sottolista se nessun elemento della collezione è presente.
      * @motivation Assicurarsi che la sottolista venga svuotata se non ci sono elementi da mantenere.
      * @pre La sottolista contiene ["uno", "due", "tre"]. Collezione con "sette", "otto".
      * @post La sottolista è vuota.
@@ -893,7 +893,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#retainAll(HCollection)}.
-     * @summary Verifica che `retainAll` lanci `NullPointerException` se la collezione è null.
+     *  Verifica che `retainAll` lanci `NullPointerException` se la collezione è null.
      * @motivation Assicurare la conformità alla Javadoc di `Collection.retainAll()`, che specifica
      * il lancio di `NullPointerException` se la collezione è null.
      * @pre La sottolista contiene elementi. La collezione è null.
@@ -910,7 +910,7 @@ public class TestSubListAdapter
 
     /**
      * Test di interazione: modifica sulla lista padre si riflette nella sottolista.
-     * @summary Verifica che una modifica di un elemento nella lista padre (all'interno del range della sublist)
+     *  Verifica che una modifica di un elemento nella lista padre (all'interno del range della sublist)
      * si rifletta nella sottolista.
      * @motivation Questo è un comportamento chiave delle "views": le modifiche non strutturali
      * si propagano istantaneamente tra la vista e la lista backing.
@@ -929,7 +929,7 @@ public class TestSubListAdapter
 
     /**
      * Test di interazione: aggiunta sulla lista padre e "semantica indefinita" della sottolista.
-     * @summary Verifica il comportamento della sottolista quando la lista padre subisce
+     *  Verifica il comportamento della sottolista quando la lista padre subisce
      * una modifica strutturale (aggiunta) *non* tramite la sottolista.
      * @motivation Questo test è cruciale per mostrare la "semantica indefinita" menzionata nella Javadoc.
      * Senza un meccanismo "fail-fast", la `SubList` non viene invalidata,
@@ -984,7 +984,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#subList(int, int)} di una `SubList`.
-     * @summary Verifica la creazione di una sottolista da una sottolista esistente.
+     *  Verifica la creazione di una sottolista da una sottolista esistente.
      * @motivation Assicurarsi che la creazione di sottoliste ricorsive funzioni correttamente,
      * con il calcolo cumulativo dell'offset rispetto alla lista originale.
      * @pre La sottolista iniziale è ["uno", "due", "tre"].
@@ -1013,7 +1013,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#subList(int, int)} su una `SubList`.
-     * @summary Verifica che `subList` lanci `IndexOutOfBoundsException` per `fromIndex` negativo.
+     *  Verifica che `subList` lanci `IndexOutOfBoundsException` per `fromIndex` negativo.
      * @motivation Assicurare la conformità alla Javadoc e la corretta validazione degli indici.
      * @pre La sottolista contiene elementi.
      * @post Viene lanciata `IndexOutOfBoundsException`.
@@ -1027,7 +1027,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#subList(int, int)} su una `SubList`.
-     * @summary Verifica che `subList` lanci `IndexOutOfBoundsException` per `toIndex` fuori limite.
+     *  Verifica che `subList` lanci `IndexOutOfBoundsException` per `toIndex` fuori limite.
      * @motivation Assicurare la conformità alla Javadoc e la corretta validazione degli indici.
      * @pre La sottolista contiene 3 elementi.
      * @post Viene lanciata `IndexOutOfBoundsException`.
@@ -1041,7 +1041,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#subList(int, int)} su una `SubList`.
-     * @summary Verifica che `subList` lanci `IndexOutOfBoundsException` per `fromIndex` maggiore di `toIndex`.
+     *  Verifica che `subList` lanci `IndexOutOfBoundsException` per `fromIndex` maggiore di `toIndex`.
      * @motivation Assicurare la conformità alla Javadoc e la corretta validazione degli indici.
      * @pre La sottolista contiene elementi.
      * @post Viene lanciata `IndexOutOfBoundsException`.
@@ -1056,7 +1056,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#toArray()}.
-     * @summary Verifica che `toArray()` restituisca un array contenente tutti gli elementi della sottolista.
+     *  Verifica che `toArray()` restituisca un array contenente tutti gli elementi della sottolista.
      * @motivation Assicurarsi che la conversione in array funzioni correttamente per la vista.
      * @pre La sottolista contiene ["uno", "due", "tre"].
      * @post Viene restituito un array contenente ["uno", "due", "tre"].
@@ -1073,7 +1073,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#toArray(Object[])}.
-     * @summary Verifica che `toArray(T[] a)` riempia l'array fornito se è abbastanza grande.
+     *  Verifica che `toArray(T[] a)` riempia l'array fornito se è abbastanza grande.
      * @motivation Assicurarsi che la sovrascrittura di `toArray(T[] a)` gestisca correttamente il riutilizzo
      * dell'array passato.
      * @pre La sottolista contiene ["uno", "due", "tre"]. Viene fornito un array di dimensione sufficiente.
@@ -1097,7 +1097,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#toArray(Object[])}.
-     * @summary Verifica che `toArray(T[] a)` crei un nuovo array se quello fornito è troppo piccolo.
+     *  Verifica che `toArray(T[] a)` crei un nuovo array se quello fornito è troppo piccolo.
      * @motivation Assicurarsi che venga creato un nuovo array della dimensione corretta se l'array passato non è sufficiente.
      * @pre La sottolista contiene ["uno", "due", "tre"]. Viene fornito un array troppo piccolo.
      * @post Viene restituito un nuovo array con gli elementi della sottolista.
@@ -1119,7 +1119,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#toArray(Object[])}.
-     * @summary Verifica che `toArray(T[] a)` lanci `NullPointerException` se l'array è null.
+     *  Verifica che `toArray(T[] a)` lanci `NullPointerException` se l'array è null.
      * @motivation Assicurare la conformità alla Javadoc di `Collection.toArray(T[] a)`, che specifica
      * il lancio di `NullPointerException` se l'array è null.
      * @pre La sottolista contiene elementi. L'array è null.
@@ -1139,7 +1139,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#iterator()}.
-     * @summary Verifica che {@code iterator()} restituisca un iteratore valido e funzionante.
+     *  Verifica che {@code iterator()} restituisca un iteratore valido e funzionante.
      * @motivation Assicurarsi che l'iteratore ottenuto dalla sottolista permetta di scorrere i suoi elementi.
      * @pre La sottolista contiene ["uno", "due", "tre"].
      * @post L'iteratore scorre correttamente gli elementi.
@@ -1160,7 +1160,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#listIterator()}.
-     * @summary Verifica che {@code listIterator()} restituisca un list iterator valido e funzionante.
+     *  Verifica che {@code listIterator()} restituisca un list iterator valido e funzionante.
      * @motivation Assicurarsi che il list iterator ottenuto dalla sottolista permetta di scorrere i suoi elementi.
      * @pre La sottolista contiene ["uno", "due", "tre"].
      * @post Il list iterator scorre correttamente gli elementi.
@@ -1181,7 +1181,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#listIterator(int)}.
-     * @summary Verifica che {@code listIterator(int)} restituisca un list iterator valido
+     *  Verifica che {@code listIterator(int)} restituisca un list iterator valido
      * che inizia dalla posizione specificata.
      * @motivation Assicurarsi che il list iterator possa essere posizionato correttamente all'inizio.
      * @pre La sottolista contiene ["uno", "due", "tre"].
@@ -1198,7 +1198,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#listIterator(int)}.
-     * @summary Verifica che {@code listIterator(int)} restituisca un list iterator valido
+     *  Verifica che {@code listIterator(int)} restituisca un list iterator valido
      * che inizia da una posizione intermedia.
      * @motivation Assicurarsi che il list iterator possa essere posizionato correttamente.
      * @pre La sottolista contiene ["uno", "due", "tre"].
@@ -1218,7 +1218,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#listIterator(int)}.
-     * @summary Verifica che {@code listIterator(int)} restituisca un list iterator valido
+     *  Verifica che {@code listIterator(int)} restituisca un list iterator valido
      * che inizia alla fine della lista (pronto per aggiungere).
      * @motivation Assicurarsi che un list iterator possa essere posizionato alla fine della lista,
      * consentendo l'aggiunta.
@@ -1236,7 +1236,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#listIterator(int)}.
-     * @summary Verifica che `listIterator(int)` lanci `IndexOutOfBoundsException` per indice negativo.
+     *  Verifica che `listIterator(int)` lanci `IndexOutOfBoundsException` per indice negativo.
      * @motivation Assicurare la conformità alla Javadoc di `ListIterator`, che specifica
      * il lancio di `IndexOutOfBoundsException` per indici negativi.
      * @pre La sottolista contiene elementi.
@@ -1251,7 +1251,7 @@ public class TestSubListAdapter
 
     /**
      * Test del metodo {@link HList#listIterator(int)}.
-     * @summary Verifica che `listIterator(int)` lanci `IndexOutOfBoundsException` per indice maggiore della dimensione.
+     *  Verifica che `listIterator(int)` lanci `IndexOutOfBoundsException` per indice maggiore della dimensione.
      * @motivation Assicurare la conformità alla Javadoc di `ListIterator`, che specifica
      * il lancio di `IndexOutOfBoundsException` se l'indice è maggiore della dimensione.
      * @pre La sottolista contiene 3 elementi.

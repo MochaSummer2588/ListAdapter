@@ -37,7 +37,7 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link myAdapter.ListAdapter#add(Object) add}.
      * 
-     * @summary Verifica che il metodo {@code add()} aggiunga correttamente un elemento alla lista.
+     * Verifica che il metodo {@code add()} aggiunga correttamente un elemento alla lista.
      * 
      * @design Verifica che l'elemento venga aggiunto in fondo alla lista e che la dimensione aumenti di 1.
      * 
@@ -69,7 +69,7 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(int, Object)}.
      *
-     * @summary Verifica l’inserimento di un elemento all'inizio della lista.
+     * Verifica l’inserimento di un elemento all'inizio della lista.
      *
      *  @description 1. Aggiunge un elemento all'inizio della lista.<br />
      *               2. Verifica che la dimensione sia aumentata di 1.<br />
@@ -93,7 +93,7 @@ public class TestListAdapterPopulated
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
-     * @summary Verifica l’inserimento di un elemento nel mezzo della lista.
+     * Verifica l’inserimento di un elemento nel mezzo della lista.
      * @description 1. Aggiunge un elemento tra due elementi esistenti.<br />
      *              2. Verifica che la dimensione sia aumentata di 1.<br />
      *              3. Verifica che l'elemento sia stato inserito correttamente.
@@ -124,7 +124,7 @@ public class TestListAdapterPopulated
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
-     * @summary Verifica l’inserimento di un elemento alla fine della lista.
+     * Verifica l’inserimento di un elemento alla fine della lista.
      * @description 1. Aggiunge un elemento alla fine della lista.<br />
      *              2. Verifica che la dimensione sia aumentata di 1.<br />
      *              3. Verifica che l'elemento sia stato aggiunto in fondo.
@@ -150,7 +150,7 @@ public class TestListAdapterPopulated
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
-     * @summary Verifica l'inserimento di un elemento in una posizione non valida.
+     * Verifica l'inserimento di un elemento in una posizione non valida.
      * @description 1. Prova ad aggiungere un elemento in una posizione negativa.<br />
      *              2. Prova ad aggiungere un elemento in una posizione oltre la dimensione della lista.
      * 
@@ -167,7 +167,7 @@ public class TestListAdapterPopulated
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
-     * @summary Verifica l'inserimento di un elemento in una posizione valida.
+     * Verifica l'inserimento di un elemento in una posizione valida.
      * @description 1) Aggiunge un elemento in una posizione non valida (0).<br />
      * 
      * @pre La lista è vuota.
@@ -188,7 +188,7 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link myAdapter.ListAdapter#size() size}.
      * 
-     * @summary Verifica che il metodo {@code size()} restituisca correttamente la dimensione della lista.
+     *  Verifica che il metodo {@code size()} restituisca correttamente la dimensione della lista.
      * 
      * @design Verifica che {@code size()} si appoggi correttamente al metodo size del Vector sottostante.
      * 
@@ -222,7 +222,7 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#addAll(HCollection)}.
      * 
-     * @summary Verifica che il metodo {@code addAll()} aggiunga correttamente tutti gli elementi di una collezione alla lista.
+     *  Verifica che il metodo {@code addAll()} aggiunga correttamente tutti gli elementi di una collezione alla lista.
      * 
      * @design Verifica che gli elementi della collezione siano aggiunti in fondo alla lista e che la dimensione aumenti di 3.
      * 
