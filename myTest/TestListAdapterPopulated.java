@@ -101,6 +101,8 @@ public class TestListAdapterPopulated
         assertEquals("cinque", list.get(list.size() - 1));
     }
 
+    //------- TEST DEL METODO add(int, Object) ----------
+
     /**
      * Test del metodo {@link HList#add(int, Object)}.
      *
@@ -111,8 +113,7 @@ public class TestListAdapterPopulated
      *               3. Verifica che l'elemento sia stato aggiunto in fondo.
      * @pre La lista è stata popolata con 4 elementi.
      * @post La lista ha un elemento in più all'inizio.
-     * @result {@code add(int, Object)} deve inserire l'elemento all'inizio della lista.
-     * @expected {@code size()} restituisce 1 e {@code get(0)} è "A".
+     * @expected {@code add(int, Object)} deve inserire l'elemento "A" all'inizio della lista e aumentare la dimensione di 1.
      */
     @Test
     public void testAddAtBeginning() 
@@ -127,5 +128,94 @@ public class TestListAdapterPopulated
         assertEquals(elemento, list.get(0));
     }
 
+    /**
+     * Test del metodo {@link HList#add(int, Object)}.
+     * @summary Verifica l’inserimento di un elemento nel mezzo della lista.
+     * @description 1. Aggiunge un elemento tra due elementi esistenti.<br />
+     *              2. Verifica che la dimensione sia aumentata di 1.<br />
+     *              3. Verifica che l'elemento sia stato inserito correttamente.
+     * 
+     * @pre La lista è stata popolata con 4 elementi.
+     * @post La lista ha un elemento in più nel mezzo.
+     * @expected {@code add(int, Object)} deve inserire l'elemento "A" tra "due" e "tre" e aumentare la dimensione di 1.
+     */
+    @Test
+    public void testAddAtMiddle() 
+    {
+        int sizeOriginale = list.size();
+        Object elemento = "A";
+        // Aggiunge "A" all'indice 2 (tra "due" e "tre")
+        list.add(2, elemento);
+
+        // Verifica che la dimensione sia aumentata di 1
+        assertEquals(sizeOriginale + 1, list.size());
+
+        // Verifica che l'elemento "A" sia stato inserito correttamente
+        assertEquals("uno", list.get(0));
+        assertEquals(elemento, list.get(2));
+
+        // Verifica che gli altri elementi siano stati spostati correttamente
+        assertEquals("tre", list.get(3));
+        assertEquals("quattro", list.get(4));
+    }
+
+    /**
+     * Test del metodo {@link HList#add(int, Object)}.
+     * @summary Verifica l’inserimento di un elemento alla fine della lista.
+     * @description 1. Aggiunge un elemento alla fine della lista.<br />
+     *              2. Verifica che la dimensione sia aumentata di 1.<br />
+     *              3. Verifica che l'elemento sia stato aggiunto in fondo.
+     * 
+     * @pre La lista è stata popolata con 4 elementi.
+     * @post La lista ha un elemento in più alla fine.
+     * @expected {@code add(int, Object)} deve inserire l'elemento "A" alla fine della lista e aumentare la dimensione di 1.
+     */
+    @Test
+    public void testAddAtEnd() 
+    {
+        int sizeOriginale = list.size();
+        Object elemento = "A";
+        // Aggiunge "A" alla fine della lista
+        list.add(sizeOriginale, elemento);
+
+        // Verifica che la dimensione sia aumentata di 1
+        assertEquals(sizeOriginale + 1, list.size());
+
+        // Verifica che l'elemento sia stato aggiunto in fondo
+        assertEquals(elemento, list.get(list.size() - 1));
+    }
+
+    /**
+     * Test del metodo {@link HList#add(int, Object)}.
+     * @summary Verifica l'inserimento di un elemento in una posizione non valida.
+     * @description 1. Prova ad aggiungere un elemento in una posizione negativa.<br />
+     *              2. Prova ad aggiungere un elemento in una posizione oltre la dimensione della lista.
+     * 
+     * @pre La lista è stata popolata con 4 elementi.
+     * @post La lista non cambia.
+     * @expected {@code add(int, Object)} deve lanciare IndexOutOfBoundsException per posizioni non valide.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testAddNegativeIndex() 
+    {
+        // Prova ad aggiungere un elemento in una posizione negativa
+        list.add(-1, "A");
+    }
+
+    /**
+     * Test del metodo {@link HList#add(int, Object)}.
+     * @summary Verifica l'inserimento di un elemento in una posizione valida.
+     * @description 1) Aggiunge un elemento in una posizione non valida (0).<br />
+     * 
+     * @pre La lista è vuota.
+     * @post La lista non cambia.
+     * @expected {@code add(int, Object)} deve lanciare IndexOutOfBoundsException per posizioni non valide.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testAddGreaterIndex() 
+    {
+        // Aggiunge un elemento in una posizione valida (0)
+        list.add(list.size() + 1, "A");
+    }
 
 }

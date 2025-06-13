@@ -70,7 +70,7 @@ public class ListAdapter implements HList
     /**
      * {@inheritDoc}
      */
-    public boolean add(Object o)                            //TESTATO IN MAINPROVA
+    public boolean add(Object o)                            
     {
         // Aggiunge l'elemento alla fine della lista
         vector.addElement(o);
@@ -80,7 +80,7 @@ public class ListAdapter implements HList
     /**
      * {@inheritDoc}
      */
-    public boolean addAll(HCollection c)                            //TESTATO IN MAINPROVA
+    public boolean addAll(HCollection c)                            
     {
         if(c == null) 
         {
@@ -222,7 +222,7 @@ public class ListAdapter implements HList
     /**
      * {@inheritDoc}
      */
-    public Object get(int index)                                    //TESTATO IN MAINPROVA
+    public Object get(int index)                                    
     {
         // Controlla se l'indice è valido
         if (index < 0 || index >= vector.size()) 
@@ -253,7 +253,7 @@ public class ListAdapter implements HList
     /**
      * {@inheritDoc}
      */
-    public int indexOf(Object o)                    //TESTATO IN MAINPROVA  
+    public int indexOf(Object o)                      
     {
         return vector.indexOf(o); // Restituisce l'indice della prima occorrenza dell'elemento
     }
@@ -427,7 +427,7 @@ public class ListAdapter implements HList
     /**
      * {@inheritDoc}
      */
-    public Object[] toArray()                           //TESTATO IN MAINPROVA
+    public Object[] toArray()                           
     {
         Object[] array = new Object[vector.size()];
         for (int i = 0; i < vector.size(); i++) 

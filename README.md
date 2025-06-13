@@ -14,6 +14,11 @@ javac -cp "JUnit\junit-4.13.2.jar;JUnit\hamcrest-core-1.3.jar" -d bin myAdapter\
 COMANDO PER ESEGUIRE I TEST:
 java -cp "bin;JUnit\junit-4.13.2.jar;JUnit\hamcrest-core-1.3.jar" myTest.TestRunner
 
+COMANDO PER COMPILARE SOLO IL MAIN:
+javac -d bin .\myAdapter\*.java .\myExceptions\*.java
+
+COMANDO PER ESEGUIRE SOLO IL MAIN:
+java .\myAdapter\MainProva.java
 
 // --- nomeTest() ---
     /*
