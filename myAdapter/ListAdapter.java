@@ -260,7 +260,6 @@ public class ListAdapter implements HList
      */
     public int indexOf(Object o)                    //TESTATO IN MAINPROVA  
     {
-
         return vector.indexOf(o); // Restituisce l'indice della prima occorrenza dell'elemento
     }
     
@@ -435,7 +434,8 @@ public class ListAdapter implements HList
      * Restituisce un array contenente tutti gli elementi di questa collezione;
      * il tipo runtime dell'array restituito è quello dell'array specificato.
      */
-    public Object[] toArray(Object[] a) {
+    public Object[] toArray(Object[] a) 
+    {
         // Implementazione da fornire
         return null;
     }
