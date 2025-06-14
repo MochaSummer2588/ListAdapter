@@ -48,8 +48,8 @@ public class TestListIteratorEmpty
      * l'iteratore sia posizionato correttamente all'inizio (cursore a 0, lastReturned a -1).
      * <p>
      * Test Description: 1) Verifica che l'iteratore non abbia elementi successivi.
-     * 2) Verifica che l'iteratore non abbia elementi precedenti.
-     * 3) Verifica che {@code nextIndex()} restituisca 0.
+     *                   2) Verifica che l'iteratore non abbia elementi precedenti.
+     *                   3) Verifica che {@code nextIndex()} restituisca 0.
      * 4) Verifica {@code previousIndex()} restituisca -1.
      * <p>
      * Preconditions: Lista vuota.
@@ -78,8 +78,8 @@ public class TestListIteratorEmpty
      * rappresentando la posizione "prima del primo elemento" (che non esiste).
      * <p>
      * Test Description: 1) Si crea un iteratore all'indice 0 su una lista vuota.
-     * 2) Si verifica che non abbia elementi successivi o precedenti.
-     * 3) Si verificano gli indici restituiti da {@code nextIndex()} e {@code previousIndex()}.
+     *                   2) Si verifica che non abbia elementi successivi o precedenti.
+     *                   3) Si verificano gli indici restituiti da {@code nextIndex()} e {@code previousIndex()}.
      * <p>
      * Preconditions: Lista vuota.
      * <p>
@@ -152,8 +152,7 @@ public class TestListIteratorEmpty
      * <p>
      * Test Case Design: La motivazione è garantire che l'iteratore riconosca correttamente l'assenza di elementi successivi in una lista vuota.
      * <p>
-     * Test Description: 1) Si crea un iteratore su una lista vuota.
-     * 2) Si verifica che {@code hasNext()} restituisca {@code false}.
+     * Test Description: 1) Si verifica che {@code hasNext()} restituisca {@code false}.
      * <p>
      * Preconditions: Lista vuota. L'iteratore è all'inizio.
      * <p>
@@ -195,8 +194,7 @@ public class TestListIteratorEmpty
      * <p>
      * Test Case Design: La motivazione è garantire che l'iteratore riconosca correttamente l'assenza di elementi precedenti in una lista vuota.
      * <p>
-     * Test Description: 1) Si crea un iteratore su una lista vuota.
-     * 2) Si verifica che {@code hasPrevious()} restituisca {@code false}.
+     * Test Description: 1) Si verifica che {@code hasPrevious()} restituisca {@code false}.
      * <p>
      * Preconditions: Lista vuota. L'iteratore è all'inizio.
      * <p>
@@ -236,12 +234,11 @@ public class TestListIteratorEmpty
     /**
      * Test del metodo {@link myAdapter.ListIterator#nextIndex()} su lista vuota.
      * <p>
-     * Summary: Il test verifica che {@code nextIndex()} restituisca 0 quando la lista è vuota.
+     * Summary: Il test verifica che {@code nextIndex()} restituisca 0 in lista è vuota.
      * <p>
      * Test Case Design: Si vuole garantire che l'indice del prossimo elemento sia 0, indicando che non ci sono elementi successivi.
      * <p>
-     * Test Description: 1) Si crea un iteratore su una lista vuota.
-     * 2) Si verifica che {@code nextIndex()} restituisca 0.
+     * Test Description: 1) Si verifica che {@code nextIndex()} restituisca 0.
      * <p>
      * Preconditions: Lista vuota. L'iteratore è all'inizio.
      * <p>
@@ -262,8 +259,7 @@ public class TestListIteratorEmpty
      * <p>
      * Test Case Design: Si vuole garantire che l'indice dell'elemento precedente sia -1, indicando che non ci sono elementi precedenti.
      * <p>
-     * Test Description: 1) Si crea un iteratore su una lista vuota.
-     * 2) Si verifica che {@code previousIndex()} restituisca -1.
+     * Test Description: 1) Si verifica che {@code previousIndex()} restituisca -1.
      * <p>
      * Preconditions: Lista vuota. L'iteratore è all'inizio.
      * <p>
@@ -287,12 +283,11 @@ public class TestListIteratorEmpty
      * <p>
      * Test Case Design: La motivazione è garantire che {@code remove()} non possa essere chiamato quando non c'è un elemento "lastReturned" da rimuovere.
      * <p>
-     * Test Description: 1) Si crea un iteratore su una lista vuota.
-     * 2) Si tenta di chiamare {@code remove()} immediatamente.
+     * Test Description: 1) Si tenta di chiamare {@code remove()} immediatamente.
      * <p>
      * Preconditions: Lista vuota. L'iteratore è all'inizio.
      * <p>
-     * Postconditions: La lista rimane vuota. Viene lanciata un'eccezione.
+     * Postconditions: La lista e l'iteratore rimangono invariati. Viene lanciata un'eccezione.
      * <p>
      * Expected Result: {@code IllegalStateException} deve essere lanciata.
      */
@@ -311,11 +306,11 @@ public class TestListIteratorEmpty
      * Test Case Design: La motivazione è garantire che {@code set()} non possa essere chiamato quando non c'è un elemento "lastReturned" da modificare.
      * <p>
      * Test Description: 1) Si crea un iteratore su una lista vuota.
-     * 2) Si tenta di chiamare {@code set()} immediatamente.
+     *                   2) Si tenta di chiamare {@code set()} immediatamente.
      * <p>
      * Preconditions: Lista vuota. L'iteratore è all'inizio.
      * <p>
-     * Postconditions: La lista rimane vuota. Viene lanciata un'eccezione.
+     * Postconditions: La lista e l'iteratore rimangono invariati. Viene lanciata un'eccezione.
      * <p>
      * Expected Result: {@code IllegalStateException} deve essere lanciata.
      */
@@ -333,9 +328,9 @@ public class TestListIteratorEmpty
      * Test Case Design: Garantire che {@code add()} funzioni come previsto anche quando la lista è inizialmente vuota.
      * <p>
      * Test Description: 1) Si aggiunge un elemento alla lista vuota.
-     * 2) Si verifica che la dimensione della lista sia 1.
-     * 3) Si verifica che l'elemento aggiunto sia presente e al corretto indice.
-     * 4) Si verifica che il cursore sia avanzato e {@code lastReturned} resettato.
+     *                   2) Si verifica che la dimensione della lista sia 1.
+     *                   3) Si verifica che l'elemento aggiunto sia presente e al corretto indice.
+     *                   4) Si verifica che il cursore sia avanzato e {@code lastReturned} resettato.
      * <p>
      * Preconditions: Lista vuota. L'iteratore è all'inizio.
      * <p>
@@ -363,8 +358,8 @@ public class TestListIteratorEmpty
      * Test Case Design: Assicurarsi che l'iteratore possa aggiungere e gestire {@code null} come elemento valido anche in una lista vuota.
      * <p>
      * Test Description: 1) Si aggiunge un elemento {@code null} alla lista vuota.
-     * 2) Si verifica che la dimensione sia 1 e che l'elemento sia {@code null}.
-     * 3) Si naviga l'iteratore per recuperare il {@code null} e verificare che sia corretto.
+     *                   2) Si verifica che la dimensione sia 1 e che l'elemento sia {@code null}.
+     *                   3) Si naviga l'iteratore per recuperare il {@code null} e verificare che sia corretto.
      * <p>
      * Preconditions: Lista vuota. L'iteratore è all'inizio.
      * <p>
@@ -383,8 +378,7 @@ public class TestListIteratorEmpty
         assertTrue(iterator.hasPrevious());
         assertFalse(iterator.hasNext());
 
-        // Naviga per verificare che il null sia recuperabile
-        assertEquals(null, iterator.previous()); // lastReturned = 0, cursor = 0
+        assertEquals(null, iterator.previous());
         assertEquals(-1, iterator.previousIndex());
         assertEquals(0, iterator.nextIndex());
     }
@@ -397,9 +391,9 @@ public class TestListIteratorEmpty
      * Test Case Design: Questo test valuta la gestione degli stati dell'iteratore dopo una modifica di aggiunta e poi rimozione.
      * <p>
      * Test Description: 1) Aggiungi un elemento alla lista vuota.
-     * 2) Chiama {@code next()} per posizionare {@code lastReturned}.
-     * 3) Chiama {@code remove()}.
-     * 4) Verifica che la lista sia di nuovo vuota e che l'iteratore sia nello stato iniziale.
+     *                   2) Chiama {@code next()} per spostare l'iteratore {@code lastReturned}.
+     *                   3) Chiama {@code remove()}.
+     *                   4) Verifica che la lista sia di nuovo vuota e che l'iteratore sia nello stato iniziale.
      * <p>
      * Preconditions: Lista vuota.
      * <p>
@@ -413,9 +407,9 @@ public class TestListIteratorEmpty
         iterator.add("temp"); // Aggiunge "temp". list: ["temp"]. Cursore a 1. lastReturned = -1.
         assertEquals(1, list.size());
 
-        assertEquals("temp", iterator.previous()); // Sposta il cursore a 0, lastReturned = 0
+        assertEquals("temp", iterator.previous()); 
         
-        iterator.remove(); // Rimuove "temp". list: []. Cursore a 0. lastReturned = -1.
+        iterator.remove();
         assertEquals(0, list.size());
         assertFalse(list.contains("temp"));
         

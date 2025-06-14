@@ -392,7 +392,7 @@ public class TestListIteratorPopulated
     @Test(expected = java.util.NoSuchElementException.class)
     public void testPreviousThrowsNoSuchElementException()
     {
-        iterator.previous(); // Dovrebbe lanciare l'eccezione, essendo all'inizio
+        iterator.previous();
     }
 
     /**
@@ -646,339 +646,509 @@ public class TestListIteratorPopulated
     }
 
     /**
-     * Test del metodo {@link myAdapter.ListIterator#remove()} chiamato due volte di seguito.
+     * Test del metodo {@link myAdapter.ListIterator#remove()} per svuotare la lista.
      * <p>
-     * Verifica che {@code remove()} lanci {@code IllegalStateException} se chiamato due volte
-     * consecutivamente senza una chiamata intermedia a {@code next()} o {@code previous()}.
+     * Summary: Il test verifica che il metodo {@code remove()} possa essere usato ripetutamente in combinazione con {@code next()}
+     * per rimuovere tutti gli elementi da una lista, fino a renderla completamente vuota.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo rispetti la regola che può essere chiamato
-     * al massimo una volta per ogni chiamata a {@code next()} o {@code previous()}.
+     * Test Case Design: La motivazione dietro a questo test è assicurare che l'operazione di rimozione sia consistente e che
+     * l'iteratore gestisca correttamente lo stato della lista e i propri indici durante un'iterazione completa di rimozione.
+     * Si verifica che ogni elemento venga rimosso e che la dimensione della lista si riduca progressivamente fino a zero.
      * <p>
-     * Preconditions: L'iteratore ha chiamato {@code next()} (o {@code previous()}) e poi {@code remove()}.
+     * Test Description: 1) Si registra la dimensione iniziale della lista.
+     *                   2) Si usa un ciclo `while` che continua finché ci sono elementi successivi da attraversare (`hasNext()`).
+     *                   3) All'interno del ciclo, si chiama {@code next()} per ottenere un elemento e far avanzare il cursore, impostando {@code lastReturned}.
+     *                   4) Immediatamente dopo, si chiama {@code remove()} per eliminare l'elemento appena restituito.
+     *                   5) Dopo il ciclo, si verifica che la lista sia completamente vuota e che la sua dimensione sia 0.
+     *                   6) Si verificano anche gli indici finali dell'iteratore per assicurare che siano nello stato corretto per una lista vuota.
      * <p>
-     * Postconditions: Nessuna ulteriore modifica alla lista. Viene lanciata un'eccezione.
+     * Preconditions: La lista è popolata con un numero noto di elementi: ["zero", "uno", "due"]. L'iteratore è all'inizio della lista.
      * <p>
-     * Expected Result: {@code IllegalStateException} deve essere lanciata.
+     * Postconditions: Tutti gli elementi della lista vengono rimossi. La lista risulta vuota. Il cursore dell'iteratore si trova all'inizio della lista (che ora è vuota), 
+     * e {@code lastReturned} è resettato a -1.
+     * <p>
+     * Expected Result: La dimensione finale della lista deve essere 0. La lista non deve contenere alcun elemento.
+     * L'iteratore deve indicare che non ci sono elementi né successivi né precedenti ({@code hasNext()} e {@code hasPrevious()} false),
+     * e gli indici {@code nextIndex()} e {@code previousIndex()} devono essere rispettivamente 0 e -1.
      */
-    @Test(expected = IllegalStateException.class)
-    public void testRemoveWhileLoop() 
+    @Test
+    public void testRemoveUntilListIsEmpty()
     {
-        iterator.next();
-        iterator.remove();
-        iterator.remove(); // Seconda chiamata, dovrebbe fallire
+        int originalSize = list.size();
+
+        int removedCount = 0;
+        while (iterator.hasNext())
+        {
+            iterator.next();    // Sposta il cursore e imposta lastReturned (es. "zero", lastReturned = 0)
+            iterator.remove();  // Rimuove l'elemento. lastReturned = -1. Cursore si sposta indietro se necessario.
+            removedCount++;     // Contatore degli elementi rimossi
+        }
+
+        // Verifica finale
+        assertEquals(0, list.size()); // La lista dovrebbe essere completamente vuota
+        assertTrue(list.isEmpty());   // Verifica anche con isEmpty()
+
+        // Verifica che siano stati rimossi tutti gli elementi originali
+        assertEquals(originalSize, removedCount);
+
+        // Verifica lo stato finale dell'iteratore
+        assertFalse(iterator.hasNext());
+        assertFalse(iterator.hasPrevious());
+        assertEquals(0, iterator.nextIndex());
+        assertEquals(-1, iterator.previousIndex());
     }
 
     /**
      * Test del metodo {@link myAdapter.ListIterator#set(Object)}.
      * <p>
-     * Verifica che {@code set()} sostituisca correttamente l'ultimo elemento restituito da {@code next()}.
+     * Summary: Il test verifica che il metodo {@code set()} sostituisca correttamente l'ultimo elemento restituito da una precedente chiamata a {@code next()},
+     * aggiornando la lista senza modificarne la dimensione.
      * <p>
-     * Test Case Design: Assicurarsi che l'elemento corretto venga sostituito e che la lista
-     * sottostante venga aggiornata.
+     * Test Case Design: La motivazione dietro a questo test è assicurare che {@code set()} modifichi l'elemento corretto all'interno della lista
+     * (quello identificato dall'ultima operazione di navigazione) e che la lista sottostante venga aggiornata di conseguenza,
+     * mantenendo inalterati gli altri elementi e la dimensione complessiva.
      * <p>
-     * Preconditions: L'iteratore ha chiamato {@code next()} almeno una volta.
+     * Test Description: 1) Si registra la dimensione iniziale della lista.
+     *                   2) L'iteratore avanza chiamando {@code next()} una volta, per ottenere l'elemento all'indice 0 ("zero") e impostare {@code lastReturned}.
+     *                   3) Si chiama {@code set()} con un nuovo oggetto ("nuovoElemento") per sostituire l'elemento appena restituito.
+     *                   4) Si verifica che la dimensione della lista sia rimasta invariata.
+     *                   5) Si verifica che l'elemento all'indice 0 sia ora il "nuovoElemento".
+     *                   6) Si verifica che gli altri elementi della lista ("uno", "due") siano rimasti inalterati alle loro posizioni originali.
+     *                   7) Si verifica che gli indici dell'iteratore non siano stati influenzati dall'operazione di {@code set()} (il cursore non si sposta).
      * <p>
-     * Postconditions: L'elemento sostituito con il nuovo elemento. La dimensione non cambia.
+     * Preconditions: La lista è popolata in questo modo: ["zero", "uno", "due"]. L'iteratore è all'inizio della lista.
      * <p>
-     * Expected Result: L'elemento a indice 0 deve essere "nuovoElemento".
+     * Postconditions: L'elemento precedentemente restituito da {@code next()} (o {@code previous()}) viene sostituito dal nuovo elemento specificato.
+     * La dimensione della lista rimane invariata. Gli altri elementi non vengono modificati né spostati. Lo stato del cursore dell'iteratore non cambia,
+     * e {@code lastReturned} rimane l'indice dell'elemento che è stato appena modificato.
+     * <p>
+     * Expected Result: La dimensione finale della lista deve essere 3. L'elemento all'indice 0 deve essere "nuovoElemento".
+     * L'elemento all'indice 1 deve essere "uno" e l'elemento all'indice 2 deve essere "due".
+     * Il {@code nextIndex()} dell'iteratore deve rimanere 1 e il {@code previousIndex()} deve rimanere 0.
      */
     @Test
-    public void testSetAfterNext() {
-        iterator.next(); // Restituisce "zero", lastReturned = 0
-        iterator.set("nuovoElemento");
+    public void testSetAfterNext()
+    {
+        int sizeOriginale = list.size(); // Salva la dimensione iniziale (3)
 
-        assertEquals(3, list.size());
-        assertEquals("nuovoElemento", list.get(0));
-        assertEquals("uno", list.get(1)); // Gli altri elementi non sono toccati
+        iterator.next();                 // Restituisce "zero". lastReturned = 0, cursor = 1.
+        
+        Object elementAtIndex1BeforeSet = list.get(1);      // Cattura "uno"
+        Object elementAtIndex2BeforeSet = list.get(2);      // Cattura "due"
+
+        int cursorAfterNext = iterator.nextIndex();             // Cursore dopo next() = 1
+        int lastReturnedIndex = iterator.previousIndex();       // lastReturned = 0
+
+        Object o = "nuovoElemento";
+
+        iterator.set(o);                          // Sostituisce list[0] con "nuovoElemento". lastReturned rimane 0.
+
+        assertEquals(sizeOriginale, list.size());                  // La dimensione della lista non deve cambiare (3)
+        assertEquals(o, list.get(0));          // L'elemento all'indice 0 deve essere stato sostituito
+        assertEquals(elementAtIndex1BeforeSet, list.get(1)); // L'elemento all'indice 1 deve essere rimasto "uno"
+        assertEquals(elementAtIndex2BeforeSet, list.get(2)); // L'elemento all'indice 2 deve essere rimasto "due"
+
+        assertEquals(cursorAfterNext, iterator.nextIndex());    // nextIndex() deve essere ancora 1
+        assertEquals(lastReturnedIndex, iterator.previousIndex()); // previousIndex() deve essere ancora 0
     }
 
-    /**
+   /**
      * Test del metodo {@link myAdapter.ListIterator#set(Object)}.
      * <p>
-     * Verifica che {@code set()} sostituisca correttamente l'ultimo elemento restituito da {@code previous()}.
+     * Summary: Il test verifica che il metodo {@code set()} sostituisca correttamente l'ultimo elemento restituito da una precedente chiamata a {@code previous()},
+     * aggiornando la lista senza modificarne la dimensione.
      * <p>
-     * Test Case Design: Assicurarsi che l'elemento corretto venga sostituito anche dopo una
-     * navigazione all'indietro.
+     * Test Case Design: La motivazione dietro a questo test è assicurare che {@code set()} modifichi l'elemento corretto all'interno della lista
+     * (quello identificato dall'ultima operazione di navigazione, in questo caso all'indietro) e che la lista sottostante venga aggiornata di conseguenza,
+     * mantenendo inalterati gli altri elementi e la dimensione complessiva.
      * <p>
-     * Preconditions: L'iteratore ha chiamato {@code previous()} almeno una volta.
+     * Test Description: 1) L'iteratore avanza chiamando {@code next()} tre volte, posizionandosi alla fine della lista (dopo "due").
+     *                   2) L'iteratore arretra chiamando {@code previous()} una volta, per ottenere l'elemento all'indice 2 ("due") e impostare {@code lastReturned}.
+     *                   3) Si chiama {@code set()} con un nuovo oggetto ("nuovoDue") per sostituire l'elemento appena restituito.
+     *                   4) Si verifica che la dimensione della lista sia rimasta invariata.
+     *                   5) Si verifica che l'elemento all'indice 2 sia ora "nuovoDue".
+     *                   6) Si verifica che gli altri elementi della lista ("zero", "uno") siano rimasti inalterati alle loro posizioni originali.
+     *                   7) Si verifica che gli indici dell'iteratore non siano stati influenzati dall'operazione di {@code set()} (il cursore non si sposta).
      * <p>
-     * Postconditions: L'elemento sostituito con il nuovo elemento. La dimensione non cambia.
+     * Preconditions: La lista è popolata con almeno tre elementi, ad esempio: ["zero", "uno", "due"]. L'iteratore è all'inizio della lista e viene poi posizionato per il test.
      * <p>
-     * Expected Result: L'elemento "due" (dopo aver navigato indietro) deve essere "nuovoElemento".
+     * Postconditions: L'elemento precedentemente restituito da {@code previous()} viene sostituito dal nuovo elemento specificato.
+     * La dimensione della lista rimane invariata. Gli altri elementi non vengono modificati né spostati. Lo stato del cursore dell'iteratore non cambia,
+     * e {@code lastReturned} rimane l'indice dell'elemento che è stato appena modificato.
+     * <p>
+     * Expected Result: La dimensione finale della lista deve essere 3. L'elemento all'indice 2 deve essere "nuovoDue".
+     * L'elemento all'indice 0 deve essere "zero" e l'elemento all'indice 1 deve essere "uno".
+     * Il {@code nextIndex()} dell'iteratore deve rimanere 2 e il {@code previousIndex()} deve rimanere 1.
      */
     @Test
-    public void testSetAfterPrevious() {
-        iterator.next(); // "zero"
-        iterator.next(); // "uno"
-        iterator.next(); // "due"
-        iterator.previous(); // Restituisce "due", lastReturned = 2
-        iterator.set("nuovoDue");
+    public void testSetAfterPrevious()
+    {
+        int sizeOriginale = list.size(); // Salva la dimensione iniziale (3)
 
-        assertEquals(3, list.size());
-        assertEquals("nuovoDue", list.get(2));
-        assertEquals("uno", list.get(1));
+        // Posiziona l'iteratore:
+        iterator.next();    // Restituisce "zero". lastReturned = 0, cursor = 1.
+        iterator.next();    // Restituisce "uno".  lastReturned = 1, cursor = 2.
+        iterator.next();    // Restituisce "due".  lastReturned = 2, cursor = 3.
+
+        // Ora l'iteratore è alla fine.
+        // nextIndex() = 3, previousIndex() = 2
+
+        // Cattura gli elementi prima della modifica per verificarli dopo
+        Object elementAtIndex0BeforeSet = list.get(0); // "zero"
+        Object elementAtIndex1BeforeSet = list.get(1); // "uno"
+
+        int cursorAfterNavigations = iterator.nextIndex();     // Cursore dopo next() tre volte = 3
+        int lastReturnedIndexBeforeSet = iterator.previousIndex(); // lastReturned sarà 2 dopo previous()
+
+        // Chiama previous() per impostare lastReturned all'elemento da modificare
+        Object returnedByPrevious = iterator.previous(); // Restituisce "due". lastReturned = 2, cursor = 2.
+        Object o = "nuovoDue";
+
+        iterator.set(o); // Sostituisce list[2] con "nuovoDue". lastReturned rimane 2.
+
+        // Verifica postcondizioni sulla lista
+        assertEquals(sizeOriginale, list.size());           // La dimensione della lista non deve cambiare (3)
+        assertEquals(o, list.get(2));              // L'elemento all'indice 2 deve essere stato sostituito
+        assertEquals(elementAtIndex0BeforeSet, list.get(0)); // L'elemento all'indice 0 deve essere rimasto "zero"
+        assertEquals(elementAtIndex1BeforeSet, list.get(1)); // L'elemento all'indice 1 deve essere rimasto "uno"
+
+        assertEquals(cursorAfterNavigations -1, iterator.nextIndex()); // nextIndex() deve essere 2 (era 3, ma previous lo ha spostato a 2)
+        assertEquals(lastReturnedIndexBeforeSet -1, iterator.previousIndex()); // previousIndex() deve essere 1 (il previousIndex DOPO la chiamata a previous())
     }
 
     /**
      * Test del metodo {@link myAdapter.ListIterator#set(Object)} senza chiamare {@code next()} o {@code previous()}.
      * <p>
-     * Verifica che {@code set()} lanci {@code IllegalStateException} se non è stato chiamato
-     * {@code next()} o {@code previous()} prima.
+     * Summary: Il test verifica che il metodo {@code set()} lanci correttamente una {@code IllegalStateException} se viene chiamato prima che sia stato 
+     * restituito un elemento da {@code next()} o {@code previous()}.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo faccia rispettare la precondizione di aver
-     * restituito un elemento prima di poterlo modificare.
+     * Test Case Design: La motivazione dietro a questo test è assicurare che il metodo {@code set()} faccia rispettare la sua precondizione fondamentale: 
+     * l'obbligo di aver prima navigato l'iteratore (con {@code next()} o {@code previous()}) per identificare un elemento da modificare. 
+     * Questo previene operazioni di modifica ambigue o errate.
      * <p>
-     * Preconditions: L'iteratore è stato appena inizializzato, o remove()/add() sono già stati chiamati.
+     * Test Description: 1) L'iteratore viene inizializzato, trovandosi di default all'inizio della lista e senza aver ancora restituito alcun elemento 
+     *                      (il suo stato interno {@code lastReturned} è -1).
+     *                   2) Si tenta immediatamente di chiamare il metodo {@code set()} con un nuovo elemento.
      * <p>
-     * Postconditions: Nessuna modifica alla lista. Viene lanciata un'eccezione.
+     * Preconditions: L'iteratore è stato appena inizializzato. La lista e' popolata in questo modo: ["zero", "uno", "due"]
      * <p>
-     * Expected Result: {@code IllegalStateException} deve essere lanciata.
+     * Postconditions: Nessuna modifica allo stato della lista o dell'iteratore. Viene lanciata una {@code IllegalStateException} impedendo l'esecuzione del metodo.
+     * <p>
+     * Expected Result: Una {@code IllegalStateException} deve essere lanciata nel momento in cui si tenta di chiamare {@code set()} senza una precedente chiamata valida a {@code next()} o {@code previous()}, o dopo una chiamata a {@code remove()} o {@code add()}.
      */
     @Test(expected = IllegalStateException.class)
-    public void testSetWithoutNextOrPrevious() {
+    public void testSetWithoutNextOrPrevious()
+    {
         iterator.set("nuovoElemento");
     }
 
     /**
      * Test del metodo {@link myAdapter.ListIterator#set(Object)} dopo una chiamata a {@code remove()}.
      * <p>
-     * Verifica che {@code set()} lanci {@code IllegalStateException} dopo una chiamata a {@code remove()}.
+     * Summary: Il test verifica che il metodo {@code set()} lanci correttamente una {@code IllegalStateException} se viene chiamato dopo una precedente invocazione di {@code remove()}.
      * <p>
-     * Test Case Design: Assicurarsi che {@code set()} non possa essere chiamato dopo che
-     * l'elemento di riferimento è stato rimosso.
+     * Test Case Design: La motivazione dietro a questo test è assicurare che il metodo {@code set()} faccia rispettare la sua precondizione che l'ultimo 
+     * elemento restituito da {@code next()} o {@code previous()} sia ancora valido e presente nella lista. 
+     * Poiché {@code remove()} invalida questo riferimento, {@code set()} non dovrebbe essere permesso. 
+     * Questo garantisce la coerenza dello stato dell'iteratore e previene modifiche a un elemento non più identificabile.
      * <p>
-     * Preconditions: L'iteratore ha chiamato {@code next()} (o {@code previous()}) e poi {@code remove()}.
+     * Test Description: 1) L'iteratore avanza chiamando {@code next()} una volta, per posizionarsi su un elemento valido e impostare {@code lastReturned}.
+     *                   2) Si chiama {@code remove()} per eliminare l'elemento appena restituito. Questa operazione invalida lo stato interno di {@code lastReturned} resettandolo a -1.
+     *                   3) Si tenta di chiamare {@code set()} con un nuovo elemento, aspettandosi un'eccezione.
      * <p>
-     * Postconditions: Nessuna ulteriore modifica alla lista. Viene lanciata un'eccezione.
+     * Preconditions: La lista è popolata: ["zero", "uno", "due"]. L'iteratore viene posizionato su un elemento valido.
      * <p>
-     * Expected Result: {@code IllegalStateException} deve essere lanciata.
+     * Postconditions: La lista avrà subito la rimozione del primo elemento. La successiva chiamata a {@code set()} non modifica ulteriormente la lista, 
+     * ma provoca il lancio di una {@code IllegalStateException}. Lo stato del cursore dell'iteratore e di {@code lastReturned} rimangono invariati dopo il tentativo di `set()`.
+     * <p>
+     * Expected Result: Una {@code IllegalStateException} deve essere lanciata nel momento in cui si tenta di chiamare {@code set()} dopo una chiamata a {@code remove()}.
      */
     @Test(expected = IllegalStateException.class)
-    public void testSetAfterRemove() {
-        iterator.next();
-        iterator.remove();
-        iterator.set("dopoRemove"); // Dovrebbe fallire
-    }
+    public void testSetAfterRemove()
+    {
 
-    /**
-     * Test del metodo {@link myAdapter.ListIterator#add(Object)}.
-     * <p>
-     * Verifica che {@code add()} inserisca correttamente un elemento nella lista alla posizione del cursore.
-     * <p>
-     * Test Case Design: Assicurarsi che l'elemento venga inserito correttamente senza sovrascrivere,
-     * e che gli indici del cursore siano aggiornati.
-     * <p>
-     * Preconditions: L'iteratore è posizionato all'inizio della lista.
-     * <p>
-     * Postconditions: L'elemento viene aggiunto, la dimensione della lista aumenta,
-     * il cursore avanza oltre l'elemento aggiunto. {@code lastReturned} viene resettato a -1.
-     * <p>
-     * Expected Result: La lista deve contenere "nuovo" all'indice 0, la dimensione deve essere 4,
-     * {@code nextIndex()} deve essere 1, {@code previousIndex()} deve essere 0.
-     */
-    @Test
-    public void testAdd() {
-        iterator.add("nuovo"); // Aggiunge "nuovo" all'indice 0
-        assertEquals(4, list.size());
-        assertEquals("nuovo", list.get(0));
-        assertEquals("zero", list.get(1)); // Gli elementi esistenti sono shiftati
-        assertEquals(1, iterator.nextIndex()); // Cursore avanza oltre l'elemento aggiunto
-        assertEquals(0, iterator.previousIndex());
-        // lastReturned deve essere -1
-    }
+        iterator.next();    // Restituisce "zero". lastReturned = 0, cursor = 1.
+        iterator.remove();  // Rimuove "zero". lastReturned = -1, cursor = 0.
+                            // A questo punto, lastReturned è -1, indicando che non c'è un elemento valido da settare.
 
-    /**
-     * Test del metodo {@link myAdapter.ListIterator#add(Object)} su una lista vuota.
-     * <p>
-     * Verifica che {@code add()} funzioni correttamente anche su una lista inizialmente vuota.
-     * <p>
-     * Test Case Design: Assicurarsi che il metodo gestisca correttamente il caso di
-     * inserimento nel primo elemento di una lista vuota.
-     * <p>
-     * Preconditions: L'iteratore è stato creato su una lista vuota.
-     * <p>
-     * Postconditions: La lista contiene l'elemento aggiunto.
-     * <p>
-     * Expected Result: La lista deve contenere "primo", la dimensione deve essere 1.
-     */
-    @Test
-    public void testAddOnEmptyList() {
-        list = new ListAdapter();
-        iterator = list.listIterator();
-        iterator.add("primo");
-
-        assertEquals(1, list.size());
-        assertEquals("primo", list.get(0));
-        assertEquals(1, iterator.nextIndex());
-        assertEquals(0, iterator.previousIndex());
-    }
-
-    /**
-     * Test del metodo {@link myAdapter.ListIterator#add(Object)} e successivo {@code next()}.
-     * <p>
-     * Verifica che {@code next()} funzioni correttamente dopo una chiamata a {@code add()}.
-     * <p>
-     * Test Case Design: Assicurarsi che l'aggiunta di un elemento non alteri la corretta
-     * navigazione successiva.
-     * <p>
-     * Preconditions: Un elemento è stato aggiunto tramite {@code add()}.
-     * <p>
-     * Postconditions: Il cursore avanza e l'elemento successivo viene restituito.
-     * <p>
-     * Expected Result: {@code next()} deve restituire l'elemento che originariamente era alla
-     * posizione del cursore prima dell'aggiunta.
-     */
-    @Test
-    public void testAddThenNext() {
-        iterator.add("pre-zero"); // list: ["pre-zero", "zero", "uno", "due"]
-        // Cursore è tra "pre-zero" e "zero"
-        assertEquals("zero", iterator.next()); // next() deve restituire "zero"
-        assertEquals(2, iterator.nextIndex());
-        assertEquals(1, iterator.previousIndex());
-    }
-
-    /**
-     * Test del metodo {@link myAdapter.ListIterator#add(Object)} e successiva {@code previous()}.
-     * <p>
-     * Verifica che {@code previous()} funzioni correttamente dopo una chiamata a {@code add()}.
-     * <p>
-     * Test Case Design: Assicurarsi che l'aggiunta di un elemento non alteri la corretta
-     * navigazione all'indietro.
-     * <p>
-     * Preconditions: L'iteratore è posizionato dopo un'aggiunta e un avanzamento.
-     * <p>
-     * Postconditions: Il cursore arretra e l'elemento precedente viene restituito.
-     * <p>
-     * Expected Result: {@code previous()} deve restituire l'elemento appena aggiunto.
-     */
-    @Test
-    public void testAddThenPrevious() {
-        iterator.next(); // "zero", cursore a 1
-        iterator.add("nuovo"); // list: ["zero", "nuovo", "uno", "due"], cursore a 2
-        // lastReturned = -1
-        
-        assertEquals("nuovo", iterator.previous()); // previous() deve restituire "nuovo"
-        assertEquals(1, iterator.nextIndex());
-        assertEquals(0, iterator.previousIndex());
-        assertEquals("zero", iterator.previous()); // E poi "zero"
-    }
-
-    /**
-     * Test del metodo {@link myAdapter.ListIterator#remove()} dopo una chiamata a {@code add()}.
-     * <p>
-     * Verifica che {@code remove()} lanci {@code IllegalStateException} dopo una chiamata a {@code add()}.
-     * <p>
-     * Test Case Design: Assicurarsi che {@code remove()} non possa essere chiamato immediatamente
-     * dopo un'operazione di {@code add()}.
-     * <p>
-     * Preconditions: Un elemento è stato aggiunto tramite {@code add()}.
-     * <p>
-     * Postconditions: Nessuna modifica alla lista. Viene lanciata un'eccezione.
-     * <p>
-     * Expected Result: {@code IllegalStateException} deve essere lanciata.
-     */
-    @Test(expected = IllegalStateException.class)
-    public void testRemoveAfterAdd() {
-        iterator.add("elemento");
-        iterator.remove(); // Dovrebbe fallire
+        iterator.set("dopoRemove"); // Questa chiamata dovrebbe lanciare IllegalStateException
     }
 
     /**
      * Test del metodo {@link myAdapter.ListIterator#set(Object)} dopo una chiamata a {@code add()}.
      * <p>
-     * Verifica che {@code set()} lanci {@code IllegalStateException} dopo una chiamata a {@code add()}.
+     * Summary: Il test verifica che il metodo {@code set()} lanci correttamente una {@code IllegalStateException} se viene chiamato dopo una precedente invocazione di {@code add()}.
      * <p>
-     * Test Case Design: Assicurarsi che {@code set()} non possa essere chiamato immediatamente
-     * dopo un'operazione di {@code add()}.
+     * Test Case Design: La motivazione dietro a questo test è assicurare che il metodo {@code set()} faccia rispettare la sua precondizione che l'ultimo elemento restituito da 
+     * {@code next()} o {@code previous()} sia valido e che l'operazione di {@code add()} resetta lo stato di {@code lastReturned} a -1, invalidando la possibilità 
+     * di chiamare {@code set()} immediatamente dopo. Questo garantisce la coerenza dello stato dell'iteratore.
      * <p>
-     * Preconditions: Un elemento è stato aggiunto tramite {@code add()}.
+     * Test Description: 1) L'iteratore aggiunge un nuovo elemento alla lista chiamando {@code add()}. Questa operazione invalida lo stato interno di {@code lastReturned} resettandolo a -1.
+     *                   2) Si tenta immediatamente di chiamare {@code set()} con un nuovo valore, aspettandosi un'eccezione.
      * <p>
-     * Postconditions: Nessuna modifica alla lista. Viene lanciata un'eccezione.
+     * Preconditions: L'iteratore è stato inizializzato e la lista e' popolata: ["zero", "uno", "due"].
      * <p>
-     * Expected Result: {@code IllegalStateException} deve essere lanciata.
+     * Postconditions: La lista avrà subito l'aggiunta di un elemento. La successiva chiamata a {@code set()} non modifica ulteriormente la lista, 
+     * ma provoca il lancio di una {@code IllegalStateException}. Lo stato del cursore dell'iteratore e di {@code lastReturned} rimangono invariati dopo il tentativo di `set()`.
+     * <p>
+     * Expected Result: Una {@code IllegalStateException} deve essere lanciata nel momento in cui si tenta di chiamare {@code set()} dopo una chiamata a {@code add()}.
      */
     @Test(expected = IllegalStateException.class)
-    public void testSetAfterAdd() {
-        iterator.add("elemento");
-        iterator.set("nuovoValore"); // Dovrebbe fallire
+    public void testSetAfterAdd()
+    {
+        // Dopo add(), lastReturned viene impostato a -1.
+        iterator.add("elemento"); // Aggiunge "elemento" alla lista. lastReturned = -1.
+
+        // A questo punto, lastReturned è -1, indicando che non c'è un elemento valido da settare.
+        iterator.set("nuovoValore"); // Questa chiamata dovrebbe lanciare IllegalStateException
+    }
+
+    /**
+     * Test del metodo {@link myAdapter.ListIterator#add(Object)}.
+     * <p>
+     * Summary: Il test verifica che il metodo {@code add()} inserisca correttamente un nuovo elemento nella lista alla posizione corrente del cursore,
+     * assicurando che gli elementi esistenti vengano spostati e che lo stato dell'iteratore sia aggiornato in modo consistente.
+     * <p>
+     * Test Case Design: La motivazione dietro a questo test è assicurare che {@code add()} esegua un'inserzione e non una sovrascrittura.
+     * Si verifica che la dimensione della lista aumenti, che il nuovo elemento sia posizionato correttamente, che gli elementi preesistenti
+     * siano stati "shiftati" (spostati) e che gli indici del cursore riflettano il nuovo stato dopo l'inserimento.
+     * <p>
+     * Test Description: 1) Si registra la dimensione iniziale della lista.
+     *                   2) Si chiama {@code add()} per inserire un nuovo elemento ("nuovo") all'inizio della lista (poiché l'iteratore è inizialmente a indice 0).
+     *                   3) Si verifica che la dimensione della lista sia aumentata di uno.
+     *                   4) Si verifica che il "nuovo" elemento sia ora all'indice 0.
+     *                   5) Si verifica che l'elemento che originariamente era all'indice 0 ("zero") sia ora all'indice 1, confermando lo shift.
+     *                   6) Si verifica che {@code nextIndex()} sia avanzato di uno e {@code previousIndex()} sia stato aggiornato per riflettere il nuovo elemento.
+     *                   7) Si verifica che {@code lastReturned} sia stato resettato a -1.
+     * <p>
+     * Preconditions: La lista è popolata: ["zero", "uno", "due"]. L'iteratore è all'inizio della lista (cursore a 0).
+     * <p>
+     * Postconditions: Un nuovo elemento viene aggiunto alla lista all'indice del cursore. La dimensione della lista aumenta di uno.
+     * Gli elementi che erano all'indice del cursore o successivi vengono shiftati di una posizione a destra.
+     * Il cursore dell'iteratore avanza di uno, posizionandosi dopo l'elemento appena aggiunto. {@code lastReturned} viene resettato a -1.
+     * <p>
+     * Expected Result: La dimensione finale della lista deve essere la dimensione originale più 1 (in questo caso 4).
+     * L'elemento "nuovo" deve essere all'indice 0. L'elemento "zero" deve essere all'indice 1.
+     * {@code nextIndex()} deve essere 1 e {@code previousIndex()} deve essere 0.
+     */
+    @Test
+    public void testAdd()
+    {
+        int sizeOriginale = list.size(); // Salva la dimensione iniziale (3)
+
+        // Aggiunge "nuovo" all'indice 0 (poiché il cursore è 0)
+        // cursor = 1 dopo add()
+        iterator.add("nuovo");
+
+        // Verifica postcondizioni sulla lista
+        assertEquals(sizeOriginale + 1, list.size());                 // La dimensione deve essere aumentata a 4
+        assertEquals("nuovo", list.get(0));                     // "nuovo" deve essere all'indice 0
+        assertEquals("zero", list.get(1));                      // "zero" deve essere stato shiftato all'indice 1
+        assertEquals("uno", list.get(2));                       // "uno" rimane all'indice 2
+        assertEquals("due", list.get(3));                       // "due" rimane all'indice 3
+
+        // Verifica postcondizioni sull'iteratore
+        assertEquals(1, iterator.nextIndex());                  // Il cursore deve essere avanzato oltre l'elemento aggiunto
+        assertEquals(0, iterator.previousIndex());              // previousIndex deve essere l'indice dell'elemento appena aggiunto
+    }
+
+    /**
+     * Test del metodo {@link myAdapter.ListIterator#remove()} dopo una chiamata a {@code add()}.
+     * <p>
+     * Summary: Il test verifica che il metodo {@code remove()} lanci correttamente una {@code IllegalStateException} se viene chiamato dopo una precedente invocazione di {@code add()}.
+     * <p>
+     * Test Case Design: La motivazione dietro a questo test è assicurare che il metodo {@code remove()} faccia rispettare la sua precondizione che un elemento sia stato
+     * restituito da una precedente operazione di navigazione ({@code next()} o {@code previous()}). 
+     * Poiché {@code add()} resetta lo stato di {@code lastReturned} a -1 (indicando che non c'è un elemento "ultimo restituito" da rimuovere), 
+     * {@code remove()} non dovrebbe essere permesso immediatamente dopo. Questo garantisce la coerenza dello stato dell'iteratore.
+     * <p>
+     * Test Description: 1) L'iteratore aggiunge un nuovo elemento alla lista chiamando {@code add()}. Questa operazione invalida lo stato interno di {@code lastReturned} resettandolo a -1.
+     *                   2) Si tenta immediatamente di chiamare {@code remove()}, aspettandosi un'eccezione.
+     * <p>
+     * Preconditions: L'iteratore è stato inizializzato e la lista e' popolata: ["zero", "uno", "due"].
+     * <p>
+     * Postconditions: La lista avrà subito l'aggiunta di un elemento. La successiva chiamata a {@code remove()} non modifica ulteriormente la lista, 
+     * ma provoca il lancio di una {@code IllegalStateException}. Lo stato del cursore dell'iteratore e di {@code lastReturned} rimangono invariati dopo il tentativo di `remove()`.
+     * <p>
+     * Expected Result: Una {@code IllegalStateException} deve essere lanciata nel momento in cui si tenta di chiamare {@code remove()} dopo una chiamata a {@code add()}.
+     */
+    @Test(expected = IllegalStateException.class)
+    public void testRemoveAfterAdd()
+    {
+        iterator.add("elemento"); // Aggiunge "elemento" alla lista. lastReturned = -1.
+
+        // A questo punto, lastReturned è -1, indicando che non c'è un elemento valido da rimuovere.
+        iterator.remove();
     }
 
     /**
      * Test di combinazioni di navigazione e modifica: next, remove, add, next.
      * <p>
-     * Verifica un flusso di operazioni miste per assicurare la consistenza dello stato dell'iteratore e della lista.
+     * Summary: Il test verifica una sequenza complessa di operazioni miste (navigazione in avanti e indietro, rimozione, aggiunta e modifica di elementi)
+     * per assicurare la consistenza dello stato dell'iteratore e della lista sottostante attraverso una normale sequenza di operazioni.
      * <p>
-     * Test Case Design: Simulare un'operazione complessa per verificare la robustezza dell'iteratore.
+     * Test Case Design: La motivazione dietro a questo test è simulare un'interazione utente più complessa con il `ListIterator`
+     * per verificarne la robustezza e la capacità di mantenere la coerenza dello stato della lista e dei propri indici
+     * dopo operazioni che alterano la struttura (add, remove) e il contenuto (set). Si traccia attentamente lo stato del cursore
+     * e di `lastReturned` ad ogni passo.
      * <p>
-     * Preconditions: Lista popolata.
+     * Test Description:
+     * 1) La lista iniziale è ["zero", "uno", "due"].
+     * 2) Si chiama `next()` per ottenere "zero". Si verifica lo stato del cursore.
+     * 3) Si chiama `remove()` per eliminare "zero". Si verificano la dimensione e il contenuto della lista.
+     * 4) Si chiama `add()` per inserire "nuovoZero". Si verificano la dimensione e il contenuto.
+     * 5) Si chiama `next()` per ottenere "uno". Si verificano lo stato del cursore e l'elemento restituito.
+     * 6) Si chiama `set()` per modificare "uno" in "UNO_MODIFICATO". Si verifica il contenuto.
+     * 7) Si chiama `next()` per ottenere "due". Si verifica che non ci siano altri elementi.
+     * 8) Si chiama `previous()` per tornare a "due".
+     * 9) Si chiama `remove()` per eliminare "due". Si verificano la dimensione e il contenuto finale della lista e gli indici dell'iteratore.
      * <p>
-     * Postconditions: La lista è stata modificata in base alle operazioni, il cursore è nella posizione attesa.
+     * Preconditions: La lista è popolata con i seguenti elementi: ["zero", "uno", "due"]. L'iteratore è all'inizio della lista.
      * <p>
-     * Expected Result: La sequenza di operazioni deve portare la lista e l'iteratore a uno stato specifico e prevedibile.
+     * Postconditions: La lista è stata modificata attraverso le operazioni di rimozione e aggiunta/modifica.
+     * Il cursore dell'iteratore e lo stato di `lastReturned` sono coerenti con la sequenza di operazioni eseguite.
+     * <p>
+     * Expected Result: La lista finale deve essere ["nuovoZero", "UNO_MODIFICATO"]. La dimensione finale deve essere 2.
+     * Gli indici dell'iteratore devono riflettere il posizionamento finale del cursore.
      */
     @Test
-    public void testMixedOperations() {
-        // list: ["zero", "uno", "due"]
+    public void testMixedOperations()
+    {
+        // Precondizione: list = ["zero", "uno", "due"], size = 3
         // iterator: cursor=0, lastReturned=-1
 
-        assertEquals("zero", iterator.next()); // next: "zero", cursor=1, lastReturned=0
+        // Step 1: next()
+        assertEquals("zero", iterator.next()); // next() restituisce "zero"
+        // Stato: list=["zero", "uno", "due"], cursor=1, lastReturned=0
         assertEquals(1, iterator.nextIndex());
+        assertEquals(0, iterator.previousIndex());
 
-        iterator.remove(); // remove: list: ["uno", "due"], cursor=0, lastReturned=-1
+        // Step 2: remove()
+        iterator.remove(); // Rimuove l'ultimo elemento restituito ("zero")
+        // Stato: list=["uno", "due"], cursor=0, lastReturned=-1
         assertEquals(2, list.size());
-        assertEquals("uno", list.get(0));
+        assertFalse(list.contains("zero"));
+        assertEquals("uno", list.get(0)); // "uno" è ora il primo elemento
+        assertEquals(0, iterator.nextIndex());
+        assertEquals(-1, iterator.previousIndex()); // previousIndex è -1 quando cursor è 0
 
-        iterator.add("nuovoZero"); // add: list: ["nuovoZero", "uno", "due"], cursor=1, lastReturned=-1
+        // Step 3: add()
+        iterator.add("nuovoZero"); // Aggiunge "nuovoZero" alla posizione del cursore (0)
+        // Stato: list=["nuovoZero", "uno", "due"], cursor=1, lastReturned=-1
         assertEquals(3, list.size());
         assertEquals("nuovoZero", list.get(0));
+        assertEquals("uno", list.get(1)); // "uno" è stato shiftato
         assertEquals(1, iterator.nextIndex());
+        assertEquals(0, iterator.previousIndex());
 
-        assertEquals("uno", iterator.next()); // next: "uno", cursor=2, lastReturned=1
+        // Step 4: next()
+        assertEquals("uno", iterator.next()); // next() restituisce "uno"
+        // Stato: list=["nuovoZero", "uno", "due"], cursor=2, lastReturned=1
         assertEquals(2, iterator.nextIndex());
-
-        iterator.set("UNO_MODIFICATO"); // set: list: ["nuovoZero", "UNO_MODIFICATO", "due"], cursor=2, lastReturned=1
-        assertEquals("UNO_MODIFICATO", list.get(1));
-
-        assertEquals("due", iterator.next()); // next: "due", cursor=3, lastReturned=2
-        assertFalse(iterator.hasNext());
-
-        assertEquals("due", iterator.previous()); // previous: "due", cursor=2, lastReturned=2
-        iterator.remove(); // remove: list: ["nuovoZero", "UNO_MODIFICATO"], cursor=2, lastReturned=-1
-        assertEquals(2, list.size());
-        assertFalse(list.contains("due"));
-        assertEquals(2, iterator.nextIndex()); // Cursore rimane alla posizione
         assertEquals(1, iterator.previousIndex());
+
+        // Step 5: set()
+        iterator.set("UNO_MODIFICATO"); // Sostituisce "uno" con "UNO_MODIFICATO"
+        // Stato: list=["nuovoZero", "UNO_MODIFICATO", "due"], cursor=2, lastReturned=1
+        assertEquals("UNO_MODIFICATO", list.get(1));
+        assertEquals("nuovoZero", list.get(0)); // Assicurati che gli altri non siano toccati
+        assertEquals("due", list.get(2));       // Assicurati che gli altri non siano toccati
+        assertEquals(3, list.size()); // Dimensione invariata
+
+        // Step 6: next()
+        assertEquals("due", iterator.next()); // next() restituisce "due"
+        // Stato: list=["nuovoZero", "UNO_MODIFICATO", "due"], cursor=3, lastReturned=2
+        assertFalse(iterator.hasNext()); // Dovrebbe essere alla fine della lista
+        assertEquals(3, iterator.nextIndex());
+        assertEquals(2, iterator.previousIndex());
+
+        // Step 7: previous()
+        assertEquals("due", iterator.previous()); // previous() restituisce "due"
+        // Stato: list=["nuovoZero", "UNO_MODIFICATO", "due"], cursor=2, lastReturned=2
+        assertEquals(2, iterator.nextIndex());
+        assertEquals(1, iterator.previousIndex());
+        assertTrue(iterator.hasNext()); // Ora dovrebbe avere un next (l'elemento "due" se lo ripassiamo)
+
+        // Step 8: remove()
+        iterator.remove(); // Rimuove l'ultimo elemento restituito ("due")
+        // Stato: list=["nuovoZero", "UNO_MODIFICATO"], cursor=2, lastReturned=-1
+        assertEquals(2, list.size()); // Dimensione ora 2
+        assertFalse(list.contains("due")); // "due" non deve più esserci
+        assertEquals("nuovoZero", list.get(0));
+        assertEquals("UNO_MODIFICATO", list.get(1));
+        assertEquals(2, iterator.nextIndex()); // Cursore rimane alla posizione
+        assertEquals(1, iterator.previousIndex()); // previousIndex è 1 (cursor - 1)
+        assertFalse(iterator.hasNext()); // Non ci sono più elementi dopo il cursore (alla fine)
     }
 
     /**
      * Test per la corretta gestione di elementi null.
      * <p>
-     * Verifica che {@code add(null)} funzioni correttamente e che {@code next()} restituisca null.
+     * Summary: Il test verifica che il metodo {@code add(Object)} dell'iteratore possa inserire correttamente un valore {@code null} nella lista
+     * e che le successive operazioni di navigazione (come {@code next()}) restituiscano correttamente tale valore {@code null}.
      * <p>
-     * Test Case Design: Assicurarsi che l'iteratore gestisca `null` come un elemento valido
-     * senza lanciare `NullPointerException` (a meno che non sia specificato diversamente nel contratto).
+     * Test Case Design: La motivazione dietro a questo test è assicurarsi che l'iteratore (e la lista sottostante)
+     * gestiscano `null` come un elemento valido, senza lanciare `NullPointerException` (a meno che non sia esplicitamente
+     * specificato diversamente nel contratto dell'interfaccia/implementazione). Si verifica l'inserimento,
+     * la dimensione della lista, lo shifting degli elementi esistenti e la capacità di recuperare il valore `null` inserito.
      * <p>
-     * Preconditions: Una lista popolata.
+     * Test Description: 1) Si registra la dimensione iniziale della lista.
+     *                   2) Si chiama `add(null)` per inserire un elemento `null` all'inizio della lista (poiché l'iteratore è inizialmente a indice 0).
+     *                   3) Si verifica che la dimensione della lista sia aumentata di uno.
+     *                   4) Si verifica che l'elemento all'indice 0 sia `null`.
+     *                   5) Si verifica che l'elemento che originariamente era all'indice 0 ("zero") sia ora all'indice 1, confermando lo shift.
+     *                   6) Si verifica che `nextIndex()` e `previousIndex()` siano aggiornati correttamente dopo l'aggiunta.
+     *                   7) Si naviga attraverso gli elementi successivi per confermare che la lista sia in uno stato coerente.
+     *                   8) L'iteratore viene resettato all'inizio della lista per verificare esplicitamente che `next()` restituisca `null` come primo elemento.
+     *                   9) Si verifica che il secondo elemento restituito da `next()` sia "zero".
      * <p>
-     * Postconditions: La lista contiene un elemento null, l'iteratore restituisce null.
+     * Preconditions: La lista è popolata da tre elementi: ["zero", "uno", "due"]. L'iteratore è all'inizio della lista (cursore a 0).
      * <p>
-     * Expected Result: L'elemento null viene aggiunto e restituito correttamente.
+     * Postconditions: La lista contiene un elemento `null` all'indice 0. La sua dimensione è aumentata di uno.
+     * Gli elementi originali sono stati spostati. L'iteratore può navigare correttamente attraverso la lista modificata,
+     * restituendo il valore `null` quando incontra l'elemento inserito.
+     * <p>
+     * Expected Result: La dimensione finale della lista deve essere 4. L'elemento all'indice 0 deve essere `null`.
+     * `next()` deve restituire `null` quando si trova all'inizio della lista modificata, seguito da "zero".
+     * Gli indici dell'iteratore devono essere coerenti con la navigazione.
      */
     @Test
-    public void testAddNullElement() {
-        iterator.add(null);
-        assertEquals(4, list.size());
-        assertNull(list.get(0));
-        assertEquals("zero", list.get(1)); // Gli elementi esistenti sono shiftati
-        assertEquals(1, iterator.nextIndex());
+    public void testAddNullElement() 
+    {
+        // Precondizione: list = ["zero", "uno", "due"], size = 3, cursor = 0, lastReturned = -1
+        int originalSize = list.size();
 
-        assertEquals("zero", iterator.next());
-        assertEquals("uno", iterator.next());
-        assertEquals("due", iterator.next());
-        
-        iterator = list.listIterator(0); // Reset iteratore
-        assertNull(iterator.next()); // Il primo elemento è null
-        assertEquals("zero", iterator.next()); // Il secondo è "zero"
+        // Aggiungi null all'inizio della lista (indice 0)
+        iterator.add(null);
+        // Stato: list = [null, "zero", "uno", "due"]
+
+        // Verifica stato dopo l'aggiunta di null
+        assertEquals(originalSize + 1, list.size()); // Dimensione deve essere 4
+        assertNull(list.get(0));                     // L'elemento all'indice 0 deve essere null
+        assertEquals("zero", list.get(1));           // "zero" deve essere stato shiftato all'indice 1
+        assertEquals("uno", list.get(2));            // "uno" rimane all'indice 2
+        assertEquals("due", list.get(3));            // "due" rimane all'indice 3
+        assertEquals(1, iterator.nextIndex());       // Cursore è avanzato dopo il null
+        assertEquals(0, iterator.previousIndex());   // previousIndex punta al null aggiunto
+
+        // Continua a navigare per verificare la consistenza
+        assertEquals("zero", iterator.next());       // next() restituisce "zero"
+        assertEquals("uno", iterator.next());        // next() restituisce "uno"
+        assertEquals("due", iterator.next());        // next() restituisce "due"
+        assertFalse(iterator.hasNext());             // Dovrebbe essere alla fine
+
+        // Reset l'iteratore all'inizio per testare esplicitamente next() su null
+        iterator = list.listIterator(0); // cursor = 0, lastReturned = -1
+
+        // Verifica che next() restituisca null correttamente
+        assertNull(iterator.next());                 // Il primo elemento (null) viene restituito
+        assertEquals(1, iterator.nextIndex());       // Cursore è su 1
+        assertEquals(0, iterator.previousIndex());   // previousIndex punta al null
+
+        // Verifica il successivo elemento
+        assertEquals("zero", iterator.next());       // Il secondo elemento ("zero") viene restituito
+        assertEquals(2, iterator.nextIndex());       // Cursore è su 2
+        assertEquals(1, iterator.previousIndex());   // previousIndex punta a "zero"
     }
 
 }

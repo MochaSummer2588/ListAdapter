@@ -14,7 +14,7 @@ public class TestRunner
     public static void main(String[] args) 
     {
         System.out.println("=== ESECUZIONE TEST SUITE ===");
-        System.out.println("Avvio dei test...\n");
+        System.out.println("Avvio dei test...");
         
         long startTime = System.currentTimeMillis();
         
