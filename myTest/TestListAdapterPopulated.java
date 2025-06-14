@@ -3,8 +3,10 @@ package myTest;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
+import org.junit.Ignore; // Importa l'annotazione Ignore se necessario
 import myAdapter.*;
+import myExceptions.IllegalStateException; // Assicurati di avere questa classe, se Iterator.remove() la lancia
+
 import java.util.Vector; // Necessario per testare l'interazione con Vector se usi i toArray con array CLDC
 
 /**
@@ -23,6 +25,9 @@ public class TestListAdapterPopulated
 
     private HList list; // Utilizza HList per mantenere l'astrazione
 
+    /**
+     * Configura l'ambiente di test popolando la lista che verrà manipolata.
+     */
     @Before
     public void setUp()
     {
@@ -33,149 +38,169 @@ public class TestListAdapterPopulated
         list.add("tre");    // Index 2
         list.add("quattro"); // Index 3
     }
+    
+    //------- TEST DEL METODO size() ----------
 
     /**
      * Test del metodo {@link HList#size()}.
      * <p>
-     * @summary Verifica che la dimensione della lista popolata sia corretta.
+     * Summary: Verifica che la dimensione di una lista popolata sia corretta.
      * <p>
-     * @design Assicurarsi che il metodo {@code size()} restituisca il numero
-     * corretto di elementi dopo l'inizializzazione.
+     * Test Case Design: Questo test verifica il valore iniziale di {@code size()} per una lista pre-popolata.
      * <p>
-     * @description 1. La lista viene popolata con 4 elementi in setUp().<br />
-     * 2. Chiama il metodo {@code size()} sulla lista.<br />
-     * 3. Verifica che il valore restituito sia 4.
+     * Test Description: 1. Verifica la dimensione della lista dopo la sua inizializzazione nel setup.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata con 4 elementi.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
      * @expected {@code size()} deve restituire 4.
      */
     @Test
-    public void testSizePopulated()
+    public void testSizePopulatedList()
     {
         assertEquals(4, list.size());
     }
 
+    //------- TEST DEL METODO isEmpty() ----------
+
     /**
      * Test del metodo {@link HList#isEmpty()}.
      * <p>
-     * @summary Verifica che una lista popolata non sia vuota.
+     * Summary: Verifica che {@code isEmpty()} restituisca false per una lista popolata.
      * <p>
-     * @design Assicurarsi che il metodo {@code isEmpty()} restituisca false
-     * quando la lista contiene elementi.
+     * Test Case Design: Questo test verifica che una lista con elementi non sia identificata come vuota.
      * <p>
-     * @description 1. La lista viene popolata con 4 elementi in setUp().<br />
-     * 2. Chiama il metodo {@code isEmpty()} sulla lista.<br />
-     * 3. Verifica che il valore restituito sia false.
+     * Test Description: 1. Verifica lo stato di vuoto della lista dopo la sua inizializzazione nel setup.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata con 4 elementi.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
      * @expected {@code isEmpty()} deve restituire false.
      */
     @Test
-    public void testIsEmptyFalse()
+    public void testIsEmptyPopulatedList()
     {
         assertFalse(list.isEmpty());
+    }
+
+    //------- TEST DEL METODO contains(Object) ----------
+
+    /**
+     * Test del metodo {@link HList#contains(Object)}.
+     * <p>
+     * Summary: Verifica che {@code contains()} restituisca true per un elemento presente nella lista.
+     * <p>
+     * Test Case Design: Assicurarsi che gli elementi effettivamente presenti siano riconosciuti.
+     * <p>
+     * Test Description: 1. Cerca un elemento presente nella lista ("due").<br />
+     * 2. Verifica che il risultato sia true.
+     * <p>
+     * Preconditions: Lista popolata con 4 elementi.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code contains("due")} deve restituire true.
+     */
+    @Test
+    public void testContainsExistingElement()
+    {
+        assertTrue(list.contains("due"));
     }
 
     /**
      * Test del metodo {@link HList#contains(Object)}.
      * <p>
-     * @summary Verifica che {@code contains()} identifichi correttamente elementi presenti e assenti.
+     * Summary: Verifica che {@code contains()} restituisca false per un elemento non presente nella lista.
      * <p>
-     * @design Assicurarsi che il metodo restituisca true per un elemento presente e false per uno assente.
+     * Test Case Design: Assicurarsi che gli elementi non presenti siano correttamente identificati come tali.
      * <p>
-     * @description 1. Chiama {@code contains()} con un elemento presente ("due").<br />
-     * 2. Verifica che il risultato sia true.<br />
-     * 3. Chiama {@code contains()} con un elemento non presente ("cinque").<br />
-     * 4. Verifica che il risultato sia false.
+     * Test Description: 1. Cerca un elemento non presente nella lista ("cinque").<br />
+     * 2. Verifica che il risultato sia false.
      * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro".
+     * Preconditions: Lista popolata con 4 elementi.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code contains("due")} deve essere true, {@code contains("cinque")} deve essere false.
+     * @expected {@code contains("cinque")} deve restituire false.
      */
     @Test
-    public void testContainsPopulated()
+    public void testContainsNonExistingElement()
     {
-        assertTrue(list.contains("due"));
         assertFalse(list.contains("cinque"));
     }
 
     /**
-     * Test del metodo {@link HList#contains(Object)} con elemento null.
+     * Test del metodo {@link HList#contains(Object)}.
      * <p>
-     * @summary Verifica che {@code contains(null)} funzioni correttamente su una lista popolata senza null.
+     * Summary: Verifica che {@code contains(null)} restituisca false se null non è presente.
      * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente la ricerca di null
-     * quando la lista non contiene tale elemento.
+     * Test Case Design: Assicurarsi che la ricerca di un elemento null funzioni correttamente quando non è presente.
      * <p>
-     * @description 1. Chiama {@code contains(null)} su una lista senza elementi null.<br />
-     * 2. Verifica che il risultato sia false.
+     * Test Description: 1. Verifica che la lista non contenga null.<br />
+     * 2. Cerca null nella lista.<br />
+     * 3. Verifica che il risultato sia false.
      * <p>
-     * @pre Lista popolata con elementi non null.
+     * Preconditions: Lista popolata con 4 elementi non null.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
      * @expected {@code contains(null)} deve restituire false.
      */
     @Test
-    public void testContainsNullPopulatedNoNull()
+    public void testContainsNullNotPresent()
     {
         assertFalse(list.contains(null));
     }
 
     /**
-     * Test del metodo {@link HList#contains(Object)} con elemento null in una lista che contiene null.
+     * Test del metodo {@link HList#contains(Object)}.
      * <p>
-     * @summary Verifica che {@code contains(null)} restituisca true se null è presente.
+     * Summary: Verifica che {@code contains(null)} restituisca true se null è presente.
      * <p>
-     * @design Assicurarsi che il metodo identifichi correttamente la presenza di elementi null.
+     * Test Case Design: Assicurarsi che la ricerca di un elemento null funzioni correttamente quando è presente.
      * <p>
-     * @description 1. Aggiunge un elemento null alla lista.<br />
-     * 2. Chiama {@code contains(null)}.<br />
-     * 3. Verifica che il risultato sia true.
+     * Test Description: 1. Aggiunge null alla lista.<br />
+     * 2. Cerca null nella lista.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica la dimensione della lista sia corretta.
      * <p>
-     * @pre Lista popolata, con l'aggiunta di un elemento null.
+     * Preconditions: Lista popolata con 4 elementi non null.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista contiene un elemento null in più.
      * <p>
      * @expected {@code contains(null)} deve restituire true.
      */
     @Test
-    public void testContainsNullPopulatedWithNull()
+    public void testContainsNullWhenPresent()
     {
         list.add(null);
         assertTrue(list.contains(null));
+        assertEquals(5, list.size());
     }
+
+    //------- TEST DEL METODO iterator() ----------
 
     /**
      * Test del metodo {@link HList#iterator()}.
      * <p>
-     * @summary Verifica l'iterazione su una lista popolata.
+     * Summary: Verifica l'iterazione base su una lista popolata.
      * <p>
-     * @design Assicurarsi che l'iteratore restituisca tutti gli elementi nell'ordine corretto
-     * e che {@code hasNext()} e {@code next()} funzionino come previsto.
+     * Test Case Design: Assicurarsi che l'iteratore possa percorrere tutti gli elementi.
      * <p>
-     * @description 1. Ottiene un iteratore.<br />
-     * 2. Itera su tutti gli elementi, verificando il valore di ogni elemento.<br />
-     * 3. Verifica che {@code hasNext()} sia false alla fine.<br />
-     * 4. Tenta di chiamare {@code next()} e verifica l'eccezione.
+     * Test Description: 1. Ottiene un iteratore.<br />
+     * 2. Itera attraverso gli elementi verificandone la presenza.<br />
+     * 3. Verifica che tutti gli elementi siano stati visitati e {@code hasNext()} sia false alla fine.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista popolata con 4 elementi.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected Tutti gli elementi devono essere restituiti nell'ordine corretto.
-     * {@code NoSuchElementException} alla fine.
+     * @expected L'iteratore deve restituire tutti gli elementi nell'ordine corretto.
      */
     @Test
-    public void testIteratorPopulated()
+    public void testIteratorBasicIteration()
     {
         HIterator it = list.iterator();
         assertTrue(it.hasNext());
@@ -187,66 +212,33 @@ public class TestListAdapterPopulated
         assertTrue(it.hasNext());
         assertEquals("quattro", it.next());
         assertFalse(it.hasNext());
-
-        try {
-            it.next();
-            fail("Expected NoSuchElementException");
-        } catch (java.util.NoSuchElementException e) {
-            // Success
-        }
     }
 
-    /**
-     * Test del metodo {@link HList#iterator()} con rimozione tramite iteratore.
-     * <p>
-     * @summary Verifica che {@code remove()} tramite iteratore funzioni correttamente.
-     * <p>
-     * @design Assicurarsi che l'elemento corretto venga rimosso e la lista sia aggiornata.
-     * <p>
-     * @description 1. Itera fino a un certo elemento.<br />
-     * 2. Chiama {@code remove()} tramite l'iteratore.<br />
-     * 3. Verifica la dimensione della lista e l'assenza dell'elemento rimosso.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post L'elemento è rimosso dalla lista.
-     * <p>
-     * @expected La dimensione deve diminuire e l'elemento non deve essere più presente.
-     */
-    @Test
-    public void testIteratorRemove()
-    {
-        HIterator it = list.iterator();
-        it.next(); // "uno"
-        it.next(); // "due"
-        it.remove(); // Rimuove "due"
-
-        assertEquals(3, list.size());
-        assertFalse(list.contains("due"));
-        assertEquals("tre", list.get(1)); // "tre" si sposta a indice 1
-    }
+    //------- TEST DEL METODO toArray() ----------
 
     /**
      * Test del metodo {@link HList#toArray()}.
      * <p>
-     * @summary Verifica che {@code toArray()} su una lista popolata restituisca un array corretto.
+     * Summary: Verifica che {@code toArray()} su una lista popolata restituisca un array corretto.
      * <p>
-     * @design Assicurarsi che l'array restituito contenga tutti gli elementi della lista nell'ordine corretto.
+     * Test Case Design: Assicurarsi che la conversione in array includa tutti gli elementi nell'ordine corretto.
      * <p>
-     * @description 1. Chiama {@code toArray()} sulla lista popolata.<br />
-     * 2. Verifica la dimensione dell'array.<br />
-     * 3. Verifica il contenuto di ogni elemento dell'array.
+     * Test Description: 1. Chiama {@code toArray()} su una lista popolata.<br />
+     * 2. Verifica che l'array risultante non sia null.<br />
+     * 3. Verifica che la sua lunghezza sia uguale alla dimensione della lista.<br />
+     * 4. Verifica il contenuto dell'array.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista popolata con 4 elementi.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected L'array restituito deve avere dimensione 4 e contenere "uno", "due", "tre", "quattro" nell'ordine.
+     * @expected L'array deve contenere gli stessi elementi della lista nell'ordine.
      */
     @Test
-    public void testToArrayPopulated()
+    public void testToArrayPopulatedList()
     {
         Object[] arr = list.toArray();
+        assertNotNull(arr);
         assertEquals(4, arr.length);
         assertEquals("uno", arr[0]);
         assertEquals("due", arr[1]);
@@ -254,72 +246,92 @@ public class TestListAdapterPopulated
         assertEquals("quattro", arr[3]);
     }
 
+    //------- TEST DEL METODO toArray(Object[]) ----------
+
     /**
      * Test del metodo {@link HList#toArray(Object[])}.
      * <p>
-     * @summary Verifica che {@code toArray(Object[])} su una lista popolata funzioni correttamente.
+     * Summary: Verifica che {@code toArray(T[] a)} riutilizzi un array fornito di dimensione sufficiente.
      * <p>
-     * @design Assicurarsi che il metodo popoli correttamente l'array fornito o ne crei uno nuovo se troppo piccolo,
-     * e che gli elementi dopo la fine della lista siano null.
+     * Test Case Design: Assicurarsi che l'array fornito, se grande abbastanza, venga riempito e l'elemento dopo l'ultimo sia null.
      * <p>
-     * @description 1. Chiama {@code toArray()} con un array della stessa dimensione.<br />
-     * 2. Verifica che l'array sia riempito correttamente.<br />
-     * 3. Chiama {@code toArray()} con un array più grande.<br />
-     * 4. Verifica che l'array sia riempito correttamente e che l'elemento dopo la fine della lista sia null.<br />
-     * 5. Chiama {@code toArray()} con un array più piccolo.<br />
-     * 6. Verifica che un nuovo array della dimensione corretta sia creato e riempito.
+     * Test Description: 1. Crea un array di stringhe di dimensione maggiore della lista.<br />
+     * 2. Chiama {@code toArray(arr)}.<br />
+     * 3. Verifica che l'array restituito sia lo stesso array passato.<br />
+     * 4. Verifica il contenuto e la nullificazione dell'elemento extra.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista popolata con 4 elementi. Array fornito di dimensione 5.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata. L'array fornito è riempito.
      * <p>
-     * @expected {@code toArray(Object[])} deve restituire un array corretto in tutti gli scenari.
+     * @expected L'array deve contenere gli elementi della lista e null all'indice 4.
      */
     @Test
-    public void testToArrayParameterizedPopulated()
+    public void testToArrayWithSufficientlyLargeArray()
     {
-        Object[] a = new Object[4];
-        Object[] result = list.toArray(a);
-        assertSame(a, result); // Dovrebbe essere lo stesso array
+        String[] arr = new String[5];
+        arr[4] = "extra"; // Aggiungi un elemento per verificare che venga nullificato
+        Object[] result = list.toArray(arr);
+        assertSame(arr, result); // Deve essere la stessa istanza
+        assertEquals(5, result.length); // La lunghezza rimane quella dell'array passato
+
         assertEquals("uno", result[0]);
         assertEquals("due", result[1]);
         assertEquals("tre", result[2]);
         assertEquals("quattro", result[3]);
+        assertNull(result[4]); // L'elemento extra dovrebbe essere nullificato
+    }
 
-        Object[] b = new Object[5];
-        b[4] = "extra"; // Valore extra per verificare che sia settato a null
-        result = list.toArray(b);
-        assertSame(b, result);
-        assertEquals("uno", result[0]);
-        assertEquals("quattro", result[3]);
-        assertNull(result[4]); // Elemento extra dovrebbe essere null
+    /**
+     * Test del metodo {@link HList#toArray(Object[])}.
+     * <p>
+     * Summary: Verifica che {@code toArray(T[] a)} crei un nuovo array se quello fornito è troppo piccolo.
+     * <p>
+     * Test Case Design: Assicurarsi che un nuovo array venga allocato quando quello fornito è insufficiente.
+     * <p>
+     * Test Description: 1. Crea un array di stringhe di dimensione minore della lista.<br />
+     * 2. Chiama {@code toArray(arr)}.<br />
+     * 3. Verifica che l'array restituito non sia lo stesso array passato.<br />
+     * 4. Verifica che il nuovo array abbia la dimensione corretta e il contenuto corretto.
+     * <p>
+     * Preconditions: Lista popolata con 4 elementi. Array fornito di dimensione 2.
+     * <p>
+     * Postconditions: La lista rimane invariata. Un nuovo array è creato.
+     * <p>
+     * @expected Un nuovo array di dimensione 4 con gli elementi della lista.
+     */
+    @Test
+    public void testToArrayWithTooSmallArray()
+    {
+        String[] arr = new String[2];
+        Object[] result = list.toArray(arr);
+        assertNotSame(arr, result); // Deve essere una nuova istanza
+        assertEquals(4, result.length); // La lunghezza deve essere quella della lista
 
-        Object[] c = new Object[2];
-        result = list.toArray(c);
-        assertNotSame(c, result); // Dovrebbe essere un nuovo array
-        assertEquals(4, result.length);
         assertEquals("uno", result[0]);
+        assertEquals("due", result[1]);
+        assertEquals("tre", result[2]);
         assertEquals("quattro", result[3]);
     }
 
     /**
-     * Test del metodo {@link HList#toArray(Object[])} con array di input null.
+     * Test del metodo {@link HList#toArray(Object[])}.
      * <p>
-     * @summary Verifica che {@code toArray(Object[])} lanci {@code NullPointerException} se l'array di input è null.
+     * Summary: Verifica che {@code toArray(T[] a)} lanci {@code NullPointerException} se l'array fornito è null.
      * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per l'array.
+     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per l'array.
      * <p>
-     * @description 1. Chiama {@code toArray(null)}.<br />
+     * Test Description: 1. Chiama {@code toArray(null)}.<br />
      * 2. Verifica che venga lanciata {@code NullPointerException}.
      * <p>
-     * @pre Lista popolata.
+     * Preconditions: Lista popolata.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
+     * @expected {@code NullPointerException}.
      */
     @Test(expected = NullPointerException.class)
-    public void testToArrayParameterizedNullArray()
+    public void testToArrayNullArray()
     {
         list.toArray(null);
     }
@@ -329,18 +341,18 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(Object)}.
      * <p>
-     * @summary Verifica l'aggiunta di un elemento alla fine della lista popolata.
+     * Summary: Verifica l'aggiunta di un elemento alla fine della lista popolata.
      * <p>
-     * @design Assicurarsi che l'elemento sia aggiunto in coda, la dimensione sia aggiornata
+     * Test Case Design: Assicurarsi che l'elemento sia aggiunto in coda, la dimensione sia aggiornata
      * e il metodo restituisca true.
      * <p>
-     * @description 1. Aggiunge un nuovo elemento.<br />
+     * Test Description: 1. Aggiunge un nuovo elemento.<br />
      * 2. Verifica che la dimensione sia 5.<br />
      * 3. Verifica che l'elemento aggiunto sia l'ultimo della lista.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista popolata con 4 elementi.
      * <p>
-     * @post La lista contiene un elemento in più alla fine, dimensione 5.
+     * Postconditions: La lista contiene un elemento in più alla fine, dimensione 5.
      * <p>
      * @expected {@code add(Object)} deve restituire true, {@code size()} deve essere 5,
      * e {@code get(4)} deve restituire l'elemento aggiunto.
@@ -356,17 +368,17 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(Object)} con elemento null.
      * <p>
-     * @summary Verifica che l'aggiunta di un elemento null alla lista popolata funzioni.
+     * Summary: Verifica che l'aggiunta di un elemento null alla lista popolata funzioni.
      * <p>
-     * @design Assicurarsi che il metodo possa gestire l'aggiunta di elementi nulli.
+     * Test Case Design: Assicurarsi che il metodo possa gestire l'aggiunta di elementi nulli.
      * <p>
-     * @description 1. Aggiunge un elemento null.<br />
+     * Test Description: 1. Aggiunge un elemento null.<br />
      * 2. Verifica che la dimensione sia 5.<br />
      * 3. Verifica che l'elemento null sia presente all'ultimo indice.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista popolata con 4 elementi.
      * <p>
-     * @post La lista contiene un elemento null in più alla fine, dimensione 5.
+     * Postconditions: La lista contiene un elemento null in più alla fine, dimensione 5.
      * <p>
      * @expected {@code add(Object)} deve restituire true, {@code size()} deve essere 5,
      * e {@code get(4)} deve restituire null.
@@ -380,703 +392,82 @@ public class TestListAdapterPopulated
         assertTrue(list.contains(null));
     }
 
-    //------- TEST DEL METODO remove(Object) ----------
-
     /**
-     * Test del metodo {@link HList#remove(Object)}.
+     * Test del metodo {@link HList#add(Object)}.
      * <p>
-     * @summary Verifica la rimozione di un elemento presente dalla lista popolata.
+     * Summary: Verifica l'aggiunta di molteplici elementi alla fine di una lista popolata.
      * <p>
-     * @design Assicurarsi che il metodo rimuova la prima occorrenza dell'elemento,
-     * diminuisca la dimensione e restituisca true.
+     * Test Case Design: Assicurarsi che l'aggiunta ripetuta di elementi in coda funzioni correttamente,
+     * che la dimensione sia aggiornata progressivamente e che l'ordine degli elementi sia mantenuto.
      * <p>
-     * @description 1. Rimuove l'elemento "due".<br />
-     * 2. Verifica che il risultato sia true.<br />
-     * 3. Verifica che la dimensione sia 3.<br />
-     * 4. Verifica che "due" non sia più presente e che gli elementi successivi siano shiftati.
+     * Test Description: 1. Aggiunge tre nuovi elementi consecutivamente ("cinque", "sei", "sette").<br />
+     * 2. Dopo ogni aggiunta, verifica che la dimensione della lista sia incrementata.<br />
+     * 3. Verifica che ogni elemento aggiunto si trovi all'indice corretto (l'ultimo della lista in quel momento).
      * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro".
+     * Preconditions: Lista popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
      * <p>
-     * @post La lista ha un elemento in meno, gli elementi successivi sono shiftati.
+     * Postconditions: La lista contiene 7 elementi in totale, aggiunti in coda nell'ordine corretto.
      * <p>
-     * @expected {@code remove("due")} deve restituire true, la dimensione deve essere 3, e la lista deve essere ["uno", "tre", "quattro"].
+     * @expected {@code add(Object)} deve sempre restituire true.
+     * La lista finale deve essere `["uno", "due", "tre", "quattro", "cinque", "sei", "sette"]`.
+     * La dimensione finale deve essere 7.
      */
     @Test
-    public void testRemoveObjectFromPopulatedList()
-    {
-        assertTrue(list.remove("due"));
-        assertEquals(3, list.size());
-        assertFalse(list.contains("due"));
-        assertEquals("tre", list.get(1)); // "tre" dovrebbe spostarsi a indice 1
-    }
-
-    /**
-     * Test del metodo {@link HList#remove(Object)} per un elemento non presente.
-     * <p>
-     * @summary Verifica che {@code remove(Object)} su una lista popolata non modifichi la lista se l'elemento è assente.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca false e non alteri la lista.
-     * <p>
-     * @description 1. Tenta di rimuovere un elemento ("cinque") non presente.<br />
-     * 2. Verifica che il risultato sia false.<br />
-     * 3. Verifica che la dimensione e il contenuto della lista non siano cambiati.
-     * <p>
-     * @pre Lista popolata con 4 elementi.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code remove("cinque")} deve restituire false, la dimensione deve essere 4.
-     */
-    @Test
-    public void testRemoveNonExistentObjectFromPopulatedList()
-    {
-        assertFalse(list.remove("cinque"));
+    public void testAddMultipleObjectsToPopulatedList() {
+        // Lista iniziale: ["uno", "due", "tre", "quattro"]
         assertEquals(4, list.size());
-        assertTrue(list.contains("uno")); // Verifica che la lista non sia alterata
-    }
 
-    /**
-     * Test del metodo {@link HList#remove(Object)} per elemento null in lista senza null.
-     * <p>
-     * @summary Verifica che {@code remove(null)} restituisca false se null non è presente.
-     * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente la rimozione di null quando non c'è.
-     * <p>
-     * @description 1. Tenta di rimuovere null.<br />
-     * 2. Verifica che il risultato sia false.<br />
-     * 3. Verifica che la dimensione non sia cambiata.
-     * <p>
-     * @pre Lista popolata con elementi non null.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code remove(null)} deve restituire false.
-     */
-    @Test
-    public void testRemoveNullObjectFromPopulatedListNoNull()
-    {
-        assertFalse(list.remove(null));
-        assertEquals(4, list.size());
-    }
-
-    /**
-     * Test del metodo {@link HList#remove(Object)} per elemento null in lista con null.
-     * <p>
-     * @summary Verifica che {@code remove(null)} rimuova la prima occorrenza di null.
-     * <p>
-     * @design Assicurarsi che il metodo rimuova correttamente un elemento null.
-     * <p>
-     * @description 1. Aggiunge un elemento null alla lista.<br />
-     * 2. Rimuove null.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica che la dimensione sia 4 e che null non sia più presente.
-     * <p>
-     * @pre Lista popolata, con l'aggiunta di un elemento null.
-     * <p>
-     * @post La lista ha un elemento null in meno.
-     * <p>
-     * @expected {@code remove(null)} deve restituire true, la dimensione deve essere 4, e null non deve essere presente.
-     */
-    @Test
-    public void testRemoveNullObjectFromPopulatedListWithNull()
-    {
-        list.add(null); // Aggiunge null
+        assertTrue(list.add("cinque"));
         assertEquals(5, list.size());
-        assertTrue(list.remove(null));
-        assertEquals(4, list.size());
-        assertFalse(list.contains(null)); // Solo se era l'unica occorrenza
-    }
-
-    //------- TEST DEL METODO containsAll(HCollection) ----------
-
-    /**
-     * Test del metodo {@link HList#containsAll(HCollection)}.
-     * <p>
-     * @summary Verifica che {@code containsAll()} identifichi correttamente una collezione di elementi presenti.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca true se tutti gli elementi della collezione sono presenti.
-     * <p>
-     * @description 1. Crea una collezione con elementi ("uno", "tre") presenti nella lista.<br />
-     * 2. Chiama {@code containsAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia true.
-     * <p>
-     * @pre Lista popolata con 4 elementi. Collezione con due elementi presenti.
-     * <p>
-     * @post La lista e la collezione rimangono invariate.
-     * <p>
-     * @expected {@code containsAll()} deve restituire true.
-     */
-    @Test
-    public void testContainsAllPresentElements()
-    {
-        HCollection subset = new ListAdapter();
-        subset.add("uno");
-        subset.add("tre");
-        assertTrue(list.containsAll(subset));
-    }
-
-    /**
-     * Test del metodo {@link HList#containsAll(HCollection)}.
-     * <p>
-     * @summary Verifica che {@code containsAll()} restituisca false se almeno un elemento è assente.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca false se anche un solo elemento della collezione non è presente.
-     * <p>
-     * @description 1. Crea una collezione con elementi ("uno", "cinque") dove "cinque" è assente.<br />
-     * 2. Chiama {@code containsAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia false.
-     * <p>
-     * @pre Lista popolata con 4 elementi. Collezione con un elemento presente e uno assente.
-     * <p>
-     * @post La lista e la collezione rimangono invariate.
-     * <p>
-     * @expected {@code containsAll()} deve restituire false.
-     */
-    @Test
-    public void testContainsAllMissingElement()
-    {
-        HCollection mixed = new ListAdapter();
-        mixed.add("uno");
-        mixed.add("cinque"); // Non presente
-        assertFalse(list.containsAll(mixed));
-    }
-
-    /**
-     * Test del metodo {@link HList#containsAll(HCollection)} con collezione vuota.
-     * <p>
-     * @summary Verifica che {@code containsAll()} restituisca true per una collezione vuota.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca true, poiché una lista contiene sempre "tutti" gli elementi di una collezione vuota.
-     * <p>
-     * @description 1. Crea una collezione vuota.<br />
-     * 2. Chiama {@code containsAll()} sulla lista popolata.<br />
-     * 3. Verifica che il risultato sia true.
-     * <p>
-     * @pre Lista popolata. Collezione vuota.
-     * <p>
-     * @post La lista e la collezione rimangono invariate.
-     * <p>
-     * @expected {@code containsAll()} deve restituire true.
-     */
-    @Test
-    public void testContainsAllEmptyCollection()
-    {
-        HCollection emptyCollection = new ListAdapter();
-        assertTrue(list.containsAll(emptyCollection));
-    }
-
-    /**
-     * Test del metodo {@link HList#containsAll(HCollection)} con collezione null.
-     * <p>
-     * @summary Verifica che {@code containsAll(null)} lanci {@code NullPointerException}.
-     * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
-     * <p>
-     * @description 1. Chiama {@code containsAll(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
-     */
-    @Test(expected = NullPointerException.class)
-    public void testContainsAllNullCollection()
-    {
-        list.containsAll(null);
-    }
-
-    //------- TEST DEL METODO addAll(HCollection) ----------
-
-    /**
-     * Test del metodo {@link HList#addAll(HCollection)}.
-     * <p>
-     * @summary Verifica l'aggiunta di una collezione non vuota a una lista popolata.
-     * <p>
-     * @design Assicurarsi che tutti gli elementi della collezione siano aggiunti in coda,
-     * la dimensione sia aggiornata e il metodo restituisca true.
-     * <p>
-     * @description 1. Crea una collezione con 2 elementi.<br />
-     * 2. Aggiunge la collezione alla lista popolata.<br />
-     * 3. Verifica che la dimensione sia 6.<br />
-     * 4. Verifica che gli elementi aggiunti siano in coda.
-     * <p>
-     * @pre Lista popolata con 4 elementi. Collezione con due elementi.
-     * <p>
-     * @post La lista contiene gli elementi aggiunti in coda.
-     * <p>
-     * @expected {@code addAll(HCollection)} deve restituire true, la lista deve avere dimensione 6.
-     */
-    @Test
-    public void testAddAllToPopulatedList()
-    {
-        HCollection newElements = new ListAdapter();
-        newElements.add("cinque");
-        newElements.add("sei");
-
-        assertTrue(list.addAll(newElements));
-        assertEquals(6, list.size());
         assertEquals("cinque", list.get(4));
+
+        assertTrue(list.add("sei"));
+        assertEquals(6, list.size());
         assertEquals("sei", list.get(5));
-    }
 
-    /**
-     * Test del metodo {@link HList#addAll(HCollection)} con collezione vuota.
-     * <p>
-     * @summary Verifica che l'aggiunta di una collezione vuota non modifichi la lista.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca false e non alteri la lista se la collezione da aggiungere è vuota.
-     * <p>
-     * @description 1. Crea una collezione vuota.<br />
-     * 2. Aggiunge la collezione alla lista.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
-     * <p>
-     * @pre Lista popolata con 4 elementi. Collezione vuota.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code addAll(HCollection)} deve restituire false.
-     */
-    @Test
-    public void testAddAllEmptyCollection()
-    {
-        HCollection emptyCollection = new ListAdapter();
-        assertFalse(list.addAll(emptyCollection));
-        assertEquals(4, list.size());
-    }
+        assertTrue(list.add("sette"));
+        assertEquals(7, list.size());
+        assertEquals("sette", list.get(6));
 
-    //------- TEST DEL METODO removeAll(HCollection) ----------
-
-    /**
-     * Test del metodo {@link HList#removeAll(HCollection)}.
-     * <p>
-     * @summary Verifica la rimozione di tutti gli elementi presenti in una data collezione.
-     * <p>
-     * @design Assicurarsi che il metodo rimuova tutte le occorrenze degli elementi specificati
-     * e restituisca true se la lista è stata modificata.
-     * <p>
-     * @description 1. Crea una collezione con elementi da rimuovere ("due", "quattro").<br />
-     * 2. Chiama {@code removeAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica la dimensione della lista (2) e che gli elementi rimossi non siano più presenti.
-     * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro". Collezione con "due", "quattro".
-     * <p>
-     * @post La lista contiene solo gli elementi non rimossi.
-     * <p>
-     * @expected {@code removeAll()} deve restituire true, la lista deve essere ["uno", "tre"].
-     */
-    @Test
-    public void testRemoveAllPresentElements()
-    {
-        HCollection toRemove = new ListAdapter();
-        toRemove.add("due");
-        toRemove.add("quattro");
-
-        assertTrue(list.removeAll(toRemove));
-        assertEquals(2, list.size());
-        assertFalse(list.contains("due"));
-        assertFalse(list.contains("quattro"));
-        assertTrue(list.contains("uno"));
-        assertTrue(list.contains("tre"));
-    }
-
-    /**
-     * Test del metodo {@link HList#removeAll(HCollection)} con elementi non presenti.
-     * <p>
-     * @summary Verifica che {@code removeAll()} non modifichi la lista se nessun elemento è presente nella collezione.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca false se la lista non viene modificata.
-     * <p>
-     * @description 1. Crea una collezione con elementi non presenti nella lista.<br />
-     * 2. Chiama {@code removeAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
-     * <p>
-     * @pre Lista popolata. Collezione con elementi assenti.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code removeAll()} deve restituire false.
-     */
-    @Test
-    public void testRemoveAllNonExistentElements()
-    {
-        HCollection nonExistent = new ListAdapter();
-        nonExistent.add("cinque");
-        nonExistent.add("sei");
-
-        assertFalse(list.removeAll(nonExistent));
-        assertEquals(4, list.size());
-    }
-
-    /**
-     * Test del metodo {@link HList#removeAll(HCollection)} con collezione vuota.
-     * <p>
-     * @summary Verifica che {@code removeAll()} con una collezione vuota non modifichi la lista.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca false se la collezione è vuota.
-     * <p>
-     * @description 1. Crea una collezione vuota.<br />
-     * 2. Chiama {@code removeAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
-     * <p>
-     * @pre Lista popolata. Collezione vuota.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code removeAll()} deve restituire false.
-     */
-    @Test
-    public void testRemoveAllEmptyCollection()
-    {
-        HCollection emptyCollection = new ListAdapter();
-        assertFalse(list.removeAll(emptyCollection));
-        assertEquals(4, list.size());
-    }
-
-    /**
-     * Test del metodo {@link HList#removeAll(HCollection)} con collezione null.
-     * <p>
-     * @summary Verifica che {@code removeAll(null)} lanci {@code NullPointerException}.
-     * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
-     * <p>
-     * @description 1. Chiama {@code removeAll(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
-     */
-    @Test(expected = NullPointerException.class)
-    public void testRemoveAllNullCollection()
-    {
-        list.removeAll(null);
-    }
-
-    //------- TEST DEL METODO retainAll(HCollection) ----------
-
-    /**
-     * Test del metodo {@link HList#retainAll(HCollection)}.
-     * <p>
-     * @summary Verifica che {@code retainAll()} mantenga solo gli elementi presenti in una data collezione.
-     * <p>
-     * @design Assicurarsi che il metodo rimuova gli elementi non presenti nella collezione e restituisca true
-     * se la lista è stata modificata.
-     * <p>
-     * @description 1. Crea una collezione con elementi da mantenere ("uno", "tre").<br />
-     * 2. Chiama {@code retainAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica la dimensione della lista (2) e che solo gli elementi "uno" e "tre" siano rimasti.
-     * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro". Collezione con "uno", "tre".
-     * <p>
-     * @post La lista contiene solo "uno" e "tre".
-     * <p>
-     * @expected {@code retainAll()} deve restituire true, la lista deve essere ["uno", "tre"].
-     */
-    @Test
-    public void testRetainAllExistingElements()
-    {
-        HCollection toRetain = new ListAdapter();
-        toRetain.add("uno");
-        toRetain.add("tre");
-
-        assertTrue(list.retainAll(toRetain));
-        assertEquals(2, list.size());
-        assertTrue(list.contains("uno"));
-        assertTrue(list.contains("tre"));
-        assertFalse(list.contains("due"));
-        assertFalse(list.contains("quattro"));
-    }
-
-    /**
-     * Test del metodo {@link HList#retainAll(HCollection)} senza elementi in comune.
-     * <p>
-     * @summary Verifica che {@code retainAll()} svuoti la lista se non ci sono elementi in comune.
-     * <p>
-     * @design Assicurarsi che il metodo rimuova tutti gli elementi se la collezione non ha elementi in comune.
-     * <p>
-     * @description 1. Crea una collezione con elementi non presenti nella lista ("cinque", "sei").<br />
-     * 2. Chiama {@code retainAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica che la lista sia vuota.
-     * <p>
-     * @pre Lista popolata. Collezione con elementi assenti.
-     * <p>
-     * @post La lista è vuota.
-     * <p>
-     * @expected {@code retainAll()} deve restituire true e la lista deve essere vuota.
-     */
-    @Test
-    public void testRetainAllNoCommonElements()
-    {
-        HCollection noCommon = new ListAdapter();
-        noCommon.add("cinque");
-        noCommon.add("sei");
-
-        assertTrue(list.retainAll(noCommon));
-        assertEquals(0, list.size());
-        assertTrue(list.isEmpty());
-    }
-
-    /**
-     * Test del metodo {@link HList#retainAll(HCollection)} con collezione vuota.
-     * <p>
-     * @summary Verifica che {@code retainAll()} con una collezione vuota svuoti la lista.
-     * <p>
-     * @design Assicurarsi che il metodo rimuova tutti gli elementi se la collezione di riferimento è vuota.
-     * <p>
-     * @description 1. Crea una collezione vuota.<br />
-     * 2. Chiama {@code retainAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica che la lista sia vuota.
-     * <p>
-     * @pre Lista popolata. Collezione vuota.
-     * <p>
-     * @post La lista è vuota.
-     * <p>
-     * @expected {@code retainAll()} deve restituire true e la lista deve essere vuota.
-     */
-    @Test
-    public void testRetainAllEmptyCollection()
-    {
-        HCollection emptyCollection = new ListAdapter();
-        assertTrue(list.retainAll(emptyCollection));
-        assertEquals(0, list.size());
-        assertTrue(list.isEmpty());
-    }
-
-    /**
-     * Test del metodo {@link HList#retainAll(HCollection)} con collezione identica.
-     * <p>
-     * @summary Verifica che {@code retainAll()} non modifichi la lista se la collezione è identica.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca false se la lista non viene modificata.
-     * <p>
-     * @description 1. Crea una collezione con gli stessi elementi della lista.<br />
-     * 2. Chiama {@code retainAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
-     * <p>
-     * @pre Lista popolata. Collezione con gli stessi elementi.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code retainAll()} deve restituire false.
-     */
-    @Test
-    public void testRetainAllIdenticalCollection()
-    {
-        HCollection identicalCollection = new ListAdapter();
-        identicalCollection.add("uno");
-        identicalCollection.add("due");
-        identicalCollection.add("tre");
-        identicalCollection.add("quattro");
-
-        assertFalse(list.retainAll(identicalCollection));
-        assertEquals(4, list.size());
-        assertTrue(list.containsAll(identicalCollection));
-    }
-
-    /**
-     * Test del metodo {@link HList#retainAll(HCollection)} con collezione null.
-     * <p>
-     * @summary Verifica che {@code retainAll(null)} lanci {@code NullPointerException}.
-     * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
-     * <p>
-     * @description 1. Chiama {@code retainAll(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
-     */
-    @Test(expected = NullPointerException.class)
-    public void testRetainAllNullCollection()
-    {
-        list.retainAll(null);
-    }
-
-    //------- TEST DEL METODO clear() ----------
-
-    /**
-     * Test del metodo {@link HList#clear()}.
-     * <p>
-     * @summary Verifica che {@code clear()} svuoti la lista.
-     * <p>
-     * @design Assicurarsi che il metodo rimuova tutti gli elementi, impostando la dimensione a 0.
-     * <p>
-     * @description 1. Chiama {@code clear()} sulla lista popolata.<br />
-     * 2. Verifica che la dimensione sia 0.<br />
-     * 3. Verifica che la lista sia vuota.
-     * <p>
-     * @pre Lista popolata con 4 elementi.
-     * <p>
-     * @post La lista è vuota.
-     * <p>
-     * @expected {@code size()} deve essere 0 e {@code isEmpty()} deve essere true.
-     */
-    @Test
-    public void testClearPopulatedList()
-    {
-        list.clear();
-        assertEquals(0, list.size());
-        assertTrue(list.isEmpty());
-    }
-
-    //------- TEST DEL METODO get(int) ----------
-
-    /**
-     * Test del metodo {@link HList#get(int)}.
-     * <p>
-     * @summary Verifica che {@code get(int)} restituisca l'elemento corretto.
-     * <p>
-     * @design Assicurarsi che il metodo recuperi l'elemento all'indice specificato.
-     * <p>
-     * @description 1. Chiama {@code get()} per vari indici validi (inizio, mezzo, fine).<br />
-     * 2. Verifica che gli elementi restituiti siano quelli attesi.
-     * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro".
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code get(0)} deve essere "uno", {@code get(1)} "due", {@code get(3)} "quattro".
-     */
-    @Test
-    public void testGetValidIndex()
-    {
+        // Verifica finale di tutti gli elementi
         assertEquals("uno", list.get(0));
         assertEquals("due", list.get(1));
+        assertEquals("tre", list.get(2));
         assertEquals("quattro", list.get(3));
     }
 
     /**
-     * Test del metodo {@link HList#get(int)} con indice fuori limite superiore.
+     * Test del metodo {@link HList#add(Object)}.
      * <p>
-     * @summary Verifica che {@code get(int)} lanci {@code IndexOutOfBoundsException} se l'indice è troppo grande.
+     * Summary: Verifica il comportamento di `add(Object)` quando la lista viene riempita fino alla sua capacità massima (se limitata) o cresce dinamicamente.
      * <p>
-     * @design Assicurarsi che il metodo segnali correttamente gli accessi fuori limite.
+     * Test Case Design: Assicurarsi che la lista possa espandersi dinamicamente o gestire la capacità se non predefinita.
+     * Per `ArrayList` (come probabilmente `ListAdapter` si basa), questo testa l'espansione implicita dell'array sottostante.
      * <p>
-     * @description 1. Tenta di recuperare un elemento a indice uguale alla dimensione.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * Test Description: 1. Aggiunge un numero elevato di elementi alla lista (es. 100 elementi).<br />
+     * 2. Verifica che la dimensione della lista sia corretta dopo tutte le aggiunte.<br />
+     * 3. Verifica il contenuto dell'ultimo elemento aggiunto.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista inizialmente popolata con 4 elementi.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista contiene gli elementi iniziali più tutti i nuovi elementi aggiunti.
      * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testGetIndexTooLarge()
-    {
-        list.get(4); // size is 4, valid indices 0-3
-    }
-
-    /**
-     * Test del metodo {@link HList#get(int)} con indice fuori limite inferiore.
-     * <p>
-     * @summary Verifica che {@code get(int)} lanci {@code IndexOutOfBoundsException} se l'indice è negativo.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente gli accessi a indici negativi.
-     * <p>
-     * @description 1. Tenta di recuperare un elemento a indice -1.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testGetIndexNegative()
-    {
-        list.get(-1);
-    }
-
-    //------- TEST DEL METODO set(int, Object) ----------
-
-    /**
-     * Test del metodo {@link HList#set(int, Object)}.
-     * <p>
-     * @summary Verifica che {@code set(int, Object)} sostituisca correttamente un elemento esistente.
-     * <p>
-     * @design Assicurarsi che l'elemento all'indice specificato sia sostituito con il nuovo valore
-     * e che il vecchio valore sia restituito.
-     * <p>
-     * @description 1. Imposta un nuovo elemento a indice 1 ("nuovoDue").<br />
-     * 2. Verifica che il valore restituito sia il vecchio elemento ("due").<br />
-     * 3. Verifica che la dimensione sia invariata.<br />
-     * 4. Verifica che l'elemento a indice 1 sia ora "nuovoDue".
-     * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro".
-     * <p>
-     * @post L'elemento all'indice specificato è stato sostituito.
-     * <p>
-     * @expected {@code set(1, "nuovoDue")} deve restituire "due", la dimensione deve essere 4,
-     * e {@code get(1)} deve essere "nuovoDue".
+     * @expected Tutte le chiamate a `add(Object)` devono restituire true e la lista deve contenere tutti gli elementi aggiunti.
+     * La dimensione finale deve essere 4 + il numero di elementi aggiunti.
      */
     @Test
-    public void testSetValidIndex()
-    {
-        Object oldElement = list.set(1, "nuovoDue");
-        assertEquals("due", oldElement);
-        assertEquals(4, list.size());
-        assertEquals("nuovoDue", list.get(1));
-    }
+    public void testAddObjectStressTest() {
+        // Lista iniziale: ["uno", "due", "tre", "quattro"]
+        int initialSize = list.size(); // 4
+        int elementsToAdd = 1000; // Numero elevato di elementi da aggiungere
 
-    /**
-     * Test del metodo {@link HList#set(int, Object)} con indice fuori limite superiore.
-     * <p>
-     * @summary Verifica che {@code set(int, Object)} lanci {@code IndexOutOfBoundsException} se l'indice è troppo grande.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente gli accessi fuori limite.
-     * <p>
-     * @description 1. Tenta di impostare un elemento a indice uguale alla dimensione.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata con 4 elementi.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testSetIndexTooLarge()
-    {
-        list.set(4, "test");
-    }
+        for (int i = 0; i < elementsToAdd; i++) {
+            assertTrue(list.add("element_" + i));
+        }
 
-    /**
-     * Test del metodo {@link HList#set(int, Object)} con indice fuori limite inferiore.
-     * <p>
-     * @summary Verifica che {@code set(int, Object)} lanci {@code IndexOutOfBoundsException} se l'indice è negativo.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente gli accessi a indici negativi.
-     * <p>
-     * @description 1. Tenta di impostare un elemento a indice -1.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testSetIndexNegative()
-    {
-        list.set(-1, "test");
+        assertEquals(initialSize + elementsToAdd, list.size());
+        assertEquals("element_" + (elementsToAdd - 1), list.get(list.size() - 1)); // Verifica l'ultimo elemento
+        assertEquals("uno", list.get(0)); // Verifica che i primi elementi non siano stati alterati
     }
 
     //------- TEST DEL METODO add(int, Object) ----------
@@ -1084,809 +475,614 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(int, Object)}.
      * <p>
-     * @summary Verifica l'aggiunta di un elemento a un indice specifico all'inizio della lista.
+     * Summary: Verifica l'aggiunta di un elemento a un indice specifico all'interno della lista.
      * <p>
-     * @design Assicurarsi che l'elemento sia aggiunto correttamente, che la dimensione sia aggiornata
-     * e che gli elementi esistenti siano shiftati correttamente.
+     * Test Case Design: Assicurarsi che l'elemento sia inserito correttamente all'indice desiderato,
+     * che gli elementi successivi vengano spostati, e che la dimensione della lista sia aggiornata.
      * <p>
-     * @description 1. Aggiunge un elemento a indice 0 ("inizio").<br />
-     * 2. Verifica che la dimensione sia 5.<br />
-     * 3. Verifica che l'elemento aggiunto sia il primo e che il vecchio primo sia ora al secondo posto.
+     * Test Description: 1. Aggiunge un nuovo elemento all'indice 1.<br />
+     * 2. Verifica che la dimensione della lista sia 5.<br />
+     * 3. Verifica che l'elemento aggiunto ("nuovo") sia all'indice 1.<br />
+     * 4. Verifica che l'elemento precedentemente all'indice 1 ("due") sia ora all'indice 2.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
      * <p>
-     * @post La lista contiene un elemento in più all'inizio.
+     * Postconditions: La lista contiene un elemento in più all'indice specificato, con gli elementi successivi spostati.
+     * La dimensione della lista è 5.
      * <p>
-     * @expected {@code size()} deve essere 5, {@code get(0)} deve essere "inizio", {@code get(1)} deve essere "uno".
+     * @expected La lista deve essere `["uno", "nuovo", "due", "tre", "quattro"]`.
+     * {@code size()} deve essere 5, {@code get(1)} deve restituire "nuovo",
+     * e {@code get(2)} deve restituire "due".
      */
     @Test
-    public void testAddAtIndex0()
-    {
-        list.add(0, "inizio");
+    public void testAddObjectAtIndexPopulatedList() {
+        list.add(1, "nuovo"); // Aggiungi "nuovo" all'indice 1
         assertEquals(5, list.size());
-        assertEquals("inizio", list.get(0));
-        assertEquals("uno", list.get(1));
+        assertEquals("uno", list.get(0));
+        assertEquals("nuovo", list.get(1));
+        assertEquals("due", list.get(2)); // Verifica che l'elemento "due" sia stato spostato
+        assertEquals("tre", list.get(3));
+        assertEquals("quattro", list.get(4));
     }
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
      * <p>
-     * @summary Verifica l'aggiunta di un elemento a un indice specifico al centro della lista.
+     * Summary: Verifica che {@code add(int, Object)} lanci {@code IndexOutOfBoundsException} per un indice fuori limite superiore.
      * <p>
-     * @design Assicurarsi che l'elemento sia aggiunto correttamente, che la dimensione sia aggiornata
-     * e che gli elementi esistenti siano shiftati correttamente.
+     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc, che specifica il lancio di
+     * {@code IndexOutOfBoundsException} se l'indice è maggiore della dimensione della lista.
      * <p>
-     * @description 1. Aggiunge un elemento a indice 2 ("nuovoTre").<br />
-     * 2. Verifica che la dimensione sia 5.<br />
-     * 3. Verifica che l'elemento aggiunto sia al suo posto e che gli elementi successivi siano shiftati.
+     * Test Description: 1. Tenta di aggiungere un elemento a un indice maggiore della dimensione corrente della lista (size + 1).<br />
+     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
      * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro".
+     * Preconditions: Lista popolata con 4 elementi.
      * <p>
-     * @post La lista contiene un elemento in più al centro.
+     * Postconditions: Nessuna modifica alla lista; viene lanciata {@code IndexOutOfBoundsException}.
      * <p>
-     * @expected {@code size()} deve essere 5, {@code get(2)} deve essere "nuovoTre", {@code get(3)} deve essere "tre".
+     * @expected {@code IndexOutOfBoundsException} per {@code add(list.size() + 1, "elemento")}.
      */
-    @Test
-    public void testAddAtIndexMiddle()
-    {
-        list.add(2, "nuovoTre");
-        assertEquals(5, list.size());
-        assertEquals("nuovoTre", list.get(2));
-        assertEquals("tre", list.get(3)); // L'originale "tre" è stato shiftato
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testAddAtIndexOutOfBounds() {
+        // La lista ha 4 elementi (indici 0, 1, 2, 3).
+        // Gli indici validi per add(index, element) sono da 0 a 4 (list.size()).
+        list.add(list.size() + 1, "elemento"); // Tentativo di aggiungere a un indice fuori limite
     }
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
      * <p>
-     * @summary Verifica l'aggiunta di un elemento all'ultimo indice valido (cioè {@code size()}).
+     * Summary: Verifica l'aggiunta di un elemento all'inizio (indice 0) di una lista popolata.
      * <p>
-     * @design Assicurarsi che l'elemento sia aggiunto alla fine della lista.
+     * Test Case Design: Assicurarsi che l'elemento sia correttamente inserito all'inizio e che tutti gli altri elementi vengano spostati.
      * <p>
-     * @description 1. Aggiunge un elemento a indice {@code list.size()}.<br />
+     * Test Description: 1. Aggiunge un nuovo elemento "zero" all'indice 0.<br />
+     * 2. Verifica che la dimensione sia 5.<br />
+     * 3. Verifica che l'elemento aggiunto sia all'indice 0.<br />
+     * 4. Verifica che l'elemento precedentemente all'indice 0 ("uno") sia ora all'indice 1.
+     * <p>
+     * Preconditions: Lista popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: La lista contiene un elemento in più all'inizio.
+     * <p>
+     * @expected La lista deve essere `["zero", "uno", "due", "tre", "quattro"]`.
+     */
+    @Test
+    public void testAddAtIndex0PopulatedList() {
+        list.add(0, "zero");
+        assertEquals(5, list.size());
+        assertEquals("zero", list.get(0));
+        assertEquals("uno", list.get(1)); // L'elemento originale "uno" dovrebbe essere stato spostato
+    }
+
+    /**
+     * Test del metodo {@link HList#add(int, Object)}.
+     * <p>
+     * Summary: Verifica l'aggiunta di un elemento all'ultimo indice valido (list.size()).
+     * <p>
+     * Test Case Design: Assicurarsi che l'aggiunta all'indice `size()` funzioni come `add(Object)`.
+     * <p>
+     * Test Description: 1. Aggiunge un nuovo elemento "cinque" all'indice `list.size()` (che è 4).<br />
      * 2. Verifica che la dimensione sia 5.<br />
      * 3. Verifica che l'elemento aggiunto sia l'ultimo della lista.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista popolata con 4 elementi.
      * <p>
-     * @post La lista contiene un elemento in più alla fine.
+     * Postconditions: La lista contiene un elemento in più alla fine.
      * <p>
-     * @expected {@code size()} deve essere 5, {@code get(4)} deve essere "fine".
+     * @expected La lista deve essere `["uno", "due", "tre", "quattro", "cinque"]`.
      */
     @Test
-    public void testAddAtIndexSize()
-    {
-        list.add(list.size(), "fine");
+    public void testAddAtIndexLastValidPopulatedList() {
+        list.add(list.size(), "cinque");
         assertEquals(5, list.size());
-        assertEquals("fine", list.get(4));
+        assertEquals("cinque", list.get(4));
     }
 
     /**
-     * Test del metodo {@link HList#add(int, Object)} con indice fuori limite superiore.
+     * Test del metodo {@link HList#add(int, Object)} con elemento null.
      * <p>
-     * @summary Verifica che {@code add(int, Object)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è maggiore della dimensione.
+     * Summary: Verifica l'aggiunta di un elemento null a un indice specifico.
      * <p>
-     * @design Assicurarsi che non sia possibile aggiungere elementi a indici non validi.
+     * Test Case Design: Assicurarsi che `null` possa essere inserito correttamente a un dato indice.
      * <p>
-     * @description 1. Tenta di aggiungere un elemento a indice {@code list.size() + 1}.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * Test Description: 1. Aggiunge null all'indice 2.<br />
+     * 2. Verifica la dimensione.<br />
+     * 3. Verifica che null sia all'indice 2.<br />
+     * 4. Verifica che gli elementi successivi siano spostati.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista popolata con 4 elementi.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista contiene un elemento null all'indice specificato.
      * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
+     * @expected La lista deve essere `["uno", "due", null, "tre", "quattro"]`.
      */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testAddAtIndexTooLarge()
-    {
-        list.add(list.size() + 1, "invalid");
+    @Test
+    public void testAddNullAtIndexPopulatedList() {
+        list.add(2, null);
+        assertEquals(5, list.size());
+        assertEquals("uno", list.get(0));
+        assertEquals("due", list.get(1));
+        assertNull(list.get(2)); // null dovrebbe essere qui
+        assertEquals("tre", list.get(3)); // "tre" spostato
+        assertEquals("quattro", list.get(4)); // "quattro" spostato
     }
 
     /**
-     * Test del metodo {@link HList#add(int, Object)} con indice fuori limite inferiore.
+     * Test del metodo {@link HList#add(int, Object)}.
      * <p>
-     * @summary Verifica che {@code add(int, Object)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è negativo.
+     * Summary: Verifica che {@code add(int, Object)} lanci {@code IndexOutOfBoundsException} per indice negativo.
      * <p>
-     * @design Assicurarsi che non sia possibile aggiungere elementi a indici negativi.
+     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc per indici negativi.
      * <p>
-     * @description 1. Tenta di aggiungere un elemento a indice -1.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * Test Description: 1. Tenta di aggiungere un elemento a un indice negativo (-1).<br />
+     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
      * <p>
-     * @pre Lista popolata.
+     * Preconditions: Lista popolata.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: Nessuna modifica alla lista; viene lanciata {@code IndexOutOfBoundsException}.
      * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
+     * @expected {@code IndexOutOfBoundsException} per {@code add(-1, "elemento")}.
      */
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testAddAtIndexNegative()
-    {
-        list.add(-1, "invalid");
+    public void testAddAtIndexNegativePopulatedList() {
+        list.add(-1, "elemento");
     }
+
+    //------- TEST DEL METODO remove(Object) ----------
+
+    /**
+     * Test del metodo {@link HList#remove(Object)}.
+     * <p>
+     * Summary: Verifica la rimozione di un elemento intermedio dalla lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che l'elemento corretto venga rimosso e che gli elementi successivi si spostino.
+     * <p>
+     * Test Description: 1. Rimuove l'elemento "due".<br />
+     * 2. Verifica che il risultato sia true.<br />
+     * 3. Verifica che la dimensione sia 3.<br />
+     * 4. Verifica che "due" non sia più presente.<br />
+     * 5. Verifica che gli elementi rimanenti siano nell'ordine corretto.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: Lista: ["uno", "tre", "quattro"].
+     * <p>
+     * @expected {@code remove("due")} deve restituire true.
+     */
+    @Test
+    public void testRemoveObjectFromPopulatedList()
+    {
+        assertTrue(list.remove("due"));
+        assertEquals(3, list.size());
+        assertFalse(list.contains("due"));
+        assertEquals("uno", list.get(0));
+        assertEquals("tre", list.get(1));
+        assertEquals("quattro", list.get(2));
+    }
+
+    /**
+     * Test del metodo {@link HList#remove(Object)}.
+     * <p>
+     * Summary: Verifica la rimozione del primo elemento dalla lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che la rimozione del primo elemento sposti correttamente gli altri.
+     * <p>
+     * Test Description: 1. Rimuove l'elemento "uno".<br />
+     * 2. Verifica che il risultato sia true.<br />
+     * 3. Verifica che la dimensione sia 3.<br />
+     * 4. Verifica che "uno" non sia più presente.<br />
+     * 5. Verifica che "due" sia ora il primo elemento.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: Lista: ["due", "tre", "quattro"].
+     * <p>
+     * @expected {@code remove("uno")} deve restituire true.
+     */
+    @Test
+    public void testRemoveFirstObjectFromPopulatedList() {
+        assertTrue(list.remove("uno"));
+        assertEquals(3, list.size());
+        assertFalse(list.contains("uno"));
+        assertEquals("due", list.get(0));
+        assertEquals("tre", list.get(1));
+        assertEquals("quattro", list.get(2));
+    }
+
+    /**
+     * Test del metodo {@link HList#remove(Object)}.
+     * <p>
+     * Summary: Verifica la rimozione dell'ultimo elemento dalla lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che la rimozione dell'ultimo elemento sia gestita correttamente.
+     * <p>
+     * Test Description: 1. Rimuove l'elemento "quattro".<br />
+     * 2. Verifica che il risultato sia true.<br />
+     * 3. Verifica che la dimensione sia 3.<br />
+     * 4. Verifica che "quattro" non sia più presente.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: Lista: ["uno", "due", "tre"].
+     * <p>
+     * @expected {@code remove("quattro")} deve restituire true.
+     */
+    @Test
+    public void testRemoveLastObjectFromPopulatedList() {
+        assertTrue(list.remove("quattro"));
+        assertEquals(3, list.size());
+        assertFalse(list.contains("quattro"));
+        assertEquals("tre", list.get(2)); // Verifica che il nuovo ultimo elemento sia "tre"
+    }
+
+    /**
+     * Test del metodo {@link HList#remove(Object)}.
+     * <p>
+     * Summary: Verifica che {@code remove(Object)} restituisca false per un elemento non presente.
+     * <p>
+     * Test Case Design: Assicurarsi che la rimozione di un elemento inesistente non modifichi la lista.
+     * <p>
+     * Test Description: 1. Tenta di rimuovere un elemento "cinque" non presente.<br />
+     * 2. Verifica che il risultato sia false.<br />
+     * 3. Verifica che la dimensione della lista non sia cambiata.
+     * <p>
+     * Preconditions: Lista popolata con 4 elementi.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code remove("cinque")} deve restituire false.
+     */
+    @Test
+    public void testRemoveNonExistingObject()
+    {
+        assertFalse(list.remove("cinque"));
+        assertEquals(4, list.size()); // Dimensione invariata
+    }
+
+    /**
+     * Test del metodo {@link HList#remove(Object)}.
+     * <p>
+     * Summary: Verifica la rimozione di un elemento null dalla lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che la rimozione di null funzioni correttamente.
+     * <p>
+     * Test Description: 1. Aggiunge null alla lista.<br />
+     * 2. Rimuove null dalla lista.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica che la dimensione sia tornata a 4.
+     * <p>
+     * Preconditions: Lista popolata con 4 elementi non null, poi un null aggiunto.
+     * <p>
+     * Postconditions: La lista non contiene più l'elemento null.
+     * <p>
+     * @expected {@code remove(null)} deve restituire true dopo l'aggiunta.
+     */
+    @Test
+    public void testRemoveNullObject()
+    {
+        list.add(null); // List: ["uno", "due", "tre", "quattro", null]
+        assertEquals(5, list.size());
+        assertTrue(list.remove(null));
+        assertEquals(4, list.size()); // Dimensione tornata a 4
+        assertFalse(list.contains(null)); // Null non più presente
+    }
+
+    /**
+     * Test del metodo {@link HList#remove(Object)}.
+     * <p>
+     * Summary: Verifica che {@code remove(null)} restituisca false se null non è presente.
+     * <p>
+     * Test Case Design: Assicurarsi che tentare di rimuovere null da una lista senza null non alteri la lista.
+     * <p>
+     * Test Description: 1. Tenta di rimuovere null da una lista senza null.<br />
+     * 2. Verifica che il risultato sia false.<br />
+     * 3. Verifica che la dimensione non sia cambiata.
+     * <p>
+     * Preconditions: Lista popolata con 4 elementi non null.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code remove(null)} deve restituire false.
+     */
+    @Test
+    public void testRemoveNullObjectNotPresent() {
+        assertFalse(list.remove(null));
+        assertEquals(4, list.size());
+    }
+
+    /**
+     * Test del metodo {@link HList#remove(Object)}.
+     * <p>
+     * Summary: Verifica che {@code remove(Object)} rimuova solo la prima occorrenza di un elemento duplicato.
+     * <p>
+     * Test Case Design: Assicurarsi che la semantica di `remove(Object)` sia di rimozione della prima occorrenza.
+     * <p>
+     * Test Description: 1. Aggiunge un duplicato ("due") alla lista.<br />
+     * 2. Rimuove "due".<br />
+     * 3. Verifica che la dimensione sia 4 e che l'altro "due" sia ancora presente.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"], viene aggiunto "due" -> ["uno", "due", "tre", "quattro", "due"].
+     * <p>
+     * Postconditions: Lista: ["uno", "tre", "quattro", "due"].
+     * <p>
+     * @expected La dimensione deve essere 4 e {@code contains("due")} deve essere true.
+     */
+    @Test
+    public void testRemoveObjectFirstOccurrence() {
+        list.add("due"); // List: ["uno", "due", "tre", "quattro", "due"]
+        assertEquals(5, list.size());
+
+        assertTrue(list.remove("due")); // Rimuove il primo "due"
+        assertEquals(4, list.size());
+        assertTrue(list.contains("due")); // Il secondo "due" dovrebbe essere ancora lì
+        assertEquals("uno", list.get(0));
+        assertEquals("tre", list.get(1));
+        assertEquals("quattro", list.get(2));
+        assertEquals("due", list.get(3)); // Il secondo "due" è ora all'indice 3
+    }
+
 
     //------- TEST DEL METODO remove(int) ----------
 
     /**
      * Test del metodo {@link HList#remove(int)}.
      * <p>
-     * @summary Verifica la rimozione di un elemento a un indice specifico all'inizio della lista.
+     * Summary: Verifica la rimozione dell'elemento all'indice 0 dalla lista popolata.
      * <p>
-     * @design Assicurarsi che l'elemento corretto sia rimosso e che la dimensione e lo shift siano corretti.
+     * Test Case Design: Assicurarsi che la rimozione del primo elemento avvenga correttamente.
      * <p>
-     * @description 1. Rimuove l'elemento a indice 0.<br />
+     * Test Description: 1. Rimuove l'elemento all'indice 0.<br />
      * 2. Verifica che l'elemento restituito sia "uno".<br />
-     * 3. Verifica che la dimensione sia 3 e che "due" sia il nuovo primo elemento.
+     * 3. Verifica che la dimensione sia 3.<br />
+     * 4. Verifica che "uno" non sia più presente.<br />
+     * 5. Verifica che "due" sia ora il primo elemento.
      * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro".
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
      * <p>
-     * @post L'elemento a indice 0 è rimosso, gli altri shiftati.
+     * Postconditions: Lista: ["due", "tre", "quattro"].
      * <p>
-     * @expected Il metodo deve restituire "uno", la dimensione deve essere 3, e la lista deve essere ["due", "tre", "quattro"].
+     * @expected {@code remove(0)} deve restituire "uno".
      */
     @Test
-    public void testRemoveAtIndex0()
-    {
-        Object removed = list.remove(0);
-        assertEquals("uno", removed);
+    public void testRemoveAtIndex0PopulatedList() {
+        Object removedElement = list.remove(0);
+        assertEquals("uno", removedElement);
         assertEquals(3, list.size());
+        assertFalse(list.contains("uno"));
         assertEquals("due", list.get(0));
     }
 
     /**
      * Test del metodo {@link HList#remove(int)}.
      * <p>
-     * @summary Verifica la rimozione di un elemento a un indice specifico al centro della lista.
+     * Summary: Verifica la rimozione dell'elemento all'ultimo indice valido (size - 1) dalla lista popolata.
      * <p>
-     * @design Assicurarsi che l'elemento corretto sia rimosso e che la dimensione e lo shift siano corretti.
+     * Test Case Design: Assicurarsi che la rimozione dell'ultimo elemento avvenga correttamente.
      * <p>
-     * @description 1. Rimuove l'elemento a indice 1 ("due").<br />
-     * 2. Verifica che l'elemento restituito sia "due".<br />
-     * 3. Verifica che la dimensione sia 3 e che "tre" sia il nuovo elemento a indice 1.
+     * Test Description: 1. Rimuove l'elemento all'indice `list.size() - 1` (che è 3).<br />
+     * 2. Verifica che l'elemento restituito sia "quattro".<br />
+     * 3. Verifica che la dimensione sia 3.<br />
+     * 4. Verifica che "quattro" non sia più presente.
      * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro".
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
      * <p>
-     * @post L'elemento a indice 1 è rimosso, gli altri shiftati.
+     * Postconditions: Lista: ["uno", "due", "tre"].
      * <p>
-     * @expected Il metodo deve restituire "due", la dimensione deve essere 3, e la lista deve essere ["uno", "tre", "quattro"].
+     * @expected {@code remove(3)} deve restituire "quattro".
      */
     @Test
-    public void testRemoveAtIndexMiddle()
-    {
-        Object removed = list.remove(1);
-        assertEquals("due", removed);
+    public void testRemoveAtIndexLastPopulatedList() {
+        Object removedElement = list.remove(list.size() - 1);
+        assertEquals("quattro", removedElement);
         assertEquals(3, list.size());
-        assertEquals("tre", list.get(1));
+        assertFalse(list.contains("quattro"));
+        assertEquals("tre", list.get(list.size() - 1)); // Nuovo ultimo elemento
     }
 
     /**
      * Test del metodo {@link HList#remove(int)}.
      * <p>
-     * @summary Verifica la rimozione dell'ultimo elemento della lista.
+     * Summary: Verifica la rimozione di un elemento a un indice intermedio dalla lista popolata.
      * <p>
-     * @design Assicurarsi che l'ultimo elemento sia rimosso e la dimensione aggiornata.
+     * Test Case Design: Assicurarsi che l'elemento corretto venga rimosso e che gli elementi successivi si spostino.
      * <p>
-     * @description 1. Rimuove l'elemento a indice {@code list.size() - 1}.<br />
-     * 2. Verifica che l'elemento restituito sia "quattro".<br />
-     * 3. Verifica che la dimensione sia 3 e che "quattro" non sia più presente.
+     * Test Description: 1. Rimuove l'elemento all'indice 1 ("due").<br />
+     * 2. Verifica che l'elemento restituito sia "due".<br />
+     * 3. Verifica che la dimensione sia 3.<br />
+     * 4. Verifica che "due" non sia più presente.<br />
+     * 5. Verifica che "tre" sia ora all'indice 1.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
      * <p>
-     * @post L'ultimo elemento è rimosso.
+     * Postconditions: Lista: ["uno", "tre", "quattro"].
      * <p>
-     * @expected Il metodo deve restituire "quattro", la dimensione deve essere 3.
+     * @expected {@code remove(1)} deve restituire "due".
      */
     @Test
-    public void testRemoveAtLastIndex()
-    {
-        Object removed = list.remove(list.size() - 1); // Rimuove "quattro"
-        assertEquals("quattro", removed);
+    public void testRemoveAtIndexIntermediatePopulatedList() {
+        Object removedElement = list.remove(1);
+        assertEquals("due", removedElement);
         assertEquals(3, list.size());
-        assertFalse(list.contains("quattro"));
+        assertFalse(list.contains("due"));
+        assertEquals("uno", list.get(0));
+        assertEquals("tre", list.get(1));
+        assertEquals("quattro", list.get(2));
     }
 
     /**
-     * Test del metodo {@link HList#remove(int)} con indice fuori limite superiore.
+     * Test del metodo {@link HList#remove(int)}.
      * <p>
-     * @summary Verifica che {@code remove(int)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è uguale o maggiore della dimensione.
+     * Summary: Verifica che {@code remove(int)} lanci {@code IndexOutOfBoundsException} per indice negativo.
      * <p>
-     * @design Assicurarsi che il metodo segnali correttamente gli accessi fuori limite.
+     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc per indici negativi.
      * <p>
-     * @description 1. Tenta di rimuovere un elemento a indice uguale alla dimensione.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * Test Description: 1. Tenta di rimuovere un elemento da un indice negativo (-1).<br />
+     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
      * <p>
-     * @pre Lista popolata con 4 elementi.
+     * Preconditions: Lista popolata.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
+     * @expected {@code IndexOutOfBoundsException}.
      */
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testRemoveIndexTooLarge()
-    {
-        list.remove(list.size()); // size is 4, valid indices 0-3
-    }
-
-    /**
-     * Test del metodo {@link HList#remove(int)} con indice fuori limite inferiore.
-     * <p>
-     * @summary Verifica che {@code remove(int)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è negativo.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente gli accessi a indici negativi.
-     * <p>
-     * @description 1. Tenta di rimuovere un elemento a indice -1.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testRemoveIndexNegative()
-    {
+    public void testRemoveAtIndexNegativePopulatedList() {
         list.remove(-1);
     }
 
-    //------- TEST DEL METODO indexOf(Object) ----------
-
     /**
-     * Test del metodo {@link HList#indexOf(Object)}.
+     * Test del metodo {@link HList#remove(int)}.
      * <p>
-     * @summary Verifica che {@code indexOf()} restituisca l'indice della prima occorrenza di un elemento.
+     * Summary: Verifica che {@code remove(int)} lanci {@code IndexOutOfBoundsException} per indice uguale alla dimensione.
      * <p>
-     * @design Assicurarsi che il metodo trovi l'indice corretto per elementi presenti e restituisca -1 per elementi assenti.
+     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc per indici fuori limite superiore.
      * <p>
-     * @description 1. Chiama {@code indexOf()} per "due".<br />
-     * 2. Verifica che il risultato sia 1.<br />
-     * 3. Chiama {@code indexOf()} per "cinque" (assente).<br />
-     * 4. Verifica che il risultato sia -1.
+     * Test Description: 1. Tenta di rimuovere un elemento dall'indice {@code list.size()}.<br />
+     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
      * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro".
+     * Preconditions: Lista popolata.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code indexOf("due")} deve essere 1, {@code indexOf("cinque")} deve essere -1.
-     */
-    @Test
-    public void testIndexOfPresentAndAbsent()
-    {
-        assertEquals(1, list.indexOf("due"));
-        assertEquals(-1, list.indexOf("cinque"));
-    }
-
-    /**
-     * Test del metodo {@link HList#indexOf(Object)} con elemento null.
-     * <p>
-     * @summary Verifica che {@code indexOf(null)} funzioni correttamente.
-     * <p>
-     * @design Assicurarsi che il metodo trovi l'indice corretto per null se presente, altrimenti -1.
-     * <p>
-     * @description 1. Chiama {@code indexOf(null)} su una lista senza null.<br />
-     * 2. Verifica che il risultato sia -1.<br />
-     * 3. Aggiunge null e chiara {@code indexOf(null)}.<br />
-     * 4. Verifica che il risultato sia l'indice di null.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata (o è stata modificata per l'aggiunta di null).
-     * <p>
-     * @expected {@code indexOf(null)} deve essere -1 inizialmente, poi l'indice corretto dopo l'aggiunta.
-     */
-    @Test
-    public void testIndexOfNull()
-    {
-        assertEquals(-1, list.indexOf(null));
-        list.add(null);
-        assertEquals(4, list.indexOf(null)); // null è stato aggiunto all'indice 4
-    }
-
-    //------- TEST DEL METODO lastIndexOf(Object) ----------
-
-    /**
-     * Test del metodo {@link HList#lastIndexOf(Object)}.
-     * <p>
-     * @summary Verifica che {@code lastIndexOf()} restituisca l'indice dell'ultima occorrenza di un elemento.
-     * <p>
-     * @design Assicurarsi che il metodo trovi l'indice corretto per elementi presenti (anche duplicati) e -1 per assenti.
-     * <p>
-     * @description 1. Aggiunge un duplicato ("due").<br />
-     * 2. Chiama {@code lastIndexOf()} per "due".<br />
-     * 3. Verifica che il risultato sia l'indice dell'ultima occorrenza.<br />
-     * 4. Chiama {@code lastIndexOf()} per un elemento assente ("cinque").<br />
-     * 5. Verifica che il risultato sia -1.
-     * <p>
-     * @pre Lista popolata, eventualmente con duplicati.
-     * <p>
-     * @post La lista rimane invariata (o è stata modificata per l'aggiunta di duplicati).
-     * <p>
-     * @expected {@code lastIndexOf("due")} deve essere l'indice corretto dell'ultima occorrenza,
-     * {@code lastIndexOf("cinque")} deve essere -1.
-     */
-    @Test
-    public void testLastIndexOfPresentAndAbsent()
-    {
-        list.add("due"); // list: "uno", "due", "tre", "quattro", "due"
-        assertEquals(4, list.lastIndexOf("due"));
-        assertEquals(-1, list.lastIndexOf("cinque"));
-    }
-
-    /**
-     * Test del metodo {@link HList#lastIndexOf(Object)} con elemento null.
-     * <p>
-     * @summary Verifica che {@code lastIndexOf(null)} funzioni correttamente.
-     * <p>
-     * @design Assicurarsi che il metodo trovi l'indice corretto per l'ultima occorrenza di null se presente, altrimenti -1.
-     * <p>
-     * @description 1. Aggiunge più elementi null.<br />
-     * 2. Chiama {@code lastIndexOf(null)}.<br />
-     * 3. Verifica che il risultato sia l'indice dell'ultima occorrenza di null.
-     * <p>
-     * @pre Lista popolata, con più elementi null.
-     * <p>
-     * @post La lista rimane invariata (o è stata modificata per l'aggiunta di null).
-     * <p>
-     * @expected {@code lastIndexOf(null)} deve essere l'indice corretto dell'ultima occorrenza di null.
-     */
-    @Test
-    public void testLastIndexOfNull()
-    {
-        list.add(null);
-        list.add("sette");
-        list.add(null); // list: "uno", "due", "tre", "quattro", null, "sette", null
-        assertEquals(6, list.lastIndexOf(null));
-    }
-
-    //------- TEST DEL METODO listIterator() ----------
-
-    /**
-     * Test del metodo {@link HList#listIterator()}.
-     * <p>
-     * @summary Verifica che {@code listIterator()} su una lista popolata restituisca un iteratore valido.
-     * <p>
-     * @design Assicurarsi che l'iteratore sia posizionato all'inizio e che le sue funzionalità base (next, previous)
-     * operino correttamente.
-     * <p>
-     * @description 1. Ottiene un ListIterator.<br />
-     * 2. Verifica che {@code hasNext()} sia true e {@code hasPrevious()} sia false.<br />
-     * 3. Verifica il primo elemento con {@code next()}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata, l'iteratore è posizionato all'inizio.
-     * <p>
-     * @expected {@code hasNext()} deve essere true, {@code hasPrevious()} false,
-     * {@code next()} deve restituire il primo elemento.
-     */
-    @Test
-    public void testListIteratorPopulatedStart()
-    {
-        HListIterator it = list.listIterator();
-        assertNotNull(it);
-        assertTrue(it.hasNext());
-        assertFalse(it.hasPrevious());
-        assertEquals("uno", it.next());
-    }
-
-    //------- TEST DEL METODO listIterator(int) ----------
-
-    /**
-     * Test del metodo {@link HList#listIterator(int)}.
-     * <p>
-     * @summary Verifica che {@code listIterator(int)} crei un iteratore posizionato correttamente.
-     * <p>
-     * @design Assicurarsi che l'iteratore sia inizializzato all'indice specificato e che le sue funzionalità
-     * di navigazione e indice riflettano tale posizione.
-     * <p>
-     * @description 1. Crea un ListIterator a indice 2.<br />
-     * 2. Verifica {@code nextIndex()} e {@code previousIndex()}.<br />
-     * 3. Verifica {@code next()} e {@code previous()} dal punto di partenza.
-     * <p>
-     * @pre Lista popolata con 4 elementi.
-     * <p>
-     * @post La lista rimane invariata, l'iteratore è posizionato all'indice 2.
-     * <p>
-     * @expected {@code nextIndex()} deve essere 2, {@code previousIndex()} deve essere 1,
-     * {@code next()} deve restituire "tre", {@code previous()} deve restituire "due".
-     */
-    @Ignore("Da dei problemi con la gestione degli indici")
-    @Test
-    public void testListIteratorAtIndexPopulated()
-    {
-        HListIterator it = list.listIterator(2); // Posiziona il cursore tra "due" e "tre"
-        assertEquals(2, it.nextIndex());
-        assertEquals(1, it.previousIndex());
-        assertTrue(it.hasNext());
-        assertTrue(it.hasPrevious());
-        assertEquals("tre", it.next()); // next() dovrebbe restituire "tre"
-        assertEquals("due", it.previous()); // previous() dovrebbe restituire "due"
-    }
-
-    /**
-     * Test del metodo {@link HList#listIterator(int)} con indice alla fine della lista.
-     * <p>
-     * @summary Verifica che {@code listIterator(size())} crei un iteratore posizionato alla fine.
-     * <p>
-     * @design Assicurarsi che l'iteratore sia posizionato dopo l'ultimo elemento.
-     * <p>
-     * @description 1. Crea un ListIterator a indice {@code list.size()}.<br />
-     * 2. Verifica che {@code hasNext()} sia false e {@code hasPrevious()} sia true.<br />
-     * 3. Verifica l'ultimo elemento con {@code previous()}.
-     * <p>
-     * @pre Lista popolata con 4 elementi.
-     * <p>
-     * @post La lista rimane invariata, l'iteratore è posizionato alla fine.
-     * <p>
-     * @expected {@code hasNext()} deve essere false, {@code hasPrevious()} true,
-     * {@code previous()} deve restituire "quattro".
-     */
-    @Test
-    public void testListIteratorAtIndexAtEnd()
-    {
-        HListIterator it = list.listIterator(list.size()); // Posiziona il cursore dopo "quattro"
-        assertFalse(it.hasNext());
-        assertTrue(it.hasPrevious());
-        assertEquals(list.size(), it.nextIndex());
-        assertEquals(list.size() - 1, it.previousIndex());
-        assertEquals("quattro", it.previous());
-    }
-
-    /**
-     * Test del metodo {@link HList#listIterator(int)} con indice fuori limite superiore.
-     * <p>
-     * @summary Verifica che {@code listIterator(int)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è maggiore della dimensione.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente la creazione di iteratori con indici non validi.
-     * <p>
-     * @description 1. Tenta di creare un ListIterator con indice {@code list.size() + 1}.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata con 4 elementi.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
+     * @expected {@code IndexOutOfBoundsException}.
      */
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testListIteratorAtIndexTooLarge()
-    {
-        list.listIterator(list.size() + 1);
+    public void testRemoveAtIndexSizePopulatedList() {
+        list.remove(list.size());
     }
 
-    /**
-     * Test del metodo {@link HList#listIterator(int)} con indice fuori limite inferiore.
-     * <p>
-     * @summary Verifica che {@code listIterator(int)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è negativo.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente la creazione di iteratori con indici negativi.
-     * <p>
-     * @description 1. Tenta di creare un ListIterator con indice -1.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testListIteratorAtIndexNegative()
-    {
-        list.listIterator(-1);
-    }
-
-    //------- TEST DEL METODO subList(int, int) ----------
+    //------- TEST DEL METODO addAll(HCollection) ----------
 
     /**
-     * Test del metodo {@link HList#subList(int, int)}.
+     * Test del metodo {@link HList#addAll(HCollection)}.
      * <p>
-     * @summary Verifica la creazione di una sottolista valida al centro della lista.
+     * Summary: Verifica che {@code addAll(HCollection)} aggiunga tutti gli elementi di una collezione.
      * <p>
-     * @design Assicurarsi che la sottolista contenga gli elementi corretti e che la sua dimensione sia giusta.
+     * Test Case Design: Assicurarsi che tutti gli elementi della collezione vengano aggiunti in coda e che la dimensione sia corretta.
      * <p>
-     * @description 1. Crea una sottolista da indice 1 a 3 (esclusivo, quindi elementi a 1 e 2).<br />
-     * 2. Verifica la dimensione della sottolista (2).<br />
-     * 3. Verifica che gli elementi della sottolista siano "due" e "tre".
+     * Test Description: 1. Crea una collezione con elementi ("cinque", "sei").<br />
+     * 2. Chiama {@code addAll()} sulla lista.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica che la dimensione sia 6.<br />
+     * 5. Verifica che i nuovi elementi siano in coda.
      * <p>
-     * @pre Lista popolata con "uno", "due", "tre", "quattro".
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["cinque", "sei"].
      * <p>
-     * @post La lista originale rimane invariata. Viene creata una nuova sottolista.
+     * Postconditions: Lista: ["uno", "due", "tre", "quattro", "cinque", "sei"].
      * <p>
-     * @expected La sottolista deve avere dimensione 2 e contenere "due", "tre".
+     * @expected {@code addAll()} deve restituire true.
      */
     @Test
-    public void testSubListValidRangeMiddle()
-    {
-        HList sub = list.subList(1, 3); // fromIndex=1 (inclusive), toIndex=3 (exclusive) -> elements at index 1, 2
-        assertEquals(2, sub.size());
-        assertEquals("due", sub.get(0));
-        assertEquals("tre", sub.get(1));
-        assertFalse(sub.contains("uno"));
-        assertFalse(sub.contains("quattro"));
+    public void testAddAllCollectionToPopulatedList() {
+        ListAdapter collectionToAdd = new ListAdapter();
+        collectionToAdd.add("cinque");
+        collectionToAdd.add("sei");
+
+        assertTrue(list.addAll(collectionToAdd));
+        assertEquals(6, list.size());
+        assertEquals("cinque", list.get(4));
+        assertEquals("sei", list.get(5));
     }
 
     /**
-     * Test del metodo {@link HList#subList(int, int)}.
+     * Test del metodo {@link HList#addAll(HCollection)}.
      * <p>
-     * @summary Verifica la creazione di una sottolista valida all'inizio della lista.
+     * Summary: Verifica che {@code addAll(HCollection)} con una collezione vuota non modifichi la lista.
      * <p>
-     * @design Assicurarsi che la sottolista catturi correttamente gli elementi dall'inizio.
+     * Test Case Design: Assicurarsi che l'aggiunta di una collezione vuota non alteri lo stato di una lista.
      * <p>
-     * @description 1. Crea una sottolista da indice 0 a 2 (esclusivo, quindi elementi a 0 e 1).<br />
-     * 2. Verifica la dimensione della sottolista (2).<br />
-     * 3. Verifica che gli elementi della sottolista siano "uno" e "due".
+     * Test Description: 1. Crea una collezione vuota.<br />
+     * 2. Chiama {@code addAll()} sulla lista popolata.<br />
+     * 3. Verifica che il risultato sia false.<br />
+     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
      * <p>
-     * @pre Lista popolata.
+     * Preconditions: Lista popolata. Collezione vuota.
      * <p>
-     * @post La lista originale rimane invariata. Viene creata una nuova sottolista.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected La sottolista deve avere dimensione 2 e contenere "uno", "due".
+     * @expected {@code addAll()} deve restituire false.
      */
     @Test
-    public void testSubListValidRangeStart()
-    {
-        HList sub = list.subList(0, 2); // Elements at index 0, 1
-        assertEquals(2, sub.size());
-        assertEquals("uno", sub.get(0));
-        assertEquals("due", sub.get(1));
+    public void testAddAllEmptyCollectionToPopulatedList() {
+        HCollection emptyCollection = new ListAdapter();
+        assertFalse(list.addAll(emptyCollection));
+        assertEquals(4, list.size());
+        assertEquals("uno", list.get(0)); // Verifica che i contenuti non siano cambiati
     }
 
     /**
-     * Test del metodo {@link HList#subList(int, int)}.
+     * Test del metodo {@link HList#addAll(HCollection)}.
      * <p>
-     * @summary Verifica la creazione di una sottolista valida alla fine della lista.
+     * Summary: Verifica che {@code addAll(HCollection)} lanci {@code NullPointerException} se la collezione è null.
      * <p>
-     * @design Assicurarsi che la sottolista catturi correttamente gli elementi fino alla fine.
+     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
      * <p>
-     * @description 1. Crea una sottolista da indice 2 a {@code list.size()} (esclusivo, quindi elementi a 2 e 3).<br />
-     * 2. Verifica la dimensione della sottolista (2).<br />
-     * 3. Verifica che gli elementi della sottolista siano "tre" e "quattro".
+     * Test Description: 1. Chiama {@code addAll(null)}.<br />
+     * 2. Verifica che venga lanciata {@code NullPointerException}.
      * <p>
-     * @pre Lista popolata.
+     * Preconditions: Lista popolata. Collezione null.
      * <p>
-     * @post La lista originale rimane invariata. Viene creata una nuova sottolista.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected La sottolista deve avere dimensione 2 e contenere "tre", "quattro".
+     * @expected {@code NullPointerException}.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testAddAllNullCollectionToPopulatedList() {
+        list.addAll(null);
+    }
+
+    /**
+     * Test del metodo {@link HList#addAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code addAll(HCollection)} aggiunga elementi contenenti null.
+     * <p>
+     * Test Case Design: Assicurarsi che la lista possa gestire l'aggiunta di collezioni con elementi null.
+     * <p>
+     * Test Description: 1. Crea una collezione con elementi ("cinque", null, "sei").<br />
+     * 2. Chiama {@code addAll()} sulla lista.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica che la dimensione sia 7.<br />
+     * 5. Verifica che i nuovi elementi, incluso null, siano in coda.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["cinque", null, "sei"].
+     * <p>
+     * Postconditions: Lista: ["uno", "due", "tre", "quattro", "cinque", null, "sei"].
+     * <p>
+     * @expected {@code addAll()} deve restituire true.
      */
     @Test
-    public void testSubListValidRangeEnd()
-    {
-        HList sub = list.subList(2, list.size()); // Elements at index 2, 3
-        assertEquals(2, sub.size());
-        assertEquals("tre", sub.get(0));
-        assertEquals("quattro", sub.get(1));
-    }
+    public void testAddAllCollectionWithNullToPopulatedList() {
+        ListAdapter collectionToAdd = new ListAdapter();
+        collectionToAdd.add("cinque");
+        collectionToAdd.add(null);
+        collectionToAdd.add("sei");
 
-    /**
-     * Test del metodo {@link HList#subList(int, int)}.
-     * <p>
-     * @summary Verifica la creazione di una sottolista vuota con {@code fromIndex == toIndex}.
-     * <p>
-     * @design Assicurarsi che una sottolista vuota sia creata correttamente quando gli indici sono uguali.
-     * <p>
-     * @description 1. Crea una sottolista con indici (1, 1).<br />
-     * 2. Verifica che la dimensione della sottolista sia 0.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista originale rimane invariata. Viene creata una sottolista vuota.
-     * <p>
-     * @expected La sottolista deve avere dimensione 0.
-     */
-    @Test
-    public void testSubListEmptyRange()
-    {
-        HList sub = list.subList(1, 1);
-        assertEquals(0, sub.size());
-        assertTrue(sub.isEmpty());
-    }
-
-    /**
-     * Test del metodo {@link HList#subList(int, int)} con {@code fromIndex} negativo.
-     * <p>
-     * @summary Verifica che {@code subList()} lanci {@code IndexOutOfBoundsException} se {@code fromIndex} è negativo.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente l'intervallo non valido.
-     * <p>
-     * @description 1. Tenta di creare una sottolista con {@code fromIndex = -1}.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testSubListInvalidFromIndexNegative()
-    {
-        list.subList(-1, 2);
-    }
-
-    /**
-     * Test del metodo {@link HList#subList(int, int)} con {@code toIndex} troppo grande.
-     * <p>
-     * @summary Verifica che {@code subList()} lanci {@code IndexOutOfBoundsException} se {@code toIndex} è maggiore della dimensione.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente l'intervallo non valido.
-     * <p>
-     * @description 1. Tenta di creare una sottolista con {@code toIndex = list.size() + 1}.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testSubListInvalidToIndexTooLarge()
-    {
-        list.subList(0, list.size() + 1);
-    }
-
-    /**
-     * Test del metodo {@link HList#subList(int, int)} con {@code fromIndex} maggiore di {@code toIndex}.
-     * <p>
-     * @summary Verifica che {@code subList()} lanci {@code IndexOutOfBoundsException} se {@code fromIndex > toIndex}.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente l'intervallo non valido (start > end).
-     * <p>
-     * @description 1. Tenta di creare una sottolista con {@code fromIndex = 2} e {@code toIndex = 1}.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testSubListInvalidFromIndexGreaterThanToIndex()
-    {
-        list.subList(2, 1);
+        assertTrue(list.addAll(collectionToAdd));
+        assertEquals(7, list.size());
+        assertEquals("cinque", list.get(4));
+        assertNull(list.get(5));
+        assertEquals("sei", list.get(6));
+        assertTrue(list.contains(null));
     }
 
     //------- TEST DEL METODO addAll(int, HCollection) ----------
 
     /**
-     * Test del metodo {@link HList#addAll(int, HCollection)}.
-     * <p>
-     * @summary Verifica l'aggiunta di una collezione a un indice specifico (inizio).
-     * <p>
-     * @design Assicurarsi che gli elementi siano aggiunti correttamente e che gli elementi esistenti siano shiftati.
-     * <p>
-     * @description 1. Crea una collezione con 2 elementi.<br />
-     * 2. Aggiunge la collezione a indice 0.<br />
-     * 3. Verifica che la dimensione sia 6.<br />
-     * 4. Verifica che gli elementi siano stati aggiunti all'inizio e che i vecchi elementi siano shiftati.
-     * <p>
-     * @pre Lista popolata con 4 elementi. Collezione con due elementi.
-     * <p>
-     * @post La lista contiene gli elementi aggiunti all'inizio.
-     * <p>
-     * @expected {@code addAll(0, HCollection)} deve restituire true, la lista deve avere dimensione 6.
-     */
-    @Test
-    public void testAddAllAtIndex0PopulatedList()
-    {
-        HCollection newElements = new ListAdapter();
-        newElements.add("newA");
-        newElements.add("newB");
-
-        assertTrue(list.addAll(0, newElements));
-        assertEquals(6, list.size());
-        assertEquals("newA", list.get(0));
-        assertEquals("newB", list.get(1));
-        assertEquals("uno", list.get(2)); // Original "uno" is now at index 2
-    }
-
-    /**
-     * Test del metodo {@link HList#addAll(int, HCollection)}.
-     * <p>
-     * @summary Verifica l'aggiunta di una collezione a un indice specifico (centro).
-     * <p>
-     * @design Assicurarsi che gli elementi siano aggiunti correttamente al centro della lista e che gli elementi esistenti siano shiftati.
-     * <p>
-     * @description 1. Crea una collezione con 2 elementi.<br />
-     * 2. Aggiunge la collezione a indice 2.<br />
-     * 3. Verifica che la dimensione sia 6.<br />
-     * 4. Verifica che gli elementi siano stati aggiunti al centro e che gli elementi successivi siano shiftati.
-     * <p>
-     * @pre Lista popolata con 4 elementi. Collezione con due elementi.
-     * <p>
-     * @post La lista contiene gli elementi aggiunti al centro.
-     * <p>
-     * @expected {@code addAll(2, HCollection)} deve restituire true, la lista deve avere dimensione 6.
-     */
-    @Test
-    public void testAddAllAtIndexMiddlePopulatedList()
-    {
-        HCollection newElements = new ListAdapter();
-        newElements.add("middleX");
-        newElements.add("middleY");
-
-        assertTrue(list.addAll(2, newElements));
-        assertEquals(6, list.size());
-        assertEquals("uno", list.get(0));
-        assertEquals("due", list.get(1));
-        assertEquals("middleX", list.get(2));
-        assertEquals("middleY", list.get(3));
-        assertEquals("tre", list.get(4)); // Original "tre" is now at index 4
-        assertEquals("quattro", list.get(5));
-    }
-
-    /**
-     * Test del metodo {@link HList#addAll(int, HCollection)} con indice fuori limite superiore.
-     * <p>
-     * @summary Verifica che {@code addAll(int, HCollection)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è maggiore della dimensione.
-     * <p>
-     * @design Assicurarsi che non sia possibile aggiungere collezioni a indici non validi.
-     * <p>
-     * @description 1. Tenta di aggiungere una collezione a indice {@code list.size() + 1}.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata con 4 elementi.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testAddAllAtIndexTooLargePopulatedList()
-    {
-        HCollection newElements = new ListAdapter();
-        newElements.add("elem");
-        list.addAll(list.size() + 1, newElements);
-    }
-
-    /**
-     * Test del metodo {@link HList#addAll(int, HCollection)} con indice fuori limite inferiore.
-     * <p>
-     * @summary Verifica che {@code addAll(int, HCollection)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è negativo.
-     * <p>
-     * @design Assicurarsi che non sia possibile aggiungere collezioni a indici negativi.
-     * <p>
-     * @description 1. Tenta di aggiungere una collezione a indice -1.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista popolata.
-     * <p>
-     * @post La lista rimane invariata.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testAddAllAtIndexNegativePopulatedList()
-    {
-        HCollection newElements = new ListAdapter();
-        newElements.add("elem");
-        list.addAll(-1, newElements);
-    }
-
-    /**
      * Test del metodo {@link HList#addAll(int, HCollection)} con collezione vuota.
      * <p>
-     * @summary Verifica che l'aggiunta di una collezione vuota non modifichi la lista.
+     * Summary: Verifica che {@code addAll(int, HCollection)} con collezione vuota non modifichi la lista.
      * <p>
-     * @design Assicurarsi che il metodo restituisca false e non alteri la lista se la collezione da aggiungere è vuota.
+     * Test Case Design: Assicurarsi che l'aggiunta di una collezione vuota non alteri lo stato di una lista.
      * <p>
-     * @description 1. Crea una collezione vuota.<br />
-     * 2. Aggiunge la collezione a un indice valido.<br />
+     * Test Description: 1. Crea una collezione vuota.<br />
+     * 2. Aggiunge la collezione vuota a un indice valido.<br />
      * 3. Verifica che il risultato sia false.<br />
      * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
      * <p>
-     * @pre Lista popolata. Collezione vuota.
+     * Preconditions: Lista popolata. Collezione vuota.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
      * @expected {@code addAll(int, HCollection)} deve restituire false.
      */
@@ -1902,22 +1098,1328 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#addAll(int, HCollection)} con collezione null.
      * <p>
-     * @summary Verifica che {@code addAll(int, HCollection)} lanci {@code NullPointerException} se la collezione è null.
+     * Summary: Verifica che {@code addAll(int, HCollection)} lanci {@code NullPointerException} se la collezione è null.
      * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
+     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
      * <p>
-     * @description 1. Chiama {@code addAll(2, null)}.<br />
+     * Test Description: 1. Chiama {@code addAll(2, null)}.<br />
      * 2. Verifica che venga lanciata {@code NullPointerException}.
      * <p>
-     * @pre Lista popolata.
+     * Preconditions: Lista popolata.
      * <p>
-     * @post La lista rimane invariata.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
+     * @expected {@code NullPointerException}.
      */
     @Test(expected = NullPointerException.class)
     public void testAddAllAtIndexNullCollection()
     {
         list.addAll(2, null);
     }
+
+    /**
+     * Test del metodo {@link HList#addAll(int, HCollection)}.
+     * <p>
+     * Summary: Verifica l'aggiunta di una collezione all'inizio (indice 0) di una lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che tutti gli elementi della collezione vengano inseriti all'inizio e che gli altri si spostino.
+     * <p>
+     * Test Description: 1. Crea una collezione con elementi ("nuovoZero", "nuovoUno").<br />
+     * 2. Chiama {@code addAll(0, collectionToAdd)}.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica la nuova dimensione (6).<br />
+     * 5. Verifica che i nuovi elementi siano agli indici 0 e 1, e gli originali siano spostati.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["nuovoZero", "nuovoUno"].
+     * <p>
+     * Postconditions: Lista: ["nuovoZero", "nuovoUno", "uno", "due", "tre", "quattro"].
+     * <p>
+     * @expected {@code addAll()} deve restituire true.
+     */
+    @Test
+    public void testAddAllAtIndex0PopulatedList() {
+        ListAdapter collectionToAdd = new ListAdapter();
+        collectionToAdd.add("nuovoZero");
+        collectionToAdd.add("nuovoUno");
+
+        assertTrue(list.addAll(0, collectionToAdd));
+        assertEquals(6, list.size());
+        assertEquals("nuovoZero", list.get(0));
+        assertEquals("nuovoUno", list.get(1));
+        assertEquals("uno", list.get(2)); // Originale "uno" spostato
+        assertEquals("due", list.get(3));
+    }
+
+    /**
+     * Test del metodo {@link HList#addAll(int, HCollection)}.
+     * <p>
+     * Summary: Verifica l'aggiunta di una collezione a un indice intermedio di una lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che gli elementi della collezione vengano inseriti correttamente, spostando gli elementi esistenti.
+     * <p>
+     * Test Description: 1. Crea una collezione con elementi ("insert1", "insert2").<br />
+     * 2. Chiama {@code addAll(2, collectionToAdd)}.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica la nuova dimensione (6).<br />
+     * 5. Verifica il contenuto della lista.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["insert1", "insert2"].
+     * <p>
+     * Postconditions: Lista: ["uno", "due", "insert1", "insert2", "tre", "quattro"].
+     * <p>
+     * @expected {@code addAll()} deve restituire true.
+     */
+    @Test
+    public void testAddAllAtIndexIntermediatePopulatedList() {
+        ListAdapter collectionToAdd = new ListAdapter();
+        collectionToAdd.add("insert1");
+        collectionToAdd.add("insert2");
+
+        assertTrue(list.addAll(2, collectionToAdd));
+        assertEquals(6, list.size());
+        assertEquals("uno", list.get(0));
+        assertEquals("due", list.get(1));
+        assertEquals("insert1", list.get(2));
+        assertEquals("insert2", list.get(3));
+        assertEquals("tre", list.get(4));
+        assertEquals("quattro", list.get(5));
+    }
+
+    /**
+     * Test del metodo {@link HList#addAll(int, HCollection)}.
+     * <p>
+     * Summary: Verifica l'aggiunta di una collezione alla fine (indice size()) di una lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che l'aggiunta alla fine tramite indice sia equivalente a `addAll(HCollection)`.
+     * <p>
+     * Test Description: 1. Crea una collezione con elementi ("cinque", "sei").<br />
+     * 2. Chiama {@code addAll(list.size(), collectionToAdd)}.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica la nuova dimensione (6).<br />
+     * 5. Verifica che i nuovi elementi siano in coda.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["cinque", "sei"].
+     * <p>
+     * Postconditions: Lista: ["uno", "due", "tre", "quattro", "cinque", "sei"].
+     * <p>
+     * @expected {@code addAll()} deve restituire true.
+     */
+    @Test
+    public void testAddAllAtIndexEndPopulatedList() {
+        ListAdapter collectionToAdd = new ListAdapter();
+        collectionToAdd.add("cinque");
+        collectionToAdd.add("sei");
+
+        assertTrue(list.addAll(list.size(), collectionToAdd));
+        assertEquals(6, list.size());
+        assertEquals("cinque", list.get(4));
+        assertEquals("sei", list.get(5));
+    }
+
+    /**
+     * Test del metodo {@link HList#addAll(int, HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code addAll(int, HCollection)} lanci {@code IndexOutOfBoundsException} per indice negativo.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc per indici negativi.
+     * <p>
+     * Test Description: 1. Tenta di aggiungere una collezione a un indice negativo (-1).<br />
+     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista popolata.
+     * <p>
+     * Postconditions: Nessuna modifica alla lista.
+     * <p>
+     * @expected {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testAddAllAtIndexNegativePopulatedList() {
+        ListAdapter collectionToAdd = new ListAdapter();
+        collectionToAdd.add("a");
+        list.addAll(-1, collectionToAdd);
+    }
+
+    /**
+     * Test del metodo {@link HList#addAll(int, HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code addAll(int, HCollection)} lanci {@code IndexOutOfBoundsException} per indice maggiore di size().
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc per indici fuori limite superiore.
+     * <p>
+     * Test Description: 1. Tenta di aggiungere una collezione a un indice maggiore di `list.size()`.<br />
+     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista popolata.
+     * <p>
+     * Postconditions: Nessuna modifica alla lista.
+     * <p>
+     * @expected {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testAddAllAtIndexGreaterThanSizePopulatedList() {
+        ListAdapter collectionToAdd = new ListAdapter();
+        collectionToAdd.add("a");
+        list.addAll(list.size() + 1, collectionToAdd);
+    }
+
+    //------- TEST DEL METODO clear() ----------
+
+    /**
+     * Test del metodo {@link HList#clear()}.
+     * <p>
+     * Summary: Verifica che {@code clear()} svuoti una lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che la lista diventi vuota dopo la chiamata a `clear()`.
+     * <p>
+     * Test Description: 1. Chiama {@code clear()} sulla lista popolata.<br />
+     * 2. Verifica che la dimensione sia 0.<br />
+     * 3. Verifica che {@code isEmpty()} sia true.
+     * <p>
+     * Preconditions: Lista popolata con 4 elementi.
+     * <p>
+     * Postconditions: La lista è vuota.
+     * <p>
+     * @expected La lista deve essere vuota.
+     */
+    @Test
+    public void testClearPopulatedList() {
+        list.clear();
+        assertEquals(0, list.size());
+        assertTrue(list.isEmpty());
+        // Tentativo di accedere agli elementi dovrebbe lanciare IndexOutOfBoundsException
+        try {
+            list.get(0);
+            fail("Expected IndexOutOfBoundsException after clear()");
+        } catch (IndexOutOfBoundsException e) {
+            // Successo atteso
+        }
+    }
+
+    //------- TEST DEL METODO get(int) ----------
+
+    /**
+     * Test del metodo {@link HList#get(int)}.
+     * <p>
+     * Summary: Verifica l'accesso al primo elemento (indice 0) di una lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che l'accesso al primo elemento sia corretto.
+     * <p>
+     * Test Description: 1. Accede all'elemento all'indice 0.<br />
+     * 2. Verifica che l'elemento restituito sia "uno".
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code get(0)} deve restituire "uno".
+     */
+    @Test
+    public void testGetAtIndex0PopulatedList() {
+        assertEquals("uno", list.get(0));
+    }
+
+    /**
+     * Test del metodo {@link HList#get(int)}.
+     * <p>
+     * Summary: Verifica l'accesso all'ultimo elemento (indice size - 1) di una lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che l'accesso all'ultimo elemento sia corretto.
+     * <p>
+     * Test Description: 1. Accede all'elemento all'indice `list.size() - 1` (che è 3).<br />
+     * 2. Verifica che l'elemento restituito sia "quattro".
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code get(list.size() - 1)} deve restituire "quattro".
+     */
+    @Test
+    public void testGetAtIndexLastPopulatedList() {
+        assertEquals("quattro", list.get(list.size() - 1));
+    }
+
+    /**
+     * Test del metodo {@link HList#get(int)}.
+     * <p>
+     * Summary: Verifica l'accesso a un elemento intermedio di una lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che l'accesso a un elemento intermedio sia corretto.
+     * <p>
+     * Test Description: 1. Accede all'elemento all'indice 1.<br />
+     * 2. Verifica che l'elemento restituito sia "due".
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code get(1)} deve restituire "due".
+     */
+    @Test
+    public void testGetAtIndexIntermediatePopulatedList() {
+        assertEquals("due", list.get(1));
+    }
+
+    /**
+     * Test del metodo {@link HList#get(int)}.
+     * <p>
+     * Summary: Verifica che {@code get(int)} lanci {@code IndexOutOfBoundsException} per indice negativo.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc per indici negativi.
+     * <p>
+     * Test Description: 1. Tenta di accedere a un elemento all'indice -1.<br />
+     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista popolata.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetAtIndexNegativePopulatedList() {
+        list.get(-1);
+    }
+
+    /**
+     * Test del metodo {@link HList#get(int)}.
+     * <p>
+     * Summary: Verifica che {@code get(int)} lanci {@code IndexOutOfBoundsException} per indice uguale o maggiore di size().
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc per indici fuori limite superiore.
+     * <p>
+     * Test Description: 1. Tenta di accedere a un elemento all'indice `list.size()` (che è 4).<br />
+     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista popolata.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetAtIndexSizePopulatedList() {
+        list.get(list.size());
+    }
+
+    //------- TEST DEL METODO set(int, Object) ----------
+
+    /**
+     * Test del metodo {@link HList#set(int, Object)}.
+     * <p>
+     * Summary: Verifica la modifica dell'elemento all'indice 0 di una lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che l'elemento venga sostituito correttamente e l'elemento precedente sia restituito.
+     * <p>
+     * Test Description: 1. Imposta un nuovo elemento "zero" all'indice 0.<br />
+     * 2. Verifica che l'elemento precedentemente all'indice 0 ("uno") sia restituito.<br />
+     * 3. Verifica che l'elemento all'indice 0 sia ora "zero".<br />
+     * 4. Verifica che la dimensione non sia cambiata.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: Lista: ["zero", "due", "tre", "quattro"].
+     * <p>
+     * @expected {@code set(0, "zero")} deve restituire "uno".
+     */
+    @Test
+    public void testSetAtIndex0PopulatedList() {
+        Object oldElement = list.set(0, "zero");
+        assertEquals("uno", oldElement);
+        assertEquals("zero", list.get(0));
+        assertEquals(4, list.size());
+    }
+
+    /**
+     * Test del metodo {@link HList#set(int, Object)}.
+     * <p>
+     * Summary: Verifica la modifica dell'elemento all'ultimo indice (size - 1) di una lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che l'elemento venga sostituito correttamente e l'elemento precedente sia restituito.
+     * <p>
+     * Test Description: 1. Imposta un nuovo elemento "cinque" all'ultimo indice.<br />
+     * 2. Verifica che l'elemento precedentemente all'ultimo indice ("quattro") sia restituito.<br />
+     * 3. Verifica che l'elemento all'ultimo indice sia ora "cinque".
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: Lista: ["uno", "due", "tre", "cinque"].
+     * <p>
+     * @expected {@code set(3, "cinque")} deve restituire "quattro".
+     */
+    @Test
+    public void testSetAtIndexLastPopulatedList() {
+        Object oldElement = list.set(list.size() - 1, "cinque");
+        assertEquals("quattro", oldElement);
+        assertEquals("cinque", list.get(list.size() - 1));
+        assertEquals(4, list.size());
+    }
+
+    /**
+     * Test del metodo {@link HList#set(int, Object)}.
+     * <p>
+     * Summary: Verifica la modifica di un elemento a un indice intermedio di una lista popolata.
+     * <p>
+     * Test Case Design: Assicurarsi che l'elemento venga sostituito correttamente e l'elemento precedente sia restituito.
+     * <p>
+     * Test Description: 1. Imposta un nuovo elemento "nuovo elemento" all'indice 1.<br />
+     * 2. Verifica che l'elemento precedentemente all'indice 1 ("due") sia restituito.<br />
+     * 3. Verifica che l'elemento all'indice 1 sia ora "nuovo elemento".
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: Lista: ["uno", "nuovo elemento", "tre", "quattro"].
+     * <p>
+     * @expected {@code set(1, "nuovo elemento")} deve restituire "due".
+     */
+    @Test
+    public void testSetAtIndexIntermediatePopulatedList() {
+        Object oldElement = list.set(1, "nuovo elemento");
+        assertEquals("due", oldElement);
+        assertEquals("nuovo elemento", list.get(1));
+        assertEquals(4, list.size());
+    }
+
+    /**
+     * Test del metodo {@link HList#set(int, Object)} con elemento null.
+     * <p>
+     * Summary: Verifica la modifica di un elemento con null a un indice specifico.
+     * <p>
+     * Test Case Design: Assicurarsi che `null` possa essere impostato correttamente in una data posizione.
+     * <p>
+     * Test Description: 1. Imposta null all'indice 2.<br />
+     * 2. Verifica che l'elemento precedente ("tre") sia restituito.<br />
+     * 3. Verifica che null sia all'indice 2.<br />
+     * 4. Verifica che la dimensione non sia cambiata e che la lista contenga null.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: Lista: ["uno", "due", null, "quattro"].
+     * <p>
+     * @expected {@code set(2, null)} deve restituire "tre".
+     */
+    @Test
+    public void testSetNullAtIndexPopulatedList() {
+        Object oldElement = list.set(2, null);
+        assertEquals("tre", oldElement);
+        assertNull(list.get(2));
+        assertEquals(4, list.size());
+        assertTrue(list.contains(null));
+    }
+
+    /**
+     * Test del metodo {@link HList#set(int, Object)}.
+     * <p>
+     * Summary: Verifica che {@code set(int, Object)} lanci {@code IndexOutOfBoundsException} per indice negativo.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc per indici negativi.
+     * <p>
+     * Test Description: 1. Tenta di impostare un elemento a un indice negativo (-1).<br />
+     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista popolata.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSetAtIndexNegativePopulatedList() {
+        list.set(-1, "elemento");
+    }
+
+    /**
+     * Test del metodo {@link HList#set(int, Object)}.
+     * <p>
+     * Summary: Verifica che {@code set(int, Object)} lanci {@code IndexOutOfBoundsException} per indice uguale o maggiore di size().
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc per indici fuori limite superiore.
+     * <p>
+     * Test Description: 1. Tenta di impostare un elemento all'indice `list.size()` (che è 4).<br />
+     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista popolata.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSetAtIndexSizePopulatedList() {
+        list.set(list.size(), "elemento");
+    }
+
+    //------- TEST DEL METODO indexOf(Object) ----------
+
+    /**
+     * Test del metodo {@link HList#indexOf(Object)}.
+     * <p>
+     * Summary: Verifica che {@code indexOf()} restituisca l'indice della prima occorrenza di un elemento presente.
+     * <p>
+     * Test Case Design: Assicurarsi che la ricerca dell'indice di un elemento presente sia corretta.
+     * <p>
+     * Test Description: 1. Cerca l'indice di "due".<br />
+     * 2. Verifica che il risultato sia 1.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code indexOf("due")} deve restituire 1.
+     */
+    @Test
+    public void testIndexOfExistingElement() {
+        assertEquals(1, list.indexOf("due"));
+    }
+
+    /**
+     * Test del metodo {@link HList#indexOf(Object)}.
+     * <p>
+     * Summary: Verifica che {@code indexOf()} restituisca -1 per un elemento non presente.
+     * <p>
+     * Test Case Design: Assicurarsi che la ricerca di un elemento inesistente restituisca -1.
+     * <p>
+     * Test Description: 1. Cerca l'indice di "cinque".<br />
+     * 2. Verifica che il risultato sia -1.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code indexOf("cinque")} deve restituire -1.
+     */
+    @Test
+    public void testIndexOfNonExistingElement() {
+        assertEquals(-1, list.indexOf("cinque"));
+    }
+
+    /**
+     * Test del metodo {@link HList#indexOf(Object)}.
+     * <p>
+     * Summary: Verifica che {@code indexOf(null)} restituisca l'indice corretto se null è presente.
+     * <p>
+     * Test Case Design: Assicurarsi che la ricerca di null funzioni correttamente.
+     * <p>
+     * Test Description: 1. Aggiunge null all'indice 2.<br />
+     * 2. Cerca l'indice di null.<br />
+     * 3. Verifica che il risultato sia 2.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"], poi null aggiunto.
+     * <p>
+     * Postconditions: La lista contiene null.
+     * <p>
+     * @expected {@code indexOf(null)} deve restituire 2.
+     */
+    @Test
+    public void testIndexOfNullPresent() {
+        list.add(2, null); // List: ["uno", "due", null, "tre", "quattro"]
+        assertEquals(2, list.indexOf(null));
+    }
+
+    /**
+     * Test del metodo {@link HList#indexOf(Object)}.
+     * <p>
+     * Summary: Verifica che {@code indexOf(null)} restituisca -1 se null non è presente.
+     * <p>
+     * Test Case Design: Assicurarsi che la ricerca di null in una lista senza null restituisca -1.
+     * <p>
+     * Test Description: 1. Cerca l'indice di null.<br />
+     * 2. Verifica che il risultato sia -1.
+     * <p>
+     * Preconditions: Lista popolata senza null.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code indexOf(null)} deve restituire -1.
+     */
+    @Test
+    public void testIndexOfNullNotPresent() {
+        assertEquals(-1, list.indexOf(null));
+    }
+
+    /**
+     * Test del metodo {@link HList#indexOf(Object)}.
+     * <p>
+     * Summary: Verifica che {@code indexOf()} restituisca la prima occorrenza per elementi duplicati.
+     * <p>
+     * Test Case Design: Assicurarsi che `indexOf` si comporti come definito (prima occorrenza).
+     * <p>
+     * Test Description: 1. Aggiunge un duplicato ("due") alla lista.<br />
+     * 2. Cerca l'indice di "due".<br />
+     * 3. Verifica che il risultato sia l'indice della prima occorrenza (1).
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"], poi "due" aggiunto -> ["uno", "due", "tre", "quattro", "due"].
+     * <p>
+     * Postconditions: La lista contiene i duplicati.
+     * <p>
+     * @expected {@code indexOf("due")} deve restituire 1.
+     */
+    @Test
+    public void testIndexOfDuplicates() {
+        list.add("due"); // List: ["uno", "due", "tre", "quattro", "due"]
+        assertEquals(1, list.indexOf("due"));
+    }
+
+    //------- TEST DEL METODO lastIndexOf(Object) ----------
+
+    /**
+     * Test del metodo {@link HList#lastIndexOf(Object)}.
+     * <p>
+     * Summary: Verifica che {@code lastIndexOf()} restituisca l'indice dell'ultima occorrenza di un elemento presente.
+     * <p>
+     * Test Case Design: Assicurarsi che la ricerca dell'ultimo indice di un elemento presente sia corretta.
+     * <p>
+     * Test Description: 1. Cerca l'ultimo indice di "due".<br />
+     * 2. Verifica che il risultato sia l'indice dell'ultima occorrenza.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"], poi "due" aggiunto -> ["uno", "due", "tre", "quattro", "due"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code lastIndexOf("due")} deve restituire 4.
+     */
+    @Test
+    public void testLastIndexOfExistingElement() {
+        list.add("due"); // List: ["uno", "due", "tre", "quattro", "due"]
+        assertEquals(4, list.lastIndexOf("due"));
+    }
+
+    /**
+     * Test del metodo {@link HList#lastIndexOf(Object)}.
+     * <p>
+     * Summary: Verifica che {@code lastIndexOf()} restituisca -1 per un elemento non presente.
+     * <p>
+     * Test Case Design: Assicurarsi che la ricerca dell'ultimo indice di un elemento inesistente restituisca -1.
+     * <p>
+     * Test Description: 1. Cerca l'ultimo indice di "cinque".<br />
+     * 2. Verifica che il risultato sia -1.
+     * <p>
+     * Preconditions: Lista popolata con 4 elementi.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code lastIndexOf("cinque")} deve restituire -1.
+     */
+    @Test
+    public void testLastIndexOfNonExistingElement() {
+        assertEquals(-1, list.lastIndexOf("cinque"));
+    }
+
+    /**
+     * Test del metodo {@link HList#lastIndexOf(Object)}.
+     * <p>
+     * Summary: Verifica che {@code lastIndexOf(null)} restituisca l'indice corretto se null è presente.
+     * <p>
+     * Test Case Design: Assicurarsi che la ricerca dell'ultima occorrenza di null funzioni correttamente.
+     * <p>
+     * Test Description: 1. Aggiunge null a due posizioni diverse.<br />
+     * 2. Cerca l'ultimo indice di null.<br />
+     * 3. Verifica che il risultato sia l'indice dell'ultima occorrenza di null.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"], poi null a indice 1 e 4 -> ["uno", null, "due", "tre", "quattro", null].
+     * <p>
+     * Postconditions: La lista contiene null in più posizioni.
+     * <p>
+     * @expected {@code lastIndexOf(null)} deve restituire 5.
+     */
+    @Test
+    public void testLastIndexOfNullPresent() {
+        list.add(1, null); // ["uno", null, "due", "tre", "quattro"]
+        list.add(null);    // ["uno", null, "due", "tre", "quattro", null]
+        assertEquals(5, list.lastIndexOf(null));
+    }
+
+    /**
+     * Test del metodo {@link HList#lastIndexOf(Object)}.
+     * <p>
+     * Summary: Verifica che {@code lastIndexOf(null)} restituisca -1 se null non è presente.
+     * <p>
+     * Test Case Design: Assicurarsi che la ricerca dell'ultima occorrenza di null in una lista senza null restituisca -1.
+     * <p>
+     * Test Description: 1. Cerca l'ultimo indice di null.<br />
+     * 2. Verifica che il risultato sia -1.
+     * <p>
+     * Preconditions: Lista popolata senza null.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code lastIndexOf(null)} deve restituire -1.
+     */
+    @Test
+    public void testLastIndexOfNullNotPresent() {
+        assertEquals(-1, list.lastIndexOf(null));
+    }
+
+    //------- TEST DEL METODO retainAll(HCollection) ----------
+
+    /**
+     * Test del metodo {@link HList#retainAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code retainAll(HCollection)} mantenga solo gli elementi specificati.
+     * <p>
+     * Test Case Design: Assicurarsi che gli elementi non presenti nella collezione fornita vengano rimossi.
+     * <p>
+     * Test Description: 1. Crea una collezione con elementi ("due", "quattro").<br />
+     * 2. Chiama {@code retainAll()} sulla lista.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica che la dimensione sia 2.<br />
+     * 5. Verifica che solo "due" e "quattro" siano rimasti nella lista.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["due", "quattro"].
+     * <p>
+     * Postconditions: Lista: ["due", "quattro"].
+     * <p>
+     * @expected {@code retainAll()} deve restituire true.
+     */
+    @Test
+    public void testRetainAllCollection()
+    {
+        ListAdapter collectionToRetain = new ListAdapter();
+        collectionToRetain.add("due");
+        collectionToRetain.add("quattro");
+
+        assertTrue(list.retainAll(collectionToRetain));
+        assertEquals(2, list.size());
+        assertTrue(list.contains("due"));
+        assertTrue(list.contains("quattro"));
+        assertFalse(list.contains("uno"));
+        assertFalse(list.contains("tre"));
+    }
+
+    /**
+     * Test del metodo {@link HList#retainAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code retainAll(HCollection)} non modifichi la lista se tutti gli elementi sono da mantenere.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo restituisca false (nessuna modifica) se tutti gli elementi sono già presenti.
+     * <p>
+     * Test Description: 1. Crea una collezione con tutti gli elementi della lista.<br />
+     * 2. Chiama {@code retainAll()} sulla lista.<br />
+     * 3. Verifica che il risultato sia false.<br />
+     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code retainAll()} deve restituire false.
+     */
+    @Test
+    public void testRetainAllNoModification()
+    {
+        ListAdapter collectionToRetain = new ListAdapter();
+        collectionToRetain.add("uno");
+        collectionToRetain.add("due");
+        collectionToRetain.add("tre");
+        collectionToRetain.add("quattro");
+
+        assertFalse(list.retainAll(collectionToRetain));
+        assertEquals(4, list.size());
+        assertTrue(list.contains("uno"));
+        assertTrue(list.contains("due"));
+        assertTrue(list.contains("tre"));
+        assertTrue(list.contains("quattro"));
+    }
+
+    /**
+     * Test del metodo {@link HList#retainAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code retainAll(HCollection)} svuoti la lista se nessun elemento deve essere mantenuto.
+     * <p>
+     * Test Case Design: Assicurarsi che la lista diventi vuota se la collezione fornita non ha elementi in comune.
+     * <p>
+     * Test Description: 1. Crea una collezione con elementi non presenti nella lista.<br />
+     * 2. Chiama {@code retainAll()} sulla lista.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica che la lista sia vuota.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["cinque", "sei"].
+     * <p>
+     * Postconditions: La lista è vuota.
+     * <p>
+     * @expected {@code retainAll()} deve restituire true.
+     */
+    @Test
+    public void testRetainAllClearList()
+    {
+        ListAdapter collectionToRetain = new ListAdapter();
+        collectionToRetain.add("cinque");
+        collectionToRetain.add("sei");
+
+        assertTrue(list.retainAll(collectionToRetain));
+        assertEquals(0, list.size());
+        assertTrue(list.isEmpty());
+    }
+
+    /**
+     * Test del metodo {@link HList#retainAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code retainAll(HCollection)} lanci {@code NullPointerException} se la collezione è null.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
+     * <p>
+     * Test Description: 1. Chiama {@code retainAll(null)}.<br />
+     * 2. Verifica che venga lanciata {@code NullPointerException}.
+     * <p>
+     * Preconditions: Lista popolata. Collezione null.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code NullPointerException}.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testRetainAllNullCollection()
+    {
+        list.retainAll(null);
+    }
+
+    /**
+     * Test del metodo {@link HList#retainAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code retainAll(HCollection)} con una collezione vuota svuoti la lista.
+     * <p>
+     * Test Case Design: Assicurarsi che il comportamento di `retainAll` con una collezione vuota sia di svuotare la lista.
+     * <p>
+     * Test Description: 1. Crea una collezione vuota.<br />
+     * 2. Chiama {@code retainAll()} sulla lista popolata.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica che la lista sia vuota.
+     * <p>
+     * Preconditions: Lista popolata. Collezione vuota.
+     * <p>
+     * Postconditions: La lista è vuota.
+     * <p>
+     * @expected {@code retainAll()} deve restituire true.
+     */
+    @Test
+    public void testRetainAllEmptyCollection()
+    {
+        HCollection emptyCollection = new ListAdapter();
+        assertTrue(list.retainAll(emptyCollection));
+        assertEquals(0, list.size());
+        assertTrue(list.isEmpty());
+    }
+
+    //------- TEST DEL METODO removeAll(HCollection) ----------
+
+    /**
+     * Test del metodo {@link HList#removeAll(HCollection)}.
+     * <p>
+     * Summary: Verifica la rimozione di un sottoinsieme di elementi dalla lista.
+     * <p>
+     * Test Case Design: Assicurarsi che tutti gli elementi della collezione fornita siano rimossi dalla lista.
+     * <p>
+     * Test Description: 1. Crea una collezione con elementi ("due", "quattro").<br />
+     * 2. Chiama {@code removeAll()} sulla lista.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica che la dimensione sia 2.<br />
+     * 5. Verifica che solo "uno" e "tre" siano rimasti nella lista.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["due", "quattro"].
+     * <p>
+     * Postconditions: Lista: ["uno", "tre"].
+     * <p>
+     * @expected {@code removeAll()} deve restituire true.
+     */
+    @Test
+    public void testRemoveAllCollection()
+    {
+        ListAdapter collectionToRemove = new ListAdapter();
+        collectionToRemove.add("due");
+        collectionToRemove.add("quattro");
+
+        assertTrue(list.removeAll(collectionToRemove));
+        assertEquals(2, list.size());
+        assertTrue(list.contains("uno"));
+        assertTrue(list.contains("tre"));
+        assertFalse(list.contains("due"));
+        assertFalse(list.contains("quattro"));
+    }
+
+    /**
+     * Test del metodo {@link HList#removeAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code removeAll(HCollection)} non modifichi la lista se nessun elemento è da rimuovere.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo restituisca false se la lista non contiene nessuno degli elementi della collezione.
+     * <p>
+     * Test Description: 1. Crea una collezione con elementi non presenti nella lista.<br />
+     * 2. Chiama {@code removeAll()} sulla lista.<br />
+     * 3. Verifica che il risultato sia false.<br />
+     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["cinque", "sei"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code removeAll()} deve restituire false.
+     */
+    @Test
+    public void testRemoveAllNoMatchingElements()
+    {
+        ListAdapter collectionToRemove = new ListAdapter();
+        collectionToRemove.add("cinque");
+        collectionToRemove.add("sei");
+
+        assertFalse(list.removeAll(collectionToRemove));
+        assertEquals(4, list.size());
+        assertTrue(list.contains("uno")); // Verifica che gli elementi originali siano ancora lì
+    }
+
+    /**
+     * Test del metodo {@link HList#removeAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code removeAll(HCollection)} lanci {@code NullPointerException} se la collezione è null.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
+     * <p>
+     * Test Description: 1. Chiama {@code removeAll(null)}.<br />
+     * 2. Verifica che venga lanciata {@code NullPointerException}.
+     * <p>
+     * Preconditions: Lista popolata. Collezione null.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code NullPointerException}.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testRemoveAllNullCollection()
+    {
+        list.removeAll(null);
+    }
+
+    /**
+     * Test del metodo {@link HList#removeAll(HCollection)}.
+     * <p>
+     * Summary: Verifica la rimozione di tutti gli elementi dalla lista.
+     * <p>
+     * Test Case Design: Assicurarsi che `removeAll` con una collezione contenente tutti gli elementi della lista svuoti la lista.
+     * <p>
+     * Test Description: 1. Crea una collezione con tutti gli elementi della lista.<br />
+     * 2. Chiama {@code removeAll()} sulla lista.<br />
+     * 3. Verifica che il risultato sia true.<br />
+     * 4. Verifica che la lista sia vuota.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["uno", "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: La lista è vuota.
+     * <p>
+     * @expected {@code removeAll()} deve restituire true.
+     */
+    @Test
+    public void testRemoveAllClearList() {
+        ListAdapter collectionToRemove = new ListAdapter();
+        collectionToRemove.add("uno");
+        collectionToRemove.add("due");
+        collectionToRemove.add("tre");
+        collectionToRemove.add("quattro");
+
+        assertTrue(list.removeAll(collectionToRemove));
+        assertEquals(0, list.size());
+        assertTrue(list.isEmpty());
+    }
+
+    /**
+     * Test del metodo {@link HList#removeAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code removeAll(HCollection)} con una collezione vuota non modifichi la lista.
+     * <p>
+     * Test Case Design: Assicurarsi che rimuovere una collezione vuota non alteri la lista.
+     * <p>
+     * Test Description: 1. Crea una collezione vuota.<br />
+     * 2. Chiama {@code removeAll()} sulla lista popolata.<br />
+     * 3. Verifica che il risultato sia false.<br />
+     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
+     * <p>
+     * Preconditions: Lista popolata. Collezione vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code removeAll()} deve restituire false.
+     */
+    @Test
+    public void testRemoveAllEmptyCollection()
+    {
+        HCollection emptyCollection = new ListAdapter();
+        assertFalse(list.removeAll(emptyCollection));
+        assertEquals(4, list.size());
+        assertEquals("uno", list.get(0)); // Verify contents unchanged
+    }
+
+    //------- TEST DEL METODO containsAll(HCollection) ----------
+
+    /**
+     * Test del metodo {@link HList#containsAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code containsAll(HCollection)} restituisca true se tutti gli elementi sono presenti.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo identifichi correttamente quando una lista contiene tutti gli elementi di una collezione.
+     * <p>
+     * Test Description: 1. Crea una collezione con un sottoinsieme di elementi della lista.<br />
+     * 2. Chiama {@code containsAll()} e verifica che sia true.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["due", "quattro"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code containsAll()} deve restituire true.
+     */
+    @Test
+    public void testContainsAllSubset()
+    {
+        ListAdapter subset = new ListAdapter();
+        subset.add("due");
+        subset.add("quattro");
+        assertTrue(list.containsAll(subset));
+    }
+
+    /**
+     * Test del metodo {@link HList#containsAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code containsAll(HCollection)} restituisca false se alcuni elementi sono assenti.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo identifichi correttamente quando alcuni elementi della collezione non sono nella lista.
+     * <p>
+     * Test Description: 1. Crea una collezione con alcuni elementi presenti e altri assenti ("due", "cinque").<br />
+     * 2. Chiama {@code containsAll()} e verifica che sia false.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["due", "cinque"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code containsAll()} deve restituire false.
+     */
+    @Test
+    public void testContainsAllPartialSubset()
+    {
+        ListAdapter partialSubset = new ListAdapter();
+        partialSubset.add("due");
+        partialSubset.add("cinque"); // non presente
+        assertFalse(list.containsAll(partialSubset));
+    }
+
+    /**
+     * Test del metodo {@link HList#containsAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code containsAll(HCollection)} restituisca false se nessun elemento è presente.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo identifichi correttamente quando nessun elemento della collezione è nella lista.
+     * <p>
+     * Test Description: 1. Crea una collezione con elementi non presenti nella lista ("cinque", "sei").<br />
+     * 2. Chiama {@code containsAll()} e verifica che sia false.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["cinque", "sei"].
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code containsAll()} deve restituire false.
+     */
+    @Test
+    public void testContainsAllNoMatch()
+    {
+        ListAdapter noMatch = new ListAdapter();
+        noMatch.add("cinque");
+        noMatch.add("sei");
+        assertFalse(list.containsAll(noMatch));
+    }
+
+    /**
+     * Test del metodo {@link HList#containsAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code containsAll(HCollection)} restituisca true per una collezione vuota.
+     * <p>
+     * Test Case Design: Assicurarsi che il contratto di `containsAll` sia rispettato per le collezioni vuote (ogni lista contiene una collezione vuota).
+     * <p>
+     * Test Description: 1. Crea una collezione vuota.<br />
+     * 2. Chiama {@code containsAll()} e verifica che sia true.
+     * <p>
+     * Preconditions: Lista popolata. Collezione vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code containsAll()} deve restituire true.
+     */
+    @Test
+    public void testContainsAllEmptyCollection()
+    {
+        HCollection emptyCollection = new ListAdapter();
+        assertTrue(list.containsAll(emptyCollection));
+    }
+
+    /**
+     * Test del metodo {@link HList#containsAll(HCollection)}.
+     * <p>
+     * Summary: Verifica che {@code containsAll(HCollection)} lanci {@code NullPointerException} se la collezione è null.
+     * <p>
+     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
+     * <p>
+     * Test Description: 1. Chiama {@code containsAll(null)}.<br />
+     * 2. Verifica che venga lanciata {@code NullPointerException}.
+     * <p>
+     * Preconditions: Lista popolata. Collezione null.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code NullPointerException}.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testContainsAllNullCollection()
+    {
+        list.containsAll(null);
+    }
+
+    //------- TEST DEL METODO hashCode() ----------
+
+    /**
+     * Test del metodo {@link HList#hashCode()}.
+     * <p>
+     * Summary: Verifica che l'hashCode di due liste popolata identiche sia lo stesso.
+     * <p>
+     * Test Case Design: Assicurarsi che l'hashCode sia calcolato in modo coerente per liste con gli stessi elementi e ordine.
+     * <p>
+     * Test Description: 1. Crea una seconda lista identica alla prima.<br />
+     * 2. Calcola e confronta gli hashCode di entrambe le liste.
+     * <p>
+     * Preconditions: Due liste popolate identicamente.
+     * <p>
+     * Postconditions: Le liste rimangono invariate.
+     * <p>
+     * @expected Gli hashCode devono essere uguali.
+     */
+    @Test
+    public void testHashCodePopulatedListConsistent()
+    {
+        HList otherList = new ListAdapter();
+        otherList.add("uno");
+        otherList.add("due");
+        otherList.add("tre");
+        otherList.add("quattro");
+        assertEquals(list.hashCode(), otherList.hashCode());
+    }
+
+    /**
+     * Test del metodo {@link HList#hashCode()}.
+     * <p>
+     * Summary: Verifica che l'hashCode di due liste popolata diverse sia diverso.
+     * <p>
+     * Test Case Design: Assicurarsi che l'hashCode cambi per liste con elementi o ordine diversi.
+     * <p>
+     * Test Description: 1. Crea una seconda lista diversa dalla prima.<br />
+     * 2. Calcola e confronta gli hashCode di entrambe le liste.
+     * <p>
+     * Preconditions: Due liste popolate in modo diverso.
+     * <p>
+     * Postconditions: Le liste rimangono invariate.
+     * <p>
+     * @expected Gli hashCode devono essere diversi.
+     */
+    @Test
+    public void testHashCodePopulatedListDifferent() {
+        HList differentList = new ListAdapter();
+        differentList.add("uno");
+        differentList.add("cinque"); // Elemento diverso
+        differentList.add("tre");
+        differentList.add("quattro");
+        assertNotEquals(list.hashCode(), differentList.hashCode());
+    }
+
+    //------- TEST DEL METODO equals(Object) ----------
+
+    /**
+     * Test del metodo {@link HList#equals(Object)}.
+     * <p>
+     * Summary: Verifica che una lista popolata sia uguale a se stessa.
+     * <p>
+     * Test Case Design: Assicurarsi che la riflessività sia rispettata.
+     * <p>
+     * Test Description: 1. Confronta la lista con se stessa.
+     * <p>
+     * Preconditions: Lista popolata.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code equals(list)} deve restituire true.
+     */
+    @Test
+    public void testEqualsPopulatedListSelf() {
+        assertTrue(list.equals(list));
+    }
+
+    /**
+     * Test del metodo {@link HList#equals(Object)}.
+     * <p>
+     * Summary: Verifica che una lista popolata sia uguale a un'altra lista popolata identicamente.
+     * <p>
+     * Test Case Design: Assicurarsi che la simmetria e la transitività siano rispettate per liste identiche.
+     * <p>
+     * Test Description: 1. Crea un'altra lista con gli stessi elementi e nello stesso ordine.<br />
+     * 2. Confronta la lista originale con la nuova lista.
+     * <p>
+     * Preconditions: Due liste popolate identicamente.
+     * <p>
+     * Postconditions: Le liste rimangono invariate.
+     * <p>
+     * @expected {@code equals(otherList)} deve restituire true.
+     */
+    @Test
+    public void testEqualsPopulatedListIdentical() {
+        HList otherList = new ListAdapter();
+        otherList.add("uno");
+        otherList.add("due");
+        otherList.add("tre");
+        otherList.add("quattro");
+        assertTrue(list.equals(otherList));
+    }
+
+    /**
+     * Test del metodo {@link HList#equals(Object)}.
+     * <p>
+     * Summary: Verifica che una lista popolata non sia uguale a null.
+     * <p>
+     * Test Case Design: Assicurarsi che il confronto con null restituisca false.
+     * <p>
+     * Test Description: 1. Confronta la lista con null.
+     * <p>
+     * Preconditions: Lista popolata.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code equals(null)} deve restituire false.
+     */
+    @Test
+    public void testEqualsPopulatedListNull() {
+        assertFalse(list.equals(null));
+    }
+
+    /**
+     * Test del metodo {@link HList#equals(Object)}.
+     * <p>
+     * Summary: Verifica che una lista popolata non sia uguale a un oggetto di tipo diverso.
+     * <p>
+     * Test Case Design: Assicurarsi che il confronto con tipi incompatibili restituisca false.
+     * <p>
+     * Test Description: 1. Confronta la lista con un'istanza di `Object`.
+     * <p>
+     * Preconditions: Lista popolata.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * @expected {@code equals(new Object())} deve restituire false.
+     */
+    @Test
+    public void testEqualsPopulatedListDifferentType() {
+        assertFalse(list.equals(new Object()));
+    }
+
+    /**
+     * Test del metodo {@link HList#equals(Object)}.
+     * <p>
+     * Summary: Verifica che due liste con stessi elementi ma ordine diverso non siano uguali.
+     * <p>
+     * Test Case Design: Assicurarsi che l'ordine degli elementi sia rilevante per l'uguaglianza.
+     * <p>
+     * Test Description: 1. Crea una lista con gli stessi elementi ma in ordine diverso.<br />
+     * 2. Confronta la lista originale con la nuova lista.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Altra lista: ["quattro", "tre", "due", "uno"].
+     * <p>
+     * Postconditions: Le liste rimangono invariate.
+     * <p>
+     * @expected {@code equals(otherList)} deve restituire false.
+     */
+    @Test
+    public void testEqualsPopulatedListDifferentOrder() {
+        HList otherList = new ListAdapter();
+        otherList.add("quattro");
+        otherList.add("tre");
+        otherList.add("due");
+        otherList.add("uno");
+        assertFalse(list.equals(otherList));
+    }
+
+    /**
+     * Test del metodo {@link HList#equals(Object)}.
+     * <p>
+     * Summary: Verifica che due liste con elementi diversi non siano uguali.
+     * <p>
+     * Test Case Design: Assicurarsi che il confronto rilevi differenze negli elementi.
+     * <p>
+     * Test Description: 1. Crea una lista con alcuni elementi diversi.<br />
+     * 2. Confronta la lista originale con la nuova lista.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Altra lista: ["uno", "cinque", "tre", "sei"].
+     * <p>
+     * Postconditions: Le liste rimangono invariate.
+     * <p>
+     * @expected {@code equals(otherList)} deve restituire false.
+     */
+    @Test
+    public void testEqualsPopulatedListDifferentElements() {
+        HList otherList = new ListAdapter();
+        otherList.add("uno");
+        otherList.add("cinque"); // Elemento diverso
+        otherList.add("tre");
+        otherList.add("sei");    // Elemento diverso
+        assertFalse(list.equals(otherList));
+    }
+
+    /**
+     * Test del metodo {@link HList#equals(Object)}.
+     * <p>
+     * Summary: Verifica che una lista popolata non sia uguale a una lista di dimensione diversa.
+     * <p>
+     * Test Case Design: Assicurarsi che il confronto rilevi differenze di dimensione.
+     * <p>
+     * Test Description: 1. Crea una lista con dimensione maggiore.<br />
+     * 2. Confronta la lista originale con la nuova lista.
+     * <p>
+     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Altra lista: ["uno", "due", "tre", "quattro", "cinque"].
+     * <p>
+     * Postconditions: Le liste rimangono invariate.
+     * <p>
+     * @expected {@code equals(otherList)} deve restituire false.
+     */
+    @Test
+    public void testEqualsPopulatedListDifferentSize() {
+        HList otherList = new ListAdapter();
+        otherList.add("uno");
+        otherList.add("due");
+        otherList.add("tre");
+        otherList.add("quattro");
+        otherList.add("cinque"); // Dimensione diversa
+        assertFalse(list.equals(otherList));
+    }
+
+    /**
+     * Test del metodo {@link HList#equals(Object)}.
+     * <p>
+     * Summary: Verifica che una lista con elementi null sia uguale a un'altra lista con null identicamente posizionati.
+     * <p>
+     * Test Case Design: Assicurarsi che il confronto gestisca correttamente gli elementi null.
+     * <p>
+     * Test Description: 1. Aggiunge null a entrambe le liste in posizioni corrispondenti.<br />
+     * 2. Confronta le due liste.
+     * <p>
+     * Preconditions: Entrambe le liste: ["uno", null, "due", "tre", "quattro"].
+     * <p>
+     * Postconditions: Le liste rimangono invariate.
+     * <p>
+     * @expected {@code equals(otherList)} deve restituire true.
+     */
+    @Test
+    public void testEqualsWithNullElements() {
+        list.add(1, null); // list: ["uno", null, "due", "tre", "quattro"]
+        HList otherList = new ListAdapter();
+        otherList.add("uno");
+        otherList.add(null); // Corrispondente null
+        otherList.add("due");
+        otherList.add("tre");
+        otherList.add("quattro");
+        assertTrue(list.equals(otherList));
+    }
+
+    // Nota: I test per listIterator(int) sono stati inclusi nel file iniziale e sono mantenuti.
+    // Gli altri test specifici per ListIterator sono in TestListIteratorPopulated.java
+    // e quelli per SubList in TestSubListAdapter.java, come da tua organizzazione.
+
 }
