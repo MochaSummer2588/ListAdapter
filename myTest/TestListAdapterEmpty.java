@@ -3,7 +3,6 @@ package myTest;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 import myAdapter.*;
 import java.util.Vector; // Necessario per testare l'interazione con Vector se usi i toArray con array CLDC
 

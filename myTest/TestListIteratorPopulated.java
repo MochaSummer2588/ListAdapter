@@ -233,6 +233,10 @@ public class TestListIteratorPopulated
      * Test Case Design: La motivazione dietro a questo test è garantire che il metodo {@code next()} restituisca l'elemento successivo e che l'iteratore si sposti correttamente 
      * lungo la lista, aggiornando gli indici.
      * <p>
+     * Test Description: 1) L'iteratore viene spostato alla posizione successiva dall'inizio della lista e l'ogegtto ritornato viene verificato se e' effettivamente quello
+     *                   2) Vengono verificati gli indici : precedente e successivo
+     *                   3) Itero nuovamente fino ad arrivare a fine lista
+     * <p>
      * Preconditions: L'iteratore è all'inizio di una lista popolata.
      * <p>
      * Postconditions: Il cursore avanza, {@code lastReturned} viene aggiornato.
@@ -307,7 +311,7 @@ public class TestListIteratorPopulated
     {
         iterator.next(); // Avanza per avere un precedente
         assertTrue(iterator.hasPrevious());
-        assertTrue(list.contains(list.get(iterator.previousIndex()))); // Verifica che l'elemento successivo esista
+        assertTrue("L'elemento successivo non esiste",list.contains(list.get(iterator.previousIndex()))); // Verifica che l'elemento successivo esista
     }
 
     /**
@@ -510,7 +514,7 @@ public class TestListIteratorPopulated
         {
             iterator.next();
             // Ora previousIndex() dovrebbe puntare all'elemento appena passato
-            assertEquals(currentElementIndex, iterator.previousIndex());
+            assertEquals("Non sono uguali i due elementi",currentElementIndex, iterator.previousIndex());
             currentElementIndex++;
         }
 
@@ -559,9 +563,9 @@ public class TestListIteratorPopulated
         Object newFirstObject = list.get(iterator.nextIndex());
         iterator.remove();      
 
-        assertEquals(sizeOriginale - 1, list.size());          // Verifica dimensione
-        assertFalse(list.contains(removedObject));                         // Verifica che "zero" sia rimosso
-        assertEquals(newFirstObject, list.get(0));                // Verifica che "uno" sia il nuovo primo elemento
+        assertEquals("Dimensione errata!", sizeOriginale - 1, list.size());          // Verifica dimensione
+        assertFalse("La lista contiene ancora l'elemento",list.contains(removedObject));                         // Verifica che "zero" sia rimosso
+        assertEquals("Non sosno uguali",newFirstObject, list.get(0));                // Verifica che "uno" sia il nuovo primo elemento
 
         assertEquals(0, iterator.nextIndex());    // Cursore è tornato all'indice dove c'era "zero", ma ora c'è "uno"
         assertEquals(-1, iterator.previousIndex()); // Non c'è un elemento precedente (lastReturned è -1)
@@ -1018,67 +1022,67 @@ public class TestListIteratorPopulated
         // iterator: cursor=0, lastReturned=-1
 
         // Step 1: next()
-        assertEquals("zero", iterator.next()); // next() restituisce "zero"
+        assertEquals("L'elemento restituito da next() non è 'zero' allo Step 1.", "zero", iterator.next()); // next() restituisce "zero"
         // Stato: list=["zero", "uno", "due"], cursor=1, lastReturned=0
-        assertEquals(1, iterator.nextIndex());
-        assertEquals(0, iterator.previousIndex());
+        assertEquals("nextIndex() non è 1 allo Step 1.", 1, iterator.nextIndex());
+        assertEquals("previousIndex() non è 0 allo Step 1.", 0, iterator.previousIndex());
 
         // Step 2: remove()
         iterator.remove(); // Rimuove l'ultimo elemento restituito ("zero")
         // Stato: list=["uno", "due"], cursor=0, lastReturned=-1
-        assertEquals(2, list.size());
-        assertFalse(list.contains("zero"));
-        assertEquals("uno", list.get(0)); // "uno" è ora il primo elemento
-        assertEquals(0, iterator.nextIndex());
-        assertEquals(-1, iterator.previousIndex()); // previousIndex è -1 quando cursor è 0
+        assertEquals("La dimensione della lista non è 2 dopo remove() allo Step 2.", 2, list.size());
+        assertFalse("La lista contiene 'zero' dopo remove() allo Step 2.", list.contains("zero"));
+        assertEquals("L'elemento all'indice 0 non è 'uno' dopo remove() allo Step 2.", "uno", list.get(0)); // "uno" è ora il primo elemento
+        assertEquals("nextIndex() non è 0 dopo remove() allo Step 2.", 0, iterator.nextIndex());
+        assertEquals("previousIndex() non è -1 dopo remove() allo Step 2.", -1, iterator.previousIndex()); // previousIndex è -1 quando cursor è 0
 
         // Step 3: add()
         iterator.add("nuovoZero"); // Aggiunge "nuovoZero" alla posizione del cursore (0)
         // Stato: list=["nuovoZero", "uno", "due"], cursor=1, lastReturned=-1
-        assertEquals(3, list.size());
-        assertEquals("nuovoZero", list.get(0));
-        assertEquals("uno", list.get(1)); // "uno" è stato shiftato
-        assertEquals(1, iterator.nextIndex());
-        assertEquals(0, iterator.previousIndex());
+        assertEquals("La dimensione della lista non è 3 dopo add() allo Step 3.", 3, list.size());
+        assertEquals("L'elemento all'indice 0 non è 'nuovoZero' dopo add() allo Step 3.", "nuovoZero", list.get(0));
+        assertEquals("L'elemento all'indice 1 non è 'uno' dopo add() allo Step 3.", "uno", list.get(1)); // "uno" è stato shiftato
+        assertEquals("nextIndex() non è 1 dopo add() allo Step 3.", 1, iterator.nextIndex());
+        assertEquals("previousIndex() non è 0 dopo add() allo Step 3.", 0, iterator.previousIndex());
 
         // Step 4: next()
-        assertEquals("uno", iterator.next()); // next() restituisce "uno"
+        assertEquals("L'elemento restituito da next() non è 'uno' allo Step 4.", "uno", iterator.next()); // next() restituisce "uno"
         // Stato: list=["nuovoZero", "uno", "due"], cursor=2, lastReturned=1
-        assertEquals(2, iterator.nextIndex());
-        assertEquals(1, iterator.previousIndex());
+        assertEquals("nextIndex() non è 2 allo Step 4.", 2, iterator.nextIndex());
+        assertEquals("previousIndex() non è 1 allo Step 4.", 1, iterator.previousIndex());
 
         // Step 5: set()
         iterator.set("UNO_MODIFICATO"); // Sostituisce "uno" con "UNO_MODIFICATO"
         // Stato: list=["nuovoZero", "UNO_MODIFICATO", "due"], cursor=2, lastReturned=1
-        assertEquals("UNO_MODIFICATO", list.get(1));
-        assertEquals("nuovoZero", list.get(0)); // Assicurati che gli altri non siano toccati
-        assertEquals("due", list.get(2));       // Assicurati che gli altri non siano toccati
-        assertEquals(3, list.size()); // Dimensione invariata
+        assertEquals("L'elemento all'indice 1 non è 'UNO_MODIFICATO' dopo set() allo Step 5.", "UNO_MODIFICATO", list.get(1));
+        assertEquals("L'elemento all'indice 0 è stato modificato inaspettatamente dopo set() allo Step 5.", "nuovoZero", list.get(0)); // Assicurati che gli altri non siano toccati
+        assertEquals("L'elemento all'indice 2 è stato modificato inaspettatamente dopo set() allo Step 5.", "due", list.get(2));       // Assicurati che gli altri non siano toccati
+        assertEquals("La dimensione della lista non è 3 dopo set() allo Step 5.", 3, list.size()); // Dimensione invariata
 
         // Step 6: next()
-        assertEquals("due", iterator.next()); // next() restituisce "due"
+        assertEquals("L'elemento restituito da next() non è 'due' allo Step 6.", "due", iterator.next()); // next() restituisce "due"
         // Stato: list=["nuovoZero", "UNO_MODIFICATO", "due"], cursor=3, lastReturned=2
-        assertFalse(iterator.hasNext()); // Dovrebbe essere alla fine della lista
-        assertEquals(3, iterator.nextIndex());
-        assertEquals(2, iterator.previousIndex());
+        assertFalse("hasNext() è true alla fine della lista allo Step 6.", iterator.hasNext()); // Dovrebbe essere alla fine della lista
+        assertEquals("nextIndex() non è 3 allo Step 6.", 3, iterator.nextIndex());
+        assertEquals("previousIndex() non è 2 allo Step 6.", 2, iterator.previousIndex());
 
         // Step 7: previous()
-        assertEquals("due", iterator.previous()); // previous() restituisce "due"
+        assertEquals("L'elemento restituito da previous() non è 'due' allo Step 7.", "due", iterator.previous()); // previous() restituisce "due"
         // Stato: list=["nuovoZero", "UNO_MODIFICATO", "due"], cursor=2, lastReturned=2
-        assertEquals(2, iterator.nextIndex());
-        assertEquals(1, iterator.previousIndex());
-        assertTrue(iterator.hasNext()); // Ora dovrebbe avere un next (l'elemento "due" se lo ripassiamo)
+        assertEquals("nextIndex() non è 2 dopo previous() allo Step 7.", 2, iterator.nextIndex());
+        assertEquals("previousIndex() non è 1 dopo previous() allo Step 7.", 1, iterator.previousIndex());
+        assertTrue("hasNext() è false dopo previous() allo Step 7.", iterator.hasNext()); // Ora dovrebbe avere un next (l'elemento "due" se lo ripassiamo)
 
         // Step 8: remove()
         iterator.remove(); // Rimuove l'ultimo elemento restituito ("due")
         // Stato: list=["nuovoZero", "UNO_MODIFICATO"], cursor=2, lastReturned=-1
-        assertEquals(2, list.size()); // Dimensione ora 2
-        assertFalse(list.contains("due")); // "due" non deve più esserci
-        assertEquals("nuovoZero", list.get(0));
-        assertEquals("UNO_MODIFICATO", list.get(1));
-        assertEquals(2, iterator.nextIndex()); // Cursore rimane alla posizione
-        assertEquals(1, iterator.previousIndex()); // previousIndex è 1 (cursor - 1)
-        assertFalse(iterator.hasNext()); // Non ci sono più elementi dopo il cursore (alla fine)
+        assertEquals("La dimensione della lista non è 2 dopo il secondo remove() allo Step 8.", 2, list.size()); // Dimensione ora 2
+        assertFalse("La lista contiene 'due' dopo il secondo remove() allo Step 8.", list.contains("due")); // "due" non deve più esserci
+        assertEquals("L'elemento all'indice 0 non è 'nuovoZero' dopo il secondo remove() allo Step 8.", "nuovoZero", list.get(0));
+        assertEquals("L'elemento all'indice 1 non è 'UNO_MODIFICATO' dopo il secondo remove() allo Step 8.", "UNO_MODIFICATO", list.get(1));
+        assertEquals("nextIndex() non è 2 dopo il secondo remove() allo Step 8.", 2, iterator.nextIndex()); // Cursore rimane alla posizione
+        assertEquals("previousIndex() non è 1 dopo il secondo remove() allo Step 8.", 1, iterator.previousIndex()); // previousIndex è 1 (cursor - 1)
+        assertFalse("hasNext() è true dopo il secondo remove() allo Step 8.", iterator.hasNext()); // Non ci sono più elementi dopo il cursore (alla fine)
     }
 
     /**
@@ -1113,42 +1117,42 @@ public class TestListIteratorPopulated
      * Gli indici dell'iteratore devono essere coerenti con la navigazione.
      */
     @Test
-    public void testAddNullElement() 
-    {
+        public void testAddNullElement() 
+        {
         // Precondizione: list = ["zero", "uno", "due"], size = 3, cursor = 0, lastReturned = -1
-        int originalSize = list.size();
+        int originalSize = list.size(); // Salva la dimensione iniziale, es. 3
 
         // Aggiungi null all'inizio della lista (indice 0)
         iterator.add(null);
-        // Stato: list = [null, "zero", "uno", "due"]
+        // Stato atteso: list = [null, "zero", "uno", "due"]
 
         // Verifica stato dopo l'aggiunta di null
-        assertEquals(originalSize + 1, list.size()); // Dimensione deve essere 4
-        assertNull(list.get(0));                     // L'elemento all'indice 0 deve essere null
-        assertEquals("zero", list.get(1));           // "zero" deve essere stato shiftato all'indice 1
-        assertEquals("uno", list.get(2));            // "uno" rimane all'indice 2
-        assertEquals("due", list.get(3));            // "due" rimane all'indice 3
-        assertEquals(1, iterator.nextIndex());       // Cursore è avanzato dopo il null
-        assertEquals(0, iterator.previousIndex());   // previousIndex punta al null aggiunto
+        assertEquals("La dimensione della lista non è corretta dopo l'aggiunta di null.", originalSize + 1, list.size()); // Dimensione deve essere 4
+        assertNull("L'elemento all'indice 0 non è null dopo l'aggiunta.", list.get(0));                               // L'elemento all'indice 0 deve essere null
+        assertEquals("L'elemento all'indice 1 non è 'zero' dopo l'aggiunta di null.", "zero", list.get(1));             // "zero" deve essere stato shiftato all'indice 1
+        assertEquals("L'elemento all'indice 2 non è 'uno' dopo l'aggiunta di null.", "uno", list.get(2));                 // "uno" rimane all'indice 2
+        assertEquals("L'elemento all'indice 3 non è 'due' dopo l'aggiunta di null.", "due", list.get(3));                 // "due" rimane all'indice 3
+        assertEquals("nextIndex() non è 1 dopo l'aggiunta di null.", 1, iterator.nextIndex());                 // Cursore è avanzato dopo il null
+        assertEquals("previousIndex() non è 0 dopo l'aggiunta di null.", 0, iterator.previousIndex());         // previousIndex punta al null aggiunto
 
         // Continua a navigare per verificare la consistenza
-        assertEquals("zero", iterator.next());       // next() restituisce "zero"
-        assertEquals("uno", iterator.next());        // next() restituisce "uno"
-        assertEquals("due", iterator.next());        // next() restituisce "due"
-        assertFalse(iterator.hasNext());             // Dovrebbe essere alla fine
+        assertEquals("Il primo next() dopo l'aggiunta di null non restituisce 'zero'.", "zero", iterator.next()); // next() restituisce "zero"
+        assertEquals("Il secondo next() dopo l'aggiunta di null non restituisce 'uno'.", "uno", iterator.next());     // next() restituisce "uno"
+        assertEquals("Il terzo next() dopo l'aggiunta di null non restituisce 'due'.", "due", iterator.next());     // next() restituisce "due"
+        assertFalse("hasNext() è true quando dovrebbe essere false alla fine della lista.", iterator.hasNext());         // Dovrebbe essere alla fine
 
         // Reset l'iteratore all'inizio per testare esplicitamente next() su null
-        iterator = list.listIterator(0); // cursor = 0, lastReturned = -1
+        iterator = list.listIterator(0); // cursor = 0, lastReturned = -1 (lista è [null, "zero", "uno", "due"])
 
         // Verifica che next() restituisca null correttamente
-        assertNull(iterator.next());                 // Il primo elemento (null) viene restituito
-        assertEquals(1, iterator.nextIndex());       // Cursore è su 1
-        assertEquals(0, iterator.previousIndex());   // previousIndex punta al null
+        assertNull("Il primo next() dopo il reset non restituisce null.", iterator.next()); // Il primo elemento (null) viene restituito
+        assertEquals("nextIndex() non è 1 dopo il primo next() sul null.", 1, iterator.nextIndex()); // Cursore è su 1
+        assertEquals("previousIndex() non è 0 dopo il primo next() sul null.", 0, iterator.previousIndex()); // previousIndex punta al null
 
         // Verifica il successivo elemento
-        assertEquals("zero", iterator.next());       // Il secondo elemento ("zero") viene restituito
-        assertEquals(2, iterator.nextIndex());       // Cursore è su 2
-        assertEquals(1, iterator.previousIndex());   // previousIndex punta a "zero"
+        assertEquals("Il secondo next() dopo il reset non restituisce 'zero'.", "zero", iterator.next()); // Il secondo elemento ("zero") viene restituito
+        assertEquals("nextIndex() non è 2 dopo il secondo next().", 2, iterator.nextIndex()); // Cursore è su 2
+        assertEquals("previousIndex() non è 1 dopo il secondo next().", 1, iterator.previousIndex()); // previousIndex punta a "zero"
     }
 
 }

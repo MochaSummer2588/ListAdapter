@@ -32,3 +32,7 @@ java .\myAdapter\MainProva.java
      * <p><b>Postconditions:<b> <p>
      * <p><b>Expected Result:<b> <p>
      */
+
+Ricordati di scrivere i test case (description) 
+
+Ricordati di scrivere che per i metodi piu semplici non ci sono scritte tipo assertEquals("L'elemento all'indice " + randomIndex + " non è quello atteso.", expectedContent[randomIndex], list.get(randomIndex)); perche' il compilatore in caso di fail dice dove avviene l'errore, quindi per rendere il codice piu leggibile e meno pesante e' stato deciso di scrivere il messaggio per metodi piu complicati
