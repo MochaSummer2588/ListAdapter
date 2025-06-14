@@ -3,11 +3,12 @@ package myTest;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore; // Importa l'annotazione Ignore se necessario
 import myAdapter.*;
-import myExceptions.IllegalStateException; // Assicurati di avere questa classe, se Iterator.remove() la lancia
+import myExceptions.IllegalStateException; 
+import org.junit.Assume;
 
-import java.util.Vector; // Necessario per testare l'interazione con Vector se usi i toArray con array CLDC
+import java.util.Vector;
+import java.util.Random;
 
 /**
  * Suite di test per la classe {@link myAdapter.ListAdapter}.
@@ -47,14 +48,18 @@ public class TestListAdapterPopulated
      * Summary: Verifica che la dimensione di una lista popolata sia corretta.
      * <p>
      * Test Case Design: Questo test verifica il valore iniziale di {@code size()} per una lista pre-popolata.
+     * La motivazione è assicurare che il contatore interno della dimensione sia gestito correttamente
+     * dopo una serie di operazioni di aggiunta che popolano la lista.
      * <p>
-     * Test Description: 1. Verifica la dimensione della lista dopo la sua inizializzazione nel setup.
+     * Test Description: 1) Si fa affidamento sul metodo {@code setUp()} che inizializza la lista con 4 elementi.
+     *                   2) Si chiama il metodo {@code size()} sulla lista.
+     *                   3) Si verifica che il valore restituito sia uguale al numero di elementi aggiunti durante il setup.
      * <p>
-     * Preconditions: La lista è stata inizializzata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata con 4 elementi tramite il metodo {@code setUp()}.
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane invariata, con i suoi 4 elementi.
      * <p>
-     * @expected {@code size()} deve restituire 4.
+     * Expected Result: {@code size()} deve restituire 4.
      */
     @Test
     public void testSizePopulatedList()
@@ -70,14 +75,18 @@ public class TestListAdapterPopulated
      * Summary: Verifica che {@code isEmpty()} restituisca false per una lista popolata.
      * <p>
      * Test Case Design: Questo test verifica che una lista con elementi non sia identificata come vuota.
+     * La motivazione è garantire che il metodo {@code isEmpty()} rifletta correttamente lo stato di una lista che contiene elementi,
+     * differenziandola da una lista vuota.
      * <p>
-     * Test Description: 1. Verifica lo stato di vuoto della lista dopo la sua inizializzazione nel setup.
+     * Test Description: 1) Si fa affidamento sul metodo {@code setUp()} che inizializza la lista con 4 elementi.
+     *                   2) Si chiama il metodo {@code isEmpty()} sulla lista popolata.
+     *                   3) Si verifica che il valore booleano restituito sia false, indicando che la lista non è vuota.
      * <p>
-     * Preconditions: La lista è stata inizializzata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata con 4 elementi tramite il metodo {@code setUp()}.
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane invariata, con i suoi 4 elementi.
      * <p>
-     * @expected {@code isEmpty()} deve restituire false.
+     * Expected Result: {@code isEmpty()} deve restituire false.
      */
     @Test
     public void testIsEmptyPopulatedList()
@@ -90,18 +99,23 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#contains(Object)}.
      * <p>
-     * Summary: Verifica che {@code contains()} restituisca true per un elemento presente nella lista.
+     * Summary: Verifica che il metodo {@code contains(Object)} identifichi correttamente la presenza di un elemento che
+     * è già stato inserito nella lista popolata, restituendo {@code true}. Questo test assicura che la funzionalità di ricerca
+     * di base operi come previsto per gli elementi esistenti.
      * <p>
-     * Test Case Design: Assicurarsi che gli elementi effettivamente presenti siano riconosciuti.
+     * Test Case Design: Questo test assicura che il metodo {@code contains()} identifichi correttamente
+     * la presenza di un elemento che è stato effettivamente aggiunto alla lista.
+     * La motivazione è convalidare la funzionalità di ricerca di base.
      * <p>
-     * Test Description: 1. Cerca un elemento presente nella lista ("due").<br />
-     * 2. Verifica che il risultato sia true.
+     * Test Description: 1) Si fa affidamento sul metodo {@code setUp()} che inizializza la lista con 4 elementi.
+     *                   2) Si chiama il metodo {@code contains()} cercando un elemento che si sa essere presente ("due").
+     *                   3) Si verifica che il valore booleano restituito sia true.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata con 4 elementi, inclusi "uno", "due", "tre", "quattro".
      * <p>
      * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code contains("due")} deve restituire true.
+     * Expected Result: {@code contains("due")} deve restituire true.
      */
     @Test
     public void testContainsExistingElement()
@@ -112,18 +126,23 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#contains(Object)}.
      * <p>
-     * Summary: Verifica che {@code contains()} restituisca false per un elemento non presente nella lista.
+     * Summary: Verifica che il metodo {@code contains(Object)} restituisca correttamente {@code false}
+     * quando si tenta di cercare un elemento che non è presente all'interno della lista popolata.
+     * Questo test assicura che la funzionalità di ricerca non produca falsi positivi.
      * <p>
-     * Test Case Design: Assicurarsi che gli elementi non presenti siano correttamente identificati come tali.
+     * Test Case Design: Questo test assicura che il metodo {@code contains()} identifichi correttamente
+     * l'assenza di un elemento. La motivazione è convalidare la funzionalità di ricerca di base
+     * anche per gli elementi non esistenti.
      * <p>
-     * Test Description: 1. Cerca un elemento non presente nella lista ("cinque").<br />
-     * 2. Verifica che il risultato sia false.
+     * Test Description: 1) Si fa affidamento sul metodo {@code setUp()} che inizializza la lista con 4 elementi.
+     *                   2) Si chiama il metodo {@code contains()} cercando un elemento che non si trova nella lista ("cinque").
+     *                   3) Si verifica che il valore booleano restituito sia false.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata con 4 elementi ("uno", "due", "tre", "quattro").
      * <p>
      * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code contains("cinque")} deve restituire false.
+     * Expected Result: {@code contains("cinque")} deve restituire false.
      */
     @Test
     public void testContainsNonExistingElement()
@@ -134,19 +153,25 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#contains(Object)}.
      * <p>
-     * Summary: Verifica che {@code contains(null)} restituisca false se null non è presente.
+     * Summary: Verifica che il metodo {@code contains(Object)} restituisca correttamente {@code false}
+     * quando si tenta di cercare un riferimento {@code null} in una lista che non contiene elementi null.
+     * Questo test è cruciale per assicurare che la gestione degli elementi null sia precisa
+     * e che la ricerca di un valore non presente (anche se {@code null}) funzioni come atteso.
      * <p>
-     * Test Case Design: Assicurarsi che la ricerca di un elemento null funzioni correttamente quando non è presente.
+     * Test Case Design: Questo test assicura che la ricerca di un elemento {@code null}
+     * sia gestita correttamente quando {@code null} non è presente nella lista. La motivazione
+     * è convalidare che il metodo non dia un falso positivo o lanci un'eccezione inaspettata
+     * quando cerca un valore {@code null} assente.
      * <p>
-     * Test Description: 1. Verifica che la lista non contenga null.<br />
-     * 2. Cerca null nella lista.<br />
-     * 3. Verifica che il risultato sia false.
+     * Test Description: 1) Si fa affidamento sul metodo {@code setUp()} che inizializza la lista con 4 elementi non null.
+     *                   2) Si chiama il metodo {@code contains()} passando {@code null} come argomento.
+     *                   3) Si verifica che il valore booleano restituito sia {@code false}.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi non null.
+     * Preconditions: La lista è stata inizializzata con 4 elementi non null ("uno", "due", "tre", "quattro").
      * <p>
      * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code contains(null)} deve restituire false.
+     * Expected Result: {@code contains(null)} deve restituire false.
      */
     @Test
     public void testContainsNullNotPresent()
@@ -157,20 +182,25 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#contains(Object)}.
      * <p>
-     * Summary: Verifica che {@code contains(null)} restituisca true se null è presente.
+     * Summary: Verifica che il metodo {@code contains(Object)} restituisca correttamente {@code true}
+     * quando si cerca un riferimento {@code null} e questo è effettivamente presente nella lista.
+     * Questo test è fondamentale per assicurare la corretta gestione e rintracciabilità degli elementi {@code null}
+     * all'interno della lista.
      * <p>
-     * Test Case Design: Assicurarsi che la ricerca di un elemento null funzioni correttamente quando è presente.
+     * Test Case Design: Questo test assicura che la ricerca di un elemento {@code null} funzioni correttamente
+     * quando {@code null} è stato esplicitamente aggiunto alla lista. La motivazione è convalidare
+     * la capacità del metodo di trovare e riconoscere gli elementi {@code null} come validi contenuti della lista.
      * <p>
-     * Test Description: 1. Aggiunge null alla lista.<br />
-     * 2. Cerca null nella lista.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica la dimensione della lista sia corretta.
+     * Test Description: 1) Si aggiunge un elemento {@code null} alla lista già popolata dal {@code setUp()}.
+     *                   2) Si chiama il metodo {@code contains()} passando {@code null} come argomento.
+     *                   3) Si verifica che il valore booleano restituito sia {@code true}.
+     *                   4) Si verifica che la dimensione della lista sia aumentata di uno, confermando l'aggiunta.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi non null.
+     * Preconditions: La lista è stata inizializzata con 5 elementi ("uno", "due", "tre", "quattro", null) 
      * <p>
-     * Postconditions: La lista contiene un elemento null in più.
+     * Postconditions: La lista contiene un elemento {@code null} in più rispetto allo stato iniziale.
      * <p>
-     * @expected {@code contains(null)} deve restituire true.
+     * Expected Result: {@code contains(null)} deve restituire true. La dimensione della lista deve essere 5.
      */
     @Test
     public void testContainsNullWhenPresent()
@@ -185,19 +215,29 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#iterator()}.
      * <p>
-     * Summary: Verifica l'iterazione base su una lista popolata.
+     * Summary: Il test verifica la capacità di un {@link myAdapter.HIterator} ottenuto da una lista popolata
+     * di percorrere correttamente tutti gli elementi in sequenza, dal primo all'ultimo,
+     * assicurando che il metodo {@code hasNext()} e {@code next()} funzionino come previsto
+     * e che l'iteratore esaurisca correttamente gli elementi.
      * <p>
-     * Test Case Design: Assicurarsi che l'iteratore possa percorrere tutti gli elementi.
+     * Test Case Design: Questo test mira ad assicurare che l'iteratore possa percorrere tutti gli elementi
+     * di una lista popolata nell'ordine di inserimento. La motivazione è convalidare la funzionalità
+     * fondamentale di iterazione.
      * <p>
-     * Test Description: 1. Ottiene un iteratore.<br />
-     * 2. Itera attraverso gli elementi verificandone la presenza.<br />
-     * 3. Verifica che tutti gli elementi siano stati visitati e {@code hasNext()} sia false alla fine.
+     * Test Description: 1) Si ottiene un'istanza di {@link myAdapter.HIterator} chiamando {@code list.iterator()}.
+     *                   2) Si verifica ripetutamente che {@code hasNext()} restituisca {@code true} prima di ogni chiamata a {@code next()}.
+     *                   3) Si chiama {@code next()} per ogni elemento della lista, verificando che restituisca l'elemento atteso
+     *                      nell'ordine corretto ("uno", "due", "tre", "quattro").
+     *                   4) Dopo aver attraversato l'ultimo elemento, si verifica che {@code hasNext()} restituisca {@code false},
+     *                      indicando che l'iterazione è terminata.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane invariata nel suo contenuto e nella sua dimensione. Lo stato dell'iteratore
+     * si trova alla fine della lista.
      * <p>
-     * @expected L'iteratore deve restituire tutti gli elementi nell'ordine corretto.
+     * Expected Result: L'iteratore deve restituire tutti gli elementi nell'ordine corretto ("uno", "due", "tre", "quattro").
+     * Dopo l'ultima chiamata a {@code next()}, {@code hasNext()} deve restituire {@code false}.
      */
     @Test
     public void testIteratorBasicIteration()
@@ -219,20 +259,30 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#toArray()}.
      * <p>
-     * Summary: Verifica che {@code toArray()} su una lista popolata restituisca un array corretto.
+     * Summary: Il test verifica che il metodo {@code toArray()} su una lista popolata
+     * restituisca un array di {@code Object} contenente tutti gli elementi della lista
+     * nell'ordine corretto e con la dimensione appropriata. Questo assicura che la
+     * conversione da lista ad array avvenga in modo accurato e senza perdita di dati.
      * <p>
-     * Test Case Design: Assicurarsi che la conversione in array includa tutti gli elementi nell'ordine corretto.
+     * Test Case Design: Questo test è progettato per assicurare che la conversione
+     * della lista in un array includa tutti gli elementi presenti, mantenendo il loro
+     * ordine. La motivazione è convalidare la corretta rappresentazione dei dati
+     * della lista in una struttura array.
      * <p>
-     * Test Description: 1. Chiama {@code toArray()} su una lista popolata.<br />
-     * 2. Verifica che l'array risultante non sia null.<br />
-     * 3. Verifica che la sua lunghezza sia uguale alla dimensione della lista.<br />
-     * 4. Verifica il contenuto dell'array.
+     * Test Description: 1) Si chiama il metodo {@code toArray()} sulla lista già popolata dal {@code setUp()}.
+     *                   2) Si verifica che l'array risultante non sia {@code null}, garantendo che un array sia effettivamente creato.
+     *                   3) Si verifica che la lunghezza dell'array restituito sia esattamente uguale alla dimensione della lista,
+     *                      confermando che tutti gli elementi sono stati copiati.
+     *                   4) Si verifica il contenuto di ogni posizione dell'array, confrontandolo con gli elementi attesi
+     *                      della lista nell'ordine sequenziale.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista originale rimane invariata nel suo contenuto e nella sua dimensione.
+     * Viene creato un nuovo array contenente una copia degli elementi della lista.
      * <p>
-     * @expected L'array deve contenere gli stessi elementi della lista nell'ordine.
+     * Expected Result: L'array restituito non deve essere {@code null}. La sua lunghezza deve essere 4.
+     * Gli elementi dell'array devono essere ["uno", "due", "tre", "quattro"] nell'ordine specificato.
      */
     @Test
     public void testToArrayPopulatedList()
@@ -251,26 +301,43 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#toArray(Object[])}.
      * <p>
-     * Summary: Verifica che {@code toArray(T[] a)} riutilizzi un array fornito di dimensione sufficiente.
+     * Summary: Il test verifica che {@code toArray(T[] a)} riutilizzi correttamente un array di destinazione
+     * fornito se la sua dimensione è sufficiente a contenere tutti gli elementi della lista.
+     * Inoltre, assicura che qualsiasi elemento nell'array fornito, posizionato oltre la dimensione della lista,
+     * venga impostato a {@code null} per conformità con le specifiche.
      * <p>
-     * Test Case Design: Assicurarsi che l'array fornito, se grande abbastanza, venga riempito e l'elemento dopo l'ultimo sia null.
+     * Test Case Design: Questo test è progettato per assicurare che il metodo {@code toArray(T[] a)}
+     * gestisca correttamente il caso in cui l'array fornito sia di dimensione uguale o maggiore della lista.
+     * La motivazione è convalidare che l'implementazione aderisca alla specifica J2SE per la riutilizzazione
+     * dell'array fornito e la nullificazione degli elementi residui.
      * <p>
-     * Test Description: 1. Crea un array di stringhe di dimensione maggiore della lista.<br />
-     * 2. Chiama {@code toArray(arr)}.<br />
-     * 3. Verifica che l'array restituito sia lo stesso array passato.<br />
-     * 4. Verifica il contenuto e la nullificazione dell'elemento extra.
+     * Test Description: 1) Si crea un array di {@code String} (`arr`) con una dimensione maggiore rispetto alla lista popolata
+     *                      (ad esempio, 5 elementi per una lista di 4).
+     *                   2) Si aggiunge un valore arbitrario ("extra") all'ultima posizione dell'array fornito per verificare
+     *                      che venga correttamente sovrascritto a {@code null}.
+     *                   3) Si chiama il metodo {@code toArray()} della lista, passando l'array `arr` come argomento.
+     *                   4) Si verifica, tramite {@code assertSame()}, che l'array restituito sia esattamente la stessa istanza dell'array passato.
+     *                   5) Si verifica che la lunghezza dell'array risultante non sia stata modificata (rimanga 5).
+     *                   6) Si controlla il contenuto delle prime posizioni dell'array per assicurare che gli elementi della lista siano stati copiati correttamente.
+     *                   7) Si verifica che l'elemento alla posizione successiva all'ultimo elemento della lista (l'indice 4 in questo caso)
+     *                      sia stato impostato a {@code null}.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi. Array fornito di dimensione 5.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * Viene fornito un array di {@code Object} con una dimensione di 5 elementi.
      * <p>
-     * Postconditions: La lista rimane invariata. L'array fornito è riempito.
+     * Postconditions: La lista originale rimane invariata nel suo contenuto e nella sua dimensione.
+     * L'array fornito in input viene modificato: i suoi primi 4 elementi contengono gli elementi della lista,
+     * e il quinto elemento è impostato a {@code null}.
      * <p>
-     * @expected L'array deve contenere gli elementi della lista e null all'indice 4.
+     * Expected Result: L'array restituito deve essere la stessa istanza dell'array passato (`arr`).
+     * La sua lunghezza deve rimanere 5.
+     * I suoi elementi devono essere ["uno", "due", "tre", "quattro", null] nell'ordine specificato.
      */
     @Test
     public void testToArrayWithSufficientlyLargeArray()
     {
         String[] arr = new String[5];
-        arr[4] = "extra"; // Aggiungi un elemento per verificare che venga nullificato
+        arr[4] = "extra"; // Aggiungo un elemento per verificare che venga nullificato
         Object[] result = list.toArray(arr);
         assertSame(arr, result); // Deve essere la stessa istanza
         assertEquals(5, result.length); // La lunghezza rimane quella dell'array passato
@@ -285,20 +352,36 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#toArray(Object[])}.
      * <p>
-     * Summary: Verifica che {@code toArray(T[] a)} crei un nuovo array se quello fornito è troppo piccolo.
+     * Summary: Il test verifica che il metodo {@code toArray(T[] a)} sia in grado di creare
+     * e restituire un *nuovo* array di tipo e dimensione appropriati quando l'array di input
+     * fornito è troppo piccolo per contenere tutti gli elementi della lista. Questo assicura
+     * che l'implementazione rispetti la specifica.
      * <p>
-     * Test Case Design: Assicurarsi che un nuovo array venga allocato quando quello fornito è insufficiente.
+     * Test Case Design: Questo test è progettato per assicurare che il metodo {@code toArray(T[] a)}
+     * allochi un nuovo array quando quello fornito è insufficiente a contenere tutti gli elementi
+     * della lista. La motivazione è convalidare la corretta gestione delle dimensioni dell'array
+     * di destinazione e la creazione di un nuovo array quando necessario, preservando la tipizzazione.
      * <p>
-     * Test Description: 1. Crea un array di stringhe di dimensione minore della lista.<br />
-     * 2. Chiama {@code toArray(arr)}.<br />
-     * 3. Verifica che l'array restituito non sia lo stesso array passato.<br />
-     * 4. Verifica che il nuovo array abbia la dimensione corretta e il contenuto corretto.
+     * Test Description: 1) Si crea un array di {@code String} (`arr`) con una dimensione inferiore
+     *                      rispetto alla lista popolata (ad esempio, 2 elementi per una lista di 4).
+     *                   2) Si chiama il metodo {@code toArray()} della lista, passando l'array `arr` come argomento.
+     *                   3) Si verifica, tramite {@code assertNotSame()}, che l'array restituito non sia la stessa istanza
+     *                      dell'array passato, confermando l'allocazione di un nuovo array.
+     *                   4) Si verifica che la lunghezza del nuovo array risultante sia esattamente uguale alla dimensione della lista (4),
+     *                      confermando che tutti gli elementi sono stati copiati nel nuovo array.
+     *                   5) Si controlla il contenuto di ogni posizione del nuovo array per assicurare che gli elementi della lista
+     *                      siano stati copiati correttamente e nell'ordine sequenziale.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi. Array fornito di dimensione 2.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * Viene fornito un array di {@code String} con una dimensione di 2 elementi.
      * <p>
-     * Postconditions: La lista rimane invariata. Un nuovo array è creato.
+     * Postconditions: La lista originale rimane invariata nel suo contenuto e nella sua dimensione.
+     * Viene allocato e restituito un nuovo array che contiene una copia degli elementi della lista.
+     * L'array originale passato come parametro non viene modificato.
      * <p>
-     * @expected Un nuovo array di dimensione 4 con gli elementi della lista.
+     * Expected Result: L'array restituito deve essere una nuova istanza (non lo stesso di `arr`).
+     * La sua lunghezza deve essere 4. Gli elementi dell'array devono essere ["uno", "due", "tre", "quattro"]
+     * nell'ordine specificato.
      */
     @Test
     public void testToArrayWithTooSmallArray()
@@ -311,24 +394,38 @@ public class TestListAdapterPopulated
         assertEquals("uno", result[0]);
         assertEquals("due", result[1]);
         assertEquals("tre", result[2]);
-        assertEquals("quattro", result[3]);
+        assertEquals("quattro", result[3]); // Assicurati di includere anche l'ultima asserzione
     }
 
     /**
      * Test del metodo {@link HList#toArray(Object[])}.
      * <p>
-     * Summary: Verifica che {@code toArray(T[] a)} lanci {@code NullPointerException} se l'array fornito è null.
+     * Summary: Il test verifica che il metodo {@code toArray(T[] a)} lanci correttamente
+     * una {@link java.lang.NullPointerException} quando l'array di destinazione fornito
+     * come argomento è {@code null}. Questo assicura che l'implementazione aderisca alla
+     * specifica che prevede tale comportamento per la gestione
+     * di input non validi.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per l'array.
+     * Test Case Design: Questo test è progettato per assicurare che il metodo {@code toArray(T[] a)}
+     * gestisca in modo robusto il caso limite in cui viene fornito un array di input {@code null}.
+     * La motivazione è convalidare che il metodo non proceda con operazioni su un riferimento nullo,
+     * prevenendo potenziali {@code NullPointerException} non gestite e rispettando il contratto
+     * dell'interfaccia.
      * <p>
-     * Test Description: 1. Chiama {@code toArray(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
+     * Test Description: 1) Si chiama il metodo {@code toArray()} sulla lista popolata,
+     *                      passando intenzionalmente {@code null} come argomento per l'array di destinazione.
+     *                   2) Si usa l'annotazione JUnit `@Test(expected = NullPointerException.class)` per
+     *                      dichiarare che ci si aspetta il lancio di una {@code NullPointerException} durante l'esecuzione
+     *                      di questo test. Se l'eccezione non viene lanciata o viene lanciata un'eccezione diversa,
+     *                      il test fallirà.
      * <p>
-     * Preconditions: Lista popolata.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi.
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista originale rimane invariata nel suo contenuto e nella sua dimensione.
+     * Nessuna modifica viene apportata, poiché l'esecuzione del metodo viene interrotta dal lancio dell'eccezione.
      * <p>
-     * @expected {@code NullPointerException}.
+     * Expected Result: Il test deve completarsi con successo solo se viene lanciata una
+     * {@link java.lang.NullPointerException} al momento della chiamata a {@code list.toArray(null)}.
      */
     @Test(expected = NullPointerException.class)
     public void testToArrayNullArray()
@@ -341,21 +438,33 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(Object)}.
      * <p>
-     * Summary: Verifica l'aggiunta di un elemento alla fine della lista popolata.
+     * Summary: Il test verifica che il metodo {@code add(Object element)} possa aggiungere correttamente
+     * un nuovo elemento alla fine di una lista già popolata. Si assicura che l'elemento venga
+     * inserito nella posizione corretta, che la dimensione della lista sia aggiornata di conseguenza,
+     * e che il metodo restituisca {@code true} come specificato dal {@link myAdapter.HCollection#add(Object) HCollection}
+     * e {@link myAdapter.HList#add(Object) HList} per un'operazione di successo.
      * <p>
-     * Test Case Design: Assicurarsi che l'elemento sia aggiunto in coda, la dimensione sia aggiornata
-     * e il metodo restituisca true.
+     * Test Case Design: Questo test è progettato per verificare la funzionalità di base del metodo {@code add(Object)}
+     * quando la lista non è vuota. La motivazione è assicurare che l'aggiunta di un elemento mantenga
+     * la consistenza della lista, posizionando il nuovo elemento in coda e aggiornando la dimensione.
      * <p>
-     * Test Description: 1. Aggiunge un nuovo elemento.<br />
-     * 2. Verifica che la dimensione sia 5.<br />
-     * 3. Verifica che l'elemento aggiunto sia l'ultimo della lista.
+     * Test Description: 1) Si chiama il metodo {@code add()} sulla lista già popolata dal {@code setUp()},
+     *                      passando una nuova stringa ("cinque") come elemento da aggiungere.
+     *                   2) Si verifica, tramite {@code assertTrue()}, che il valore booleano restituito da {@code add()} sia {@code true},
+     *                      confermando che l'operazione di aggiunta ha avuto successo.
+     *                   3) Si verifica che la dimensione della lista sia aumentata correttamente da 4 a 5, utilizzando {@code assertEquals(5, list.size())}.
+     *                   4) Si accede all'ultimo elemento della lista (all'indice 4, poiché gli indici vanno da 0 a 4) tramite {@code list.get(4)}
+     *                      e si verifica che corrisponda all'elemento appena aggiunto ("cinque").
      * <p>
-     * Preconditions: Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
      * <p>
-     * Postconditions: La lista contiene un elemento in più alla fine, dimensione 5.
+     * Postconditions: La lista contiene un elemento in più rispetto allo stato iniziale.
+     * L'elemento aggiunto ("cinque") si trova all'ultima posizione (indice 4).
+     * La dimensione della lista è 5.
      * <p>
-     * @expected {@code add(Object)} deve restituire true, {@code size()} deve essere 5,
-     * e {@code get(4)} deve restituire l'elemento aggiunto.
+     * Expected Result: La chiamata a {@code add("cinque")} deve restituire {@code true}.
+     * La dimensione della lista dopo l'aggiunta deve essere 5.
+     * L'elemento all'indice 4 della lista deve essere "cinque".
      */
     @Test
     public void testAddObjectToPopulatedList()
@@ -368,20 +477,35 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(Object)} con elemento null.
      * <p>
-     * Summary: Verifica che l'aggiunta di un elemento null alla lista popolata funzioni.
+     * Summary: Il test verifica che il metodo {@code add(Object element)} gestisca correttamente
+     * l'aggiunta di un riferimento {@code null} alla fine di una lista già popolata. Si assicura
+     * che l'elemento {@code null} venga inserito correttamente, che la dimensione della lista
+     * sia aggiornata, e che il metodo {@code contains(null)} restituisca {@code true} dopo l'aggiunta,
+     * confermando che gli elementi {@code null} sono supportati e gestiti come elementi validi.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo possa gestire l'aggiunta di elementi nulli.
+     * Test Case Design: Questo test è progettato per assicurare che il metodo {@code add(Object)}
+     * possa gestire e memorizzare correttamente riferimenti {@code null}, trattandoli come qualsiasi
+     * altro elemento valido della lista. La motivazione è convalidare la capacità della lista
+     * di contenere elementi {@code null}, come specificato dalle interfacce del J2SE Collections Framework.
      * <p>
-     * Test Description: 1. Aggiunge un elemento null.<br />
-     * 2. Verifica che la dimensione sia 5.<br />
-     * 3. Verifica che l'elemento null sia presente all'ultimo indice.
+     * Test Description: 1) Si chiama il metodo {@code add()} sulla lista già popolata dal {@code setUp()},
+     *                      passando {@code null} come elemento da aggiungere.
+     *                   2) Si verifica, tramite {@code assertTrue()}, che il valore booleano restituito da {@code add()} sia {@code true},
+     *                      confermando che l'operazione di aggiunta ha avuto successo.
+     *                   3) Si verifica che la dimensione della lista sia aumentata correttamente da 4 a 5, utilizzando {@code assertEquals(5, list.size())}.
+     *                   4) Si accede all'ultimo elemento della lista (all'indice 4) tramite {@code list.get(4)}
+     *                      e si verifica che sia effettivamente {@code null}, confermando la posizione dell'elemento aggiunto.
+     *                   5) Si utilizza {@code list.contains(null)} per verificare che la lista ora riconosca la presenza di {@code null}.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi non null: ["uno", "due", "tre", "quattro"].
      * <p>
-     * Postconditions: La lista contiene un elemento null in più alla fine, dimensione 5.
+     * Postconditions: La lista contiene un elemento {@code null} in più alla fine (indice 4).
+     * La dimensione della lista è 5.
      * <p>
-     * @expected {@code add(Object)} deve restituire true, {@code size()} deve essere 5,
-     * e {@code get(4)} deve restituire null.
+     * Expected Result: La chiamata a {@code add(null)} deve restituire {@code true}.
+     * La dimensione della lista dopo l'aggiunta deve essere 5.
+     * L'elemento all'indice 4 della lista deve essere {@code null}.
+     * La chiamata a {@code list.contains(null)} deve restituire {@code true}.
      */
     @Test
     public void testAddNullObjectToPopulatedList()
@@ -395,22 +519,36 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(Object)}.
      * <p>
-     * Summary: Verifica l'aggiunta di molteplici elementi alla fine di una lista popolata.
+     * Summary: Il test verifica l'aggiunta sequenziale e corretta di molteplici elementi
+     * alla fine di una lista già popolata. Si assicura che ogni nuovo elemento venga
+     * inserito in coda, che la dimensione della lista si aggiorni progressivamente
+     * dopo ogni aggiunta, e che l'ordine degli elementi esistenti e dei nuovi elementi
+     * sia mantenuto correttamente, confermando il comportamento di accodamento.
      * <p>
-     * Test Case Design: Assicurarsi che l'aggiunta ripetuta di elementi in coda funzioni correttamente,
-     * che la dimensione sia aggiornata progressivamente e che l'ordine degli elementi sia mantenuto.
+     * Test Case Design: Questo test è progettato per simulare scenari di utilizzo comune
+     * in cui più elementi vengono aggiunti in successione alla fine di una lista.
+     * La motivazione è garantire la stabilità e la correttezza del metodo {@code add(Object)}
+     * sotto carichi di lavoro iterativi, assicurando che la lista si espanda correttamente
+     * e mantenga l'integrità dei dati.
      * <p>
-     * Test Description: 1. Aggiunge tre nuovi elementi consecutivamente ("cinque", "sei", "sette").<br />
-     * 2. Dopo ogni aggiunta, verifica che la dimensione della lista sia incrementata.<br />
-     * 3. Verifica che ogni elemento aggiunto si trovi all'indice corretto (l'ultimo della lista in quel momento).
+     * Test Description: 1) Si registra la dimensione iniziale della lista (4 elementi).
+     *                   2) Si aggiunge il primo nuovo elemento ("cinque") e si verifica che la dimensione
+     *                      sia incrementata a 5 e che "cinque" sia all'indice 4.
+     *                   3) Si aggiunge il secondo nuovo elemento ("sei") e si verifica che la dimensione
+     *                      sia incrementata a 6 e che "sei" sia all'indice 5.
+     *                   4) Si aggiunge il terzo nuovo elemento ("sette") e si verifica che la dimensione
+     *                      sia incrementata a 7 e che "sette" sia all'indice 6.
+     *                   5) Infine, si verifica l'intera sequenza di elementi nella lista finale (dal primo
+     *                      elemento originale all'ultimo elemento appena aggiunto) per confermare l'ordine e il contenuto.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
      * <p>
-     * Postconditions: La lista contiene 7 elementi in totale, aggiunti in coda nell'ordine corretto.
+     * Postconditions: La lista contiene 7 elementi in totale. I tre nuovi elementi ("cinque", "sei", "sette")
+     * sono stati aggiunti in coda, mantenendo l'ordine originale e il nuovo ordine di inserimento.
      * <p>
-     * @expected {@code add(Object)} deve sempre restituire true.
-     * La lista finale deve essere `["uno", "due", "tre", "quattro", "cinque", "sei", "sette"]`.
-     * La dimensione finale deve essere 7.
+     * Expected Result: Ogni chiamata a {@code add(Object)} deve restituire {@code true}.
+     * La dimensione della lista deve essere 5 dopo la prima aggiunta, 6 dopo la seconda, e 7 dopo la terza.
+     * La lista finale deve contenere gli elementi nell'ordine: ["uno", "due", "tre", "quattro", "cinque", "sei", "sette"].
      */
     @Test
     public void testAddMultipleObjectsToPopulatedList() {
@@ -439,21 +577,41 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(Object)}.
      * <p>
-     * Summary: Verifica il comportamento di `add(Object)` quando la lista viene riempita fino alla sua capacità massima (se limitata) o cresce dinamicamente.
+     * Summary: Il test verifica il comportamento del metodo {@code add(Object)} sotto stress,
+     * aggiungendo un numero elevato di elementi alla lista. Questo test è fondamentale
+     * per accertarsi che l'implementazione sottostante
+     * gestisca correttamente l'espansione dinamica della sua capacità senza perdita di dati,
+     * errori di integrità o prestazioni degradate in modo significativo.
      * <p>
-     * Test Case Design: Assicurarsi che la lista possa espandersi dinamicamente o gestire la capacità se non predefinita.
-     * Per `ArrayList` (come probabilmente `ListAdapter` si basa), questo testa l'espansione implicita dell'array sottostante.
+     * Test Case Design: Questo test è progettato per simulare uno scenario in cui la lista
+     * viene riempita ben oltre la sua capacità iniziale implicita o esplicita. La motivazione
+     * è assicurare che il meccanismo di espansione della capacità della lista funzioni
+     * correttamente, permettendo l'aggiunta di un gran numero di elementi in successione,
+     * e che la lista mantenga la coerenza interna (dimensione e contenuto). Per implementazioni
+     * basate su {@code Vector} (come {@code ListAdapter}), questo verifica il corretto
+     * funzionamento degli incrementi di capacità.
      * <p>
-     * Test Description: 1. Aggiunge un numero elevato di elementi alla lista (es. 100 elementi).<br />
-     * 2. Verifica che la dimensione della lista sia corretta dopo tutte le aggiunte.<br />
-     * 3. Verifica il contenuto dell'ultimo elemento aggiunto.
+     * Test Description: 1) Si registra la dimensione iniziale della lista (tipicamente 4 elementi dal {@code setUp()}).
+     *                   2) Si esegue un ciclo per aggiungere un numero elevato di nuovi elementi (es. 1000) alla lista,
+     *                      ciascuno con un identificatore unico ("element_X"). Ogni chiamata a {@code add()} è verificata
+     *                      per assicurare che restituisca {@code true}.
+     *                   3) Dopo il completamento del ciclo, si verifica che la dimensione finale della lista
+     *                      sia esattamente la somma della dimensione iniziale e del numero di elementi aggiunti.
+     *                   4) Si verifica il contenuto dell'ultimo elemento aggiunto per confermare che l'inserimento
+     *                      sia avvenuto correttamente in coda.
+     *                   5) Si verifica anche il contenuto del primo elemento originale della lista, per assicurare
+     *                      che gli elementi preesistenti non siano stati corrotti o spostati in modo imprevisto.
      * <p>
-     * Preconditions: Lista inizialmente popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
      * <p>
      * Postconditions: La lista contiene gli elementi iniziali più tutti i nuovi elementi aggiunti.
+     * La sua dimensione è uguale alla dimensione iniziale più il numero di elementi aggiunti.
+     * Tutti gli elementi sono presenti nell'ordine di inserimento.
      * <p>
-     * @expected Tutte le chiamate a `add(Object)` devono restituire true e la lista deve contenere tutti gli elementi aggiunti.
-     * La dimensione finale deve essere 4 + il numero di elementi aggiunti.
+     * Expected Result: Tutte le chiamate a {@code add(Object)} devono restituire {@code true}.
+     * La dimensione finale della lista deve essere {@code initialSize + elementsToAdd}.
+     * L'ultimo elemento della lista deve corrispondere all'ultimo elemento aggiunto nel ciclo.
+     * Gli elementi iniziali devono rimanere inalterati nelle loro posizioni.
      */
     @Test
     public void testAddObjectStressTest() {
@@ -475,52 +633,109 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(int, Object)}.
      * <p>
-     * Summary: Verifica l'aggiunta di un elemento a un indice specifico all'interno della lista.
+     * Summary: Verifica l'aggiunta di un elemento a un indice casuale *intermedio* all'interno di una lista popolata.
+     * Questo test si concentra sugli inserimenti che non avvengono né all'inizio (indice 0) né alla fine
+     * (l'ultimo elemento o {@code list.size()}), ma in posizioni centrali. Assicura che l'inserimento non alteri
+     * gli elementi prima dell'indice, sposti correttamente gli elementi successivi, e aggiorni la dimensione della lista.
      * <p>
-     * Test Case Design: Assicurarsi che l'elemento sia inserito correttamente all'indice desiderato,
-     * che gli elementi successivi vengano spostati, e che la dimensione della lista sia aggiornata.
+     * Test Case Design: Questo test è progettato per verificare la funzionalità di inserimento di un elemento
+     * in una posizione arbitraria ma valida della lista, escludendo i casi limite di inserimento all'inizio (indice 0)
+     * e alla fine (indice {@code list.size()}). La motivazione è garantire la robustezza del metodo
+     * {@code add(int, Object)} per gli inserimenti "in mezzo" alla lista. Richiede che la lista abbia
+     * almeno 3 elementi per poter avere indici intermedi validi.
      * <p>
-     * Test Description: 1. Aggiunge un nuovo elemento all'indice 1.<br />
-     * 2. Verifica che la dimensione della lista sia 5.<br />
-     * 3. Verifica che l'elemento aggiunto ("nuovo") sia all'indice 1.<br />
-     * 4. Verifica che l'elemento precedentemente all'indice 1 ("due") sia ora all'indice 2.
+     * Test Description: 1) Si determina la dimensione iniziale della lista.
+     *                   2) Si genera un indice casuale valido, compreso tra 1 (incluso) e {@code list.size() - 2} (incluso).
+     *                   3) Si crea una copia dello stato iniziale della lista per confrontare il contenuto dopo l'inserimento.
+     *                   4) Si aggiunge un nuovo elemento ("elementoCasuale") all'indice generato.
+     *                   5) Si verifica che la dimensione della lista sia incrementata di 1.
+     *                   6) Si verifica che l'elemento aggiunto sia presente all'indice specificato.
+     *                   7) Si itera sugli elementi prima dell'indice per assicurarsi che non siano stati modificati.
+     *                   8) Si itera sugli elementi dopo l'indice per assicurarsi che siano stati correttamente spostati di una posizione.
+     * 
+     * NB: Si usa {@link org.junit.Assume#assumeTrue(boolean)} per saltare il test se la lista non ha un numero sufficiente di elementi
+     * per generare un indice intermedio valido (almeno 3 elementi).
      * <p>
-     * Preconditions: Lista popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * Per l'esecuzione di questo test specifico, la dimensione della lista deve essere almeno 3.
      * <p>
      * Postconditions: La lista contiene un elemento in più all'indice specificato, con gli elementi successivi spostati.
      * La dimensione della lista è 5.
      * <p>
-     * @expected La lista deve essere `["uno", "nuovo", "due", "tre", "quattro"]`.
-     * {@code size()} deve essere 5, {@code get(1)} deve restituire "nuovo",
-     * e {@code get(2)} deve restituire "due".
+     * @expected L'elemento aggiunto deve trovarsi all'indice casuale generato (tra 1 e {@code initialSize - 2}).
+     * La dimensione finale deve essere la dimensione iniziale + 1.
+     * Tutti gli elementi originali prima dell'indice devono rimanere invariati.
+     * Tutti gli elementi originali a partire dall'indice devono essere stati spostati di una posizione a destra.
      */
     @Test
-    public void testAddObjectAtIndexPopulatedList() {
-        list.add(1, "nuovo"); // Aggiungi "nuovo" all'indice 1
-        assertEquals(5, list.size());
-        assertEquals("uno", list.get(0));
-        assertEquals("nuovo", list.get(1));
-        assertEquals("due", list.get(2)); // Verifica che l'elemento "due" sia stato spostato
-        assertEquals("tre", list.get(3));
-        assertEquals("quattro", list.get(4));
+    public void testAddObjectAtRandomValidIndexPopulatedList() 
+    {
+        int initialSize = list.size();
+
+        Assume.assumeTrue("Test saltato: la lista iniziale non ha abbastanza elementi per un indice intermedio casuale (minimo 3).", initialSize >= 3);
+
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(initialSize - 2) + 1;  //Genero un numero tra 1 e (list.size() - 1)
+
+        String newElement = "elementoCasuale";
+
+        // Cattura lo stato della lista prima della modifica per verifiche successive
+        Object[] initialContent = new Object[initialSize];
+        for (int i = 0; i < initialSize; i++) 
+        {
+            initialContent[i] = list.get(i);
+        }
+
+        list.add(randomIndex, newElement);
+
+        // --- Verifiche ---
+        assertEquals("La dimensione della lista non è corretta dopo l'aggiunta.", initialSize + 1, list.size());
+
+        assertEquals("L'elemento aggiunto non si trova all'indice corretto.", newElement, list.get(randomIndex));
+
+        for (int i = 0; i < randomIndex; i++) 
+        {
+            assertEquals("Elemento all'indice " + i + " è stato modificato inaspettatamente.", initialContent[i], list.get(i));
+        }
+
+        for (int i = randomIndex; i < initialSize; i++) 
+        {
+            assertEquals("Elemento all'indice " + i + " non è stato spostato correttamente (atteso all'indice " + (i + 1) + ").", initialContent[i], list.get(i + 1));
+        }
     }
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
      * <p>
-     * Summary: Verifica che {@code add(int, Object)} lanci {@code IndexOutOfBoundsException} per un indice fuori limite superiore.
+     * Summary: Il test verifica che il metodo {@code add(int index, Object element)}
+     * lanci correttamente una {@link java.lang.IndexOutOfBoundsException}
+     * quando si tenta di aggiungere un elemento a un indice che è strettamente maggiore
+     * della dimensione corrente della lista (ovvero, {@code index > size()}).
+     * Questo assicura che il metodo rispetti le specifiche per la gestione
+     * degli indici non validi.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc, che specifica il lancio di
-     * {@code IndexOutOfBoundsException} se l'indice è maggiore della dimensione della lista.
+     * Test Case Design: Questo test è progettato per verificare la gestione dei limiti superiori
+     * dell'indice per il metodo {@code add(int, Object)}. La motivazione è assicurare
+     * che il metodo non consenta inserimenti in posizioni logiche non valide della lista
+     * e che segnali tale violazione tramite l'eccezione appropriata, come da specifica J2SE
+     * per le interfacce {@code List}.
      * <p>
-     * Test Description: 1. Tenta di aggiungere un elemento a un indice maggiore della dimensione corrente della lista (size + 1).<br />
-     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
+     * Test Description: 1) Si tenta di chiamare il metodo {@code add()} sulla lista,
+     *                      fornendo un indice calcolato come {@code list.size() + 1} (ad esempio, 5 per una lista di dimensione 4)
+     *                      e un elemento qualsiasi ("elemento").
+     *                   2) Si utilizza l'annotazione JUnit `@Test(expected = IndexOutOfBoundsException.class)`
+     *                      per dichiarare che ci si aspetta il lancio di una {@link java.lang.IndexOutOfBoundsException}
+     *                      durante l'esecuzione di questa operazione. Se l'eccezione non viene lanciata o
+     *                      viene lanciata un'eccezione diversa, il test fallirà.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi.
      * <p>
-     * Postconditions: Nessuna modifica alla lista; viene lanciata {@code IndexOutOfBoundsException}.
+     * Postconditions: La lista rimane invariata nel suo contenuto e nella sua dimensione,
+     * poiché l'operazione di aggiunta viene interrotta dal lancio dell'eccezione.
      * <p>
-     * @expected {@code IndexOutOfBoundsException} per {@code add(list.size() + 1, "elemento")}.
+     * Expected Result: Il test deve completarsi con successo solo se viene lanciata una
+     * {@link java.lang.IndexOutOfBoundsException} quando si tenta di aggiungere un elemento
+     * all'indice {@code list.size() + 1}.
      */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testAddAtIndexOutOfBounds() {
@@ -532,23 +747,41 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(int, Object)}.
      * <p>
-     * Summary: Verifica l'aggiunta di un elemento all'inizio (indice 0) di una lista popolata.
+     * Summary: Il test verifica che il metodo {@code add(int index, Object element)}
+     * possa inserire correttamente un nuovo elemento all'inizio della lista (all'indice 0),
+     * spostando tutti gli elementi preesistenti di una posizione a destra e aggiornando
+     * correttamente la dimensione della lista. Questo assicura la corretta gestione
+     * degli inserimenti in testa alla lista.
      * <p>
-     * Test Case Design: Assicurarsi che l'elemento sia correttamente inserito all'inizio e che tutti gli altri elementi vengano spostati.
+     * Test Case Design: Questo test è progettato per verificare il caso specifico
+     * di inserimento di un elemento all'indice 0 di una lista già popolata. La motivazione
+     * è assicurare che l'operazione di aggiunta all'inizio della lista funzioni correttamente,
+     * spostando gli elementi esistenti e mantenendo l'integrità dell'ordine.
      * <p>
-     * Test Description: 1. Aggiunge un nuovo elemento "zero" all'indice 0.<br />
-     * 2. Verifica che la dimensione sia 5.<br />
-     * 3. Verifica che l'elemento aggiunto sia all'indice 0.<br />
-     * 4. Verifica che l'elemento precedentemente all'indice 0 ("uno") sia ora all'indice 1.
+     * Test Description: 1) Si chiama il metodo {@code add()} sulla lista già popolata dal {@code setUp()},
+     *                      specificando l'indice 0 e l'elemento "zero".
+     *                   2) Si verifica che la dimensione della lista sia aumentata correttamente da 4 a 5,
+     *                      utilizzando {@code assertEquals(5, list.size())}.
+     *                   3) Si verifica che l'elemento all'indice 0 sia ora "zero" (l'elemento appena inserito).
+     *                   4) Si verifica che l'elemento precedentemente all'indice 0 ("uno") sia stato
+     *                      correttamente spostato all'indice 1.
+     *                   5) (Implicitamente dalle altre assert in altri test simili) si presume che anche
+     *                       gli altri elementi siano stati spostati correttamente.
      * <p>
-     * Preconditions: Lista popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
      * <p>
-     * Postconditions: La lista contiene un elemento in più all'inizio.
+     * Postconditions: La lista contiene un elemento in più ("zero") all'inizio (indice 0).
+     * Gli elementi che erano originariamente agli indici >= 0 sono stati spostati di una posizione a destra.
+     * La dimensione della lista è 5.
      * <p>
-     * @expected La lista deve essere `["zero", "uno", "due", "tre", "quattro"]`.
+     * Expected Result: La lista finale deve essere `["zero", "uno", "due", "tre", "quattro"]`.
+     * {@code size()} deve restituire 5.
+     * {@code get(0)} deve restituire "zero".
+     * {@code get(1)} deve restituire "uno".
      */
     @Test
-    public void testAddAtIndex0PopulatedList() {
+    public void testAddAtIndex0PopulatedList() 
+    {
         list.add(0, "zero");
         assertEquals(5, list.size());
         assertEquals("zero", list.get(0));
@@ -558,22 +791,38 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(int, Object)}.
      * <p>
-     * Summary: Verifica l'aggiunta di un elemento all'ultimo indice valido (list.size()).
+     * Summary: Il test verifica che il metodo {@code add(int index, Object element)}
+     * gestisca correttamente l'aggiunta di un nuovo elemento quando l'indice specificato
+     * è esattamente uguale alla dimensione corrente della lista (ovvero, {@code index == size()}).
+     * In questo scenario, il metodo dovrebbe comportarsi in modo analogo a {@link HList#add(Object)},
+     * aggiungendo l'elemento in coda alla lista. Questo assicura che l'intervallo valido
+     * per l'inserimento sia inclusivo dell'indice pari alla dimensione.
      * <p>
-     * Test Case Design: Assicurarsi che l'aggiunta all'indice `size()` funzioni come `add(Object)`.
+     * Test Case Design: Questo test mira a convalidare il comportamento del metodo {@code add(int, Object)}
+     * quando l'elemento viene aggiunto all'ultima posizione valida (fine della lista).
+     * La motivazione è verificare che questo caso limite sia gestito correttamente e che
+     * non produca {@code IndexOutOfBoundsException} o comportamenti inattesi, agendo
+     * come un'aggiunta in coda.
      * <p>
-     * Test Description: 1. Aggiunge un nuovo elemento "cinque" all'indice `list.size()` (che è 4).<br />
-     * 2. Verifica che la dimensione sia 5.<br />
-     * 3. Verifica che l'elemento aggiunto sia l'ultimo della lista.
+     * Test Description: 1) Si chiama il metodo {@code add()} sulla lista già popolata dal {@code setUp()},
+     *                      specificando l'indice {@code list.size()} (che è 4 per una lista di 4 elementi) e l'elemento "cinque".
+     *                   2) Si verifica che la dimensione della lista sia aumentata correttamente da 4 a 5,
+     *                      utilizzando {@code assertEquals(5, list.size())}.
+     *                   3) Si accede all'ultimo elemento della lista (all'indice 4) tramite {@code list.get(4)}
+     *                      e si verifica che corrisponda all'elemento appena aggiunto ("cinque").
      * <p>
-     * Preconditions: Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
      * <p>
-     * Postconditions: La lista contiene un elemento in più alla fine.
+     * Postconditions: La lista contiene un elemento in più ("cinque") alla fine.
+     * La dimensione della lista è 5.
      * <p>
-     * @expected La lista deve essere `["uno", "due", "tre", "quattro", "cinque"]`.
+     * Expected Result: La lista finale deve essere ["uno", "due", "tre", "quattro", "cinque"].
+     * {@code size()} deve restituire 5.
+     * {@code get(4)} deve restituire "cinque".
      */
     @Test
-    public void testAddAtIndexLastValidPopulatedList() {
+    public void testAddAtIndexLastValidPopulatedList() 
+    {
         list.add(list.size(), "cinque");
         assertEquals(5, list.size());
         assertEquals("cinque", list.get(4));
@@ -582,47 +831,108 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#add(int, Object)} con elemento null.
      * <p>
-     * Summary: Verifica l'aggiunta di un elemento null a un indice specifico.
+     * Summary: Il test verifica che il metodo {@code add(int index, Object element)}
+     * sia in grado di inserire correttamente un riferimento {@code null} in una posizione
+     * *casuale ma intermedia* all'interno di una lista già popolata. Si assicura che gli elementi
+     * preesistenti vengano spostati per fare spazio al {@code null} e che la dimensione
+     * della lista sia aggiornata di conseguenza, confermando che i valori null sono
+     * trattati come elementi validi per l'inserimento posizionale.
      * <p>
-     * Test Case Design: Assicurarsi che `null` possa essere inserito correttamente a un dato indice.
+     * Test Case Design: Questo test è progettato per assicurare che il metodo
+     * {@code add(int, Object)} gestisca correttamente l'inserimento di un valore {@code null}
+     * in un indice arbitrario non di bordo (escludendo l'inizio e la fine). La motivazione
+     * è convalidare che la lista possa contenere e gestire elementi {@code null} in posizioni
+     * intermedie, mantenendo l'integrità strutturale e di contenuto. Richiede che la lista
+     * iniziale abbia almeno 3 elementi per poter generare un indice intermedio valido.
      * <p>
-     * Test Description: 1. Aggiunge null all'indice 2.<br />
-     * 2. Verifica la dimensione.<br />
-     * 3. Verifica che null sia all'indice 2.<br />
-     * 4. Verifica che gli elementi successivi siano spostati.
+     * Test Description: 1) Si determina la dimensione iniziale della lista.
+     *                   2) Si genera un indice casuale, {@code randomIndex}, compreso tra 1 (incluso) e {@code list.size() - 2} (incluso),
+     *                      per garantire un inserimento intermedio.
+     *                   3) Si prepara l'oggetto {@code null} da inserire.
+     *                   4) Si crea una copia dello stato iniziale della lista ({@code initialContent}) per confrontare
+     *                      il contenuto dopo l'inserimento.
+     *                   5) Si chiama il metodo {@code add()} sulla lista, specificando {@code randomIndex} e {@code nullObject}.
+     *                   6) Si verifica che la dimensione della lista sia aumentata correttamente di 1.
+     *                   7) Si verifica che l'elemento aggiunto ({@code null}) sia presente all'indice {@code randomIndex}.
+     *                   8) Si itera sugli elementi prima di {@code randomIndex} per assicurarsi che non siano stati modificati.
+     *                   9) Si itera sugli elementi da {@code randomIndex} in poi della lista originale per assicurarsi
+     *                      che siano stati correttamente spostati di una posizione a destra.
+     * 
+     * NB: Si usa {@link org.junit.Assume#assumeTrue(boolean)} per saltare il test se la lista non ha un numero sufficiente di elementi
+     * per generare un indice intermedio valido (almeno 3 elementi).
      * <p>
-     * Preconditions: Lista popolata con 4 elementi.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * Per l'esecuzione di questo test specifico, la dimensione della lista deve essere almeno 3.
      * <p>
-     * Postconditions: La lista contiene un elemento null all'indice specificato.
+     * Postconditions: La lista contiene un elemento {@code null} in più all'indice specificato.
+     * Gli elementi che erano originariamente agli indici >= {@code randomIndex} sono stati spostati di una posizione a destra.
+     * La dimensione della lista è {@code initialSize + 1}.
      * <p>
-     * @expected La lista deve essere `["uno", "due", null, "tre", "quattro"]`.
+     * @expected L'elemento {@code null} deve trovarsi all'indice casuale generato (tra 1 e {@code initialSize - 2}).
+     * La dimensione finale deve essere {@code initialSize + 1}.
+     * Tutti gli elementi originali prima dell'indice devono rimanere invariati.
+     * Tutti gli elementi originali a partire dall'indice devono essere stati spostati di una posizione a destra.
      */
     @Test
     public void testAddNullAtIndexPopulatedList() {
-        list.add(2, null);
-        assertEquals(5, list.size());
-        assertEquals("uno", list.get(0));
-        assertEquals("due", list.get(1));
-        assertNull(list.get(2)); // null dovrebbe essere qui
-        assertEquals("tre", list.get(3)); // "tre" spostato
-        assertEquals("quattro", list.get(4)); // "quattro" spostato
+        int initialSize = list.size();
+
+        Assume.assumeTrue("Test saltato: la lista iniziale non ha abbastanza elementi per un indice intermedio casuale (minimo 3).", initialSize >= 3);
+
+        Random rand = new Random();
+
+        int randomIndex = rand.nextInt(initialSize - 2) + 1; // Genero un numero tra 1 e (list.size() - 2)
+
+        Object nullObject = null;
+
+        // Cattura lo stato della lista prima della modifica per verifiche successive
+        Object[] initialContent = new Object[initialSize];
+        for (int i = 0; i < initialSize; i++) {
+            initialContent[i] = list.get(i);
+        }
+
+        list.add(randomIndex, nullObject);
+
+        // --- Verifiche ---
+        assertEquals("La dimensione della lista non è corretta dopo l'aggiunta.", initialSize + 1, list.size());
+
+        assertNull("L'elemento aggiunto non si trova all'indice corretto o non è null.", list.get(randomIndex));
+
+        for (int i = 0; i < randomIndex; i++) {
+            assertEquals("Elemento all'indice " + i + " è stato modificato inaspettatamente.", initialContent[i], list.get(i));
+        }
+
+        for (int i = randomIndex; i < initialSize; i++) {
+            assertEquals("Elemento all'indice " + i + " non è stato spostato correttamente (atteso all'indice " + (i + 1) + ").", initialContent[i], list.get(i + 1));
+        }
     }
 
     /**
      * Test del metodo {@link HList#add(int, Object)}.
      * <p>
-     * Summary: Verifica che {@code add(int, Object)} lanci {@code IndexOutOfBoundsException} per indice negativo.
+     * Summary: Il test verifica che il metodo {@code add(int index, Object element)}
+     * lanci correttamente una {@link java.lang.IndexOutOfBoundsException}
+     * quando si tenta di aggiungere un elemento a un indice negativo.
+     * Questo assicura che il metodo rispetti il contratto specificato dal J2SE
+     * Collections Framework, che definisce gli indici validi come non negativi
+     * e minori o uguali alla dimensione della lista.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo rispetti il contratto Javadoc per indici negativi.
+     * Test Case Design: Questo test è progettato per verificare la gestione degli indici negativi
+     * per il metodo {@code add(int, Object)}. La motivazione è assicurare che il metodo
+     * non consenta inserimenti in posizioni logiche non valide della lista (prima dell'inizio)
+     * e che segnali tale violazione tramite l'eccezione appropriata.
      * <p>
-     * Test Description: 1. Tenta di aggiungere un elemento a un indice negativo (-1).<br />
-     * 2. Si aspetta che venga lanciata una {@code IndexOutOfBoundsException}.
+     * Test Description: 1) Si tenta di chiamare il metodo {@code add()} sulla lista popolata dal {@code setUp()},
+     *                      fornendo un indice intenzionalmente negativo (ad esempio, -1) e un elemento qualsiasi ("elemento").
      * <p>
-     * Preconditions: Lista popolata.
+     * Preconditions: La lista è stata inizializzata e popolata (ad esempio, con 4 elementi).
      * <p>
-     * Postconditions: Nessuna modifica alla lista; viene lanciata {@code IndexOutOfBoundsException}.
+     * Postconditions: La lista rimane invariata nel suo contenuto e nella sua dimensione,
+     * poiché l'operazione di aggiunta viene interrotta dal lancio dell'eccezione.
      * <p>
-     * @expected {@code IndexOutOfBoundsException} per {@code add(-1, "elemento")}.
+     * Expected Result: Il test deve completarsi con successo solo se viene lanciata una
+     * {@link java.lang.IndexOutOfBoundsException} quando si tenta di aggiungere un elemento
+     * a un indice negativo.
      */
     @Test(expected = IndexOutOfBoundsException.class)
     public void testAddAtIndexNegativePopulatedList() {
@@ -634,21 +944,42 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#remove(Object)}.
      * <p>
-     * Summary: Verifica la rimozione di un elemento intermedio dalla lista popolata.
+     * Summary: Il test verifica che il metodo {@code remove(Object o)} rimuova correttamente
+     * la prima occorrenza specificata di un elemento da una lista popolata. Si assicura
+     * che la dimensione della lista venga aggiornata, che gli elementi successivi a quello
+     * rimosso si spostino correttamente per riempire lo spazio, e che il metodo restituisca
+     * {@code true} se l'elemento è stato trovato e rimosso. Questo test conferma il corretto
+     * comportamento della rimozione per valore.
      * <p>
-     * Test Case Design: Assicurarsi che l'elemento corretto venga rimosso e che gli elementi successivi si spostino.
+     * Test Case Design: Questo test è progettato per verificare la rimozione di un elemento
+     * che si trova in una posizione intermedia della lista. La motivazione è assicurare
+     * che il metodo {@code remove(Object)} non solo identifichi e rimuova l'elemento corretto,
+     * ma anche che gestisca lo spostamento degli elementi rimanenti, mantenendo l'integrità
+     * strutturale e l'ordine della lista.
      * <p>
-     * Test Description: 1. Rimuove l'elemento "due".<br />
-     * 2. Verifica che il risultato sia true.<br />
-     * 3. Verifica che la dimensione sia 3.<br />
-     * 4. Verifica che "due" non sia più presente.<br />
-     * 5. Verifica che gli elementi rimanenti siano nell'ordine corretto.
+     * Test Description: 1) Si chiama il metodo {@code remove()} sulla lista già popolata dal {@code setUp()},
+     *                      passando l'oggetto "due" come elemento da rimuovere.
+     *                   2) Si verifica, tramite {@code assertTrue()}, che il valore booleano restituito da {@code remove()}
+     *                      sia {@code true}, confermando che l'operazione di rimozione ha avuto successo (l'elemento era presente).
+     *                   3) Si verifica che la dimensione della lista sia diminuita correttamente da 4 a 3,
+     *                      utilizzando {@code assertEquals(3, list.size())}.
+     *                   4) Si verifica, tramite {@code assertFalse()}, che l'elemento "due" non sia più presente nella lista,
+     *                      utilizzando {@code list.contains("due")}.
+     *                   5) Si verifica il contenuto della lista elemento per elemento, per assicurarsi che gli elementi
+     *                      rimanenti ("uno", "tre", "quattro") siano presenti nell'ordine corretto e che "tre" abbia
+     *                      scalato all'indice precedentemente occupato da "due".
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * L'elemento "due" è presente nella lista.
      * <p>
-     * Postconditions: Lista: ["uno", "tre", "quattro"].
+     * Postconditions: L'elemento "due" è stato rimosso dalla lista.
+     * La lista ora contiene 3 elementi: ["uno", "tre", "quattro"].
+     * La dimensione della lista è 3.
      * <p>
-     * @expected {@code remove("due")} deve restituire true.
+     * Expected Result: La chiamata a {@code remove("due")} deve restituire {@code true}.
+     * La dimensione della lista dopo la rimozione deve essere 3.
+     * La lista non deve più contenere l'elemento "due".
+     * La lista finale deve essere `["uno", "tre", "quattro"]`.
      */
     @Test
     public void testRemoveObjectFromPopulatedList()
@@ -883,31 +1214,77 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#remove(int)}.
      * <p>
-     * Summary: Verifica la rimozione di un elemento a un indice intermedio dalla lista popolata.
+     * Summary: Verifica che il metodo {@code remove(int index)} rimuova correttamente
+     * l'elemento all'indice specificato casualmente da una lista popolata. Questo test
+     * assicura che gli elementi successivi a quello rimosso si spostino a sinistra per
+     * riempire lo spazio, che la dimensione della lista venga aggiornata, e che il metodo
+     * restituisca l'elemento correttamente rimosso.
      * <p>
-     * Test Case Design: Assicurarsi che l'elemento corretto venga rimosso e che gli elementi successivi si spostino.
+     * Test Case Design: Questo test è progettato per verificare la funzionalità di rimozione
+     * per indice su una posizione arbitraria e valida della lista (inizio, mezzo o fine).
+     * La motivazione è garantire la robustezza del metodo {@code remove(int)} su un intervallo
+     * completo di indici validi per la rimozione.
      * <p>
-     * Test Description: 1. Rimuove l'elemento all'indice 1 ("due").<br />
-     * 2. Verifica che l'elemento restituito sia "due".<br />
-     * 3. Verifica che la dimensione sia 3.<br />
-     * 4. Verifica che "due" non sia più presente.<br />
-     * 5. Verifica che "tre" sia ora all'indice 1.
+     * Test Description: 1) Si determina la dimensione iniziale della lista.
+     * 2) Si genera un indice casuale valido, {@code randomIndex}, compreso tra 0 (incluso) e
+     * {@code list.size() - 1} (incluso).
+     * 3) Si crea una copia dello stato iniziale della lista ({@code initialContent}) per
+     * confrontare il contenuto dopo la rimozione e identificare l'elemento atteso.
+     * 4) Si esegue l'operazione di rimozione, memorizzando l'elemento restituito.
+     * 5) Si verifica che la dimensione della lista sia diminuita di 1.
+     * 6) Si verifica che l'elemento restituito dal metodo sia quello che era originariamente
+     * all'indice {@code randomIndex}.
+     * 7) Si itera sugli elementi prima di {@code randomIndex} per assicurarsi che non siano stati modificati.
+     * 8) Si itera sugli elementi *dopo* {@code randomIndex} nella lista originale e si verifica
+     * che gli stessi elementi siano ora presenti un indice indietro nella lista modificata.
+     * 
+     * NB: Si usa {@link org.junit.Assume#assumeTrue(boolean)} per saltare il test se la lista è vuota,
+     * dato che non si può rimuovere da una lista vuota.
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * La lista deve avere almeno un elemento (ovvero non essere vuota) affinché il test sia valido.
      * <p>
-     * Postconditions: Lista: ["uno", "tre", "quattro"].
+     * Postconditions: L'elemento all'indice {@code randomIndex} è stato rimosso.
+     * Gli elementi che erano originariamente agli indici > {@code randomIndex} sono stati spostati di una posizione a sinistra.
+     * La dimensione della lista è {@code initialSize - 1}.
      * <p>
-     * @expected {@code remove(1)} deve restituire "due".
+     * @expected Il metodo {@code remove(int)} deve restituire l'elemento che era all'indice {@code randomIndex}.
+     * La dimensione finale deve essere la dimensione iniziale - 1.
+     * Tutti gli elementi originali prima dell'indice rimosso devono rimanere invariati.
+     * Tutti gli elementi originali dopo l'indice rimosso devono essere stati spostati di una posizione a sinistra.
      */
     @Test
-    public void testRemoveAtIndexIntermediatePopulatedList() {
-        Object removedElement = list.remove(1);
-        assertEquals("due", removedElement);
-        assertEquals(3, list.size());
-        assertFalse(list.contains("due"));
-        assertEquals("uno", list.get(0));
-        assertEquals("tre", list.get(1));
-        assertEquals("quattro", list.get(2));
+    public void testRemoveAtIndexRandomPopulatedList() 
+    {
+        int initialSize = list.size(); 
+
+        Assume.assumeTrue("Test saltato: la lista è vuota, impossibile rimuovere elementi per indice.", initialSize > 0);
+
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(initialSize);
+
+        Object[] initialContent = new Object[initialSize];
+        for (int i = 0; i < initialSize; i++) 
+        {
+            initialContent[i] = list.get(i);
+        }
+        Object expectedRemovedElement = initialContent[randomIndex];
+
+        Object actualRemovedElement = list.remove(randomIndex);
+
+        assertEquals("La dimensione della lista non è corretta dopo la rimozione.", initialSize - 1, list.size());
+
+        assertEquals("L'elemento restituito non corrisponde a quello rimosso.", expectedRemovedElement, actualRemovedElement);
+
+        for (int i = 0; i < randomIndex; i++) 
+        {
+            assertEquals("Elemento all'indice " + i + " è stato modificato inaspettatamente.", initialContent[i], list.get(i));
+        }
+
+        for (int i = randomIndex; i < initialSize - 1; i++) 
+        { // La lista ora è più piccola di 1
+            assertEquals("Elemento all'indice " + (i + 1) + " non è stato spostato correttamente (atteso all'indice " + i + ").", initialContent[i + 1], list.get(i));
+        }
     }
 
     /**

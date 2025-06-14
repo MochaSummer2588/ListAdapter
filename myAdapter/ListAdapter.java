@@ -36,19 +36,7 @@ public class ListAdapter implements HList
     {
         this.vector = new Vector(initialCapacity);
     }
-
-    /**
-     * Costruttore che crea un ListAdapter con una capacità iniziale specificata.
-     * 
-     * @param initialCapacity la capacità iniziale della lista
-     * @param capacityIncrement l'incremento di capacità della lista
-     * @throws IllegalArgumentException se la capacità iniziale è negativa
-     */
-    public ListAdapter(int initialCapacity, int capacityIncrement) 
-    {
-        this.vector = new Vector(initialCapacity, capacityIncrement);
-    }
-
+    
     // =============== METODI LISTADAPTER ===============
     
     /**
