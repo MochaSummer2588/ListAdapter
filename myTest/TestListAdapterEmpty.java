@@ -849,7 +849,7 @@ public class TestListAdapterEmpty
         assertEquals(anotherEmptyList.hashCode(), list.hashCode());
     }
 
-    //------- TEST DEI NUOVI METODI AGGIUNTI ----------
+    //------- TEST DI GET ----------
 
     /**
      * Test del metodo {@link HList#get(int)} su una lista vuota.
@@ -872,6 +872,8 @@ public class TestListAdapterEmpty
         list.get(0);
     }
 
+    //------- TEST DI SET ----------
+
     /**
      * Test del metodo {@link HList#set(int, Object)} su una lista vuota.
      * <p>
@@ -892,6 +894,8 @@ public class TestListAdapterEmpty
     public void testSetEmptyList() {
         list.set(0, "test");
     }
+
+    //------- TEST DI ADD ----------
 
     /**
      * Test del metodo {@link HList#add(int, Object)} su lista vuota con indice fuori limite.
@@ -914,6 +918,8 @@ public class TestListAdapterEmpty
         list.add(1, "test");
     }
 
+    //------- TEST DI REMOVE ----------
+
     /**
      * Test del metodo {@link HList#remove(int)} su lista vuota.
      * <p>
@@ -934,6 +940,8 @@ public class TestListAdapterEmpty
     public void testRemoveAtIndexEmptyList() {
         list.remove(0);
     }
+
+    //-------- TEST INDEXOF --------
 
     /**
      * Test del metodo {@link HList#indexOf(Object)} su una lista vuota.
@@ -959,6 +967,8 @@ public class TestListAdapterEmpty
         assertEquals(-1, list.indexOf(null)); // Anche per null
     }
 
+    //-------- TEST LASTINDEXOF --------
+
     /**
      * Test del metodo {@link HList#lastIndexOf(Object)} su una lista vuota.
      * <p>
@@ -982,6 +992,8 @@ public class TestListAdapterEmpty
         assertEquals(-1, list.lastIndexOf("nonEsistente"));
         assertEquals(-1, list.lastIndexOf(null)); // Anche per null
     }
+
+    //-------- TEST LISTITERATOR --------
 
     /**
      * Test del metodo {@link HList#listIterator()} su una lista vuota.
@@ -1029,7 +1041,8 @@ public class TestListAdapterEmpty
      * Expected Result: {@code hasNext()} e {@code hasPrevious()} dell'iteratore devono essere false. {@code nextIndex()} deve essere 0 e {@code previousIndex()} deve essere -1.
      */
     @Test
-    public void testListIteratorAtIndex0EmptyList() {
+    public void testListIteratorAtIndex0EmptyList() 
+    {
         HListIterator it = list.listIterator(0);
         assertFalse(it.hasNext());
         assertFalse(it.hasPrevious());
@@ -1057,6 +1070,8 @@ public class TestListAdapterEmpty
     public void testListIteratorAtIndexOutOfBoundsEmptyList() {
         list.listIterator(1);
     }
+
+    //------- TEST SUBLIST -------
 
     /**
      * Test del metodo {@link HList#subList(int, int)} su una lista vuota con indici validi (0, 0).
