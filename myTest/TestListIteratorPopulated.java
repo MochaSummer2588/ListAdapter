@@ -7,15 +7,42 @@ import myAdapter.*;
 import myExceptions.IllegalStateException;
 
 /**
- * Suite di test per la classe {@link myAdapter.ListIterator} che implementa {@link myAdapter.HListIterator}.
+ * Test di integrazione e unitari per la classe {@link myAdapter.ListIterator} su una lista popolata.
  * <p>
- * Riassunto: Verifica il corretto funzionamento dell'iteratore bidirezionale {@code ListIterator}
- * inclusi i metodi di navigazione, modifica e gestione degli indici, e la corretta
- * emissione delle eccezioni previste.
+ * Questa classe verifica il comportamento di un {@code ListIterator} ottenuto da una {@link myAdapter.ListAdapter}
+ * non vuota, testando sia i costruttori che tutti i metodi di navigazione e modifica previsti
+ * dall'interfaccia {@code ListIterator}.
  * <p>
- * Design: Utilizza JUnit 4.13.2. Ogni test case configura uno scenario specifico
- * per l'iteratore e verifica il comportamento atteso. Particolare attenzione è data
- * ai casi limite (liste vuote, inizio/fine lista) e alle condizioni che scatenano eccezioni.
+ * <b>Obiettivi dei test:</b>
+ * <ul>
+ *   <li>Verificare la corretta inizializzazione dell'iteratore in diverse posizioni della lista.</li>
+ *   <li>Assicurare la corretta gestione dei limiti sugli indici passati al costruttore.</li>
+ *   <li>Testare i metodi di navigazione ({@code hasNext()}, {@code next()}, {@code hasPrevious()}, {@code previous()}, {@code nextIndex()}, {@code previousIndex()}) in tutti i casi rilevanti.</li>
+ *   <li>Verificare il comportamento dei metodi di modifica ({@code remove()}, {@code set()}, {@code add()}) sia in condizioni normali che in presenza di errori (eccezioni attese).</li>
+ *   <li>Assicurare la coerenza dello stato interno dell'iteratore dopo sequenze di operazioni miste.</li>
+ *   <li>Verificare la corretta gestione di elementi {@code null} nella lista.</li>
+ * </ul>
+ * <p>
+ * <b>Strategia di test:</b>
+ * <ul>
+ *   <li>Per ogni metodo pubblico dell'iteratore, sono previsti test sia per il caso base che per i casi limite e di errore.</li>
+ *   <li>Le precondizioni e postcondizioni di ciascun test sono documentate nei rispettivi metodi.</li>
+ *   <li>Vengono verificati sia gli effetti sulla lista sottostante che lo stato interno dell'iteratore (cursore, indici, lastReturned).</li>
+ *   <li>Le eccezioni previste dal contratto sono testate esplicitamente.</li>
+ * </ul>
+ * <p>
+ * <b>Precondizioni generali:</b>
+ * <ul>
+ *   <li>Salvo dove diversamente specificato, ogni test parte da una lista popolata con tre elementi: "zero", "uno", "due".</li>
+ *   <li>Un nuovo {@code ListIterator} viene creato prima di ogni test tramite il metodo {@code setUp()}.</li>
+ * </ul>
+ * <p>
+ * <b>Postcondizioni generali:</b>
+ * <ul>
+ *   <li>La lista e l'iteratore si trovano nello stato atteso dopo ogni test, oppure viene lanciata l'eccezione prevista.</li>
+ * </ul>
+ * <p>
+ * <b>Nota:</b> Questa classe di test si focalizza su una lista non vuota; per i casi di lista vuota si rimanda a test specifici.
  */
 public class TestListIteratorPopulated 
 {
@@ -269,7 +296,7 @@ public class TestListIteratorPopulated
      * Test Description: 1) Si chiama {@code next()} per avanzare l'iteratore di un elemento.
      *                   2) Si verifica che {@code hasPrevious()} restituisca {@code true} e che l'elemento precedente esista nella lista.
      * <p>
-     * Preconditions: L'iteratore è stato avanzato di un elemento. La lista contiene ha i seguenti elementi: ["zero", "uno", "due"].
+     * Preconditions: L'iteratore è stato avanzato di un elemento e si trova tra gli elementi agli indici 0 e 1. La lista contiene ha i seguenti elementi: ["zero", "uno", "due"].
      * <p>
      * Postconditions: Nessuna modifica allo stato dell'iteratore o della lista.
      * <p>
@@ -286,11 +313,11 @@ public class TestListIteratorPopulated
     /**
      * Test del metodo {@link myAdapter.ListIterator#hasPrevious()} all'inizio della lista.
      * <p>
-     * Summary: Verifica che {@code hasPrevious()} restituisca {@code false} quando l'iteratore è all'inizio.
+     * Summary: Il motivo di questo test e' verificare il funzionamento di {@code hasPrevious()} 
      * <p>
      * Test Case Design: Il motivo di questo test è garantire che il metodo {@code hasPrevious()} restituisca false quando l'iteratore è posizionato all'inizio della lista.
      * <p>
-     * Test Description: 
+     * Test Description: 1) 
      * <p>
      * Preconditions: L'iteratore è all'inizio di una lista popolata con tre elementi: ["zero", "uno", "due"].
      * <p>
