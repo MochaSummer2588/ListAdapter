@@ -17,7 +17,7 @@ import myExceptions.IllegalStateException;
  * per l'iteratore e verifica il comportamento atteso. Particolare attenzione è data
  * ai casi limite (liste vuote, inizio/fine lista) e alle condizioni che scatenano eccezioni.
  */
-public class TestListIterator 
+public class TestListIteratorPopulated 
 {
 
     private ListAdapter list;
@@ -42,20 +42,26 @@ public class TestListIterator
     /**
      * Test del costruttore {@link myAdapter.ListIterator#ListIterator(myAdapter.ListAdapter)}.
      * <p>
-     * Verifica che l'iteratore sia inizializzato correttamente all'inizio della lista.
+     * Summary: Il test verifica che il costruttore {@code ListIterator(ListAdapter list)} inizializzi l'iteratore correttamente all'inizio della lista.
      * <p>
-     * Test Case Design: Assicurarsi che un iteratore creato senza un indice specifico
-     * parta con il cursore a 0 e {@code lastReturned} a -1.
+     * Test Case Design: La motivazione dietro a questo test è garantire che quando viene creato un iteratore tramite costruttore di default,
+     * l'iteratore sia posizionato all'inizio della lista, con il cursore a 0 e lastReturned a -1.
      * <p>
-     * Preconditions: Una `ListAdapter` popolata.
+     * Tes t Description: 1) Verifica che l'iteratore abbia un elemento dopo di lui.
+     *                    2) Verifica che l'iteratore non abbia un elemento prima di lui.
+     *                    3) Verifica che {@code nextIndex()} restituisca 0. 
+     *                    4) Verifica {@code previousIndex()} restituisca -1.
      * <p>
-     * Postconditions: L'iteratore è posizionato all'inizio della lista.
+     * Preconditions: Lista contenente 3 elementi: "zero", "uno", "due" e un iteratore posizionato prima dell'elemento "zero".
+     * <p>
+     * Postconditions: La lista rimane invariata e l'iteratore è posizionato all'inizio della lista.
      * <p>
      * Expected Result: {@code nextIndex()} deve essere 0, {@code previousIndex()} deve essere -1,
      * {@code hasNext()} deve essere true, {@code hasPrevious()} deve essere false.
      */
     @Test
-    public void testConstructorDefaultPosition() {
+    public void testConstructorDefaultPosition() 
+    {
         assertTrue(iterator.hasNext());
         assertFalse(iterator.hasPrevious());
         assertEquals(0, iterator.nextIndex());
@@ -65,86 +71,97 @@ public class TestListIterator
     /**
      * Test del costruttore {@link myAdapter.ListIterator#ListIterator(myAdapter.ListAdapter, int)}.
      * <p>
-     * Verifica che l'iteratore sia inizializzato correttamente a un indice specificato.
+     * Summary: Verifica che il costruttore {@code ListIterator(ListAdapter list, int index)} inizializzi l'iteratore correttamente a un indice specificato.
      * <p>
-     * Test Case Design: Assicurarsi che un iteratore creato con un indice valido sia
-     * posizionato correttamente in termini di cursore e stato.
+     * Test Case Design: La motivazione dietro a questo test è garantire che l'iteratore venga creato all'indice specificato e dunque che prima e dopo di "iterator" ci 
+     * siano gli elementi che ci si aspetta.
      * <p>
-     * Preconditions: Una `ListAdapter` popolata con 3 elementi.
+     * Test Description: 1) Si crea un iteratore a un indice specifico (1).
+     *                   2) Si verifica che {@code nextIndex()} restituisca 1, {@code previousIndex()} restituisca 0.
+     *                   3) Si verifica che {@code hasNext()} restituisca true e {@code hasPrevious()} restituisca true.
+     * <P>
+     * Preconditions: Lista contenente 3 elementi: "zero", "uno", "due".
      * <p>
      * Postconditions: L'iteratore è posizionato all'indice specificato.
      * <p>
-     * Expected Result: L'iteratore posizionato all'indice 1 deve avere {@code nextIndex()} 1,
+     * Expected Result: L'iteratore viene creato all'indice 1 della lista. Esso deve avere {@code nextIndex()} 1,
      * {@code previousIndex()} 0, {@code hasNext()} true, {@code hasPrevious()} true.
      */
     @Test
-    public void testConstructorSpecificPosition() {
+    public void testConstructorSpecificPosition() 
+    {
         iterator = list.listIterator(1); // Cursore a 1, lastReturned a -1
         assertEquals(1, iterator.nextIndex());
         assertEquals(0, iterator.previousIndex());
         assertTrue(iterator.hasNext());
         assertTrue(iterator.hasPrevious());
-        assertEquals("uno", iterator.next()); // Verifica che next() funzioni dall'indice corretto
     }
 
     /**
-     * Test del costruttore con indice fuori limite inferiore.
+     * Test del costruttore {@link myAdapter.ListIterator#ListIterator(myAdapter.ListAdapter, int)} con indice negativo.
      * <p>
-     * Verifica che il costruttore {@code ListIterator(list, index)} lanci
-     * {@code IndexOutOfBoundsException} se l'indice è negativo.
+     * Summary: Verifica che il costruttore lanci {@code IndexOutOfBoundsException} se l'indice al quale si vuole creare l'iteratore è negativo.
      * <p>
-     * Test Case Design: Assicurarsi che l'iteratore non possa essere inizializzato con
-     * un indice inferiore a 0, rispettando il contratto dell'interfaccia.
+     * Test Case Design: Si vuole garantire che il costruttore lanci {@code IndexOutOfBoundsException} se l'indice è negativo, rispettando la logica dell'iteratore
+     * (non puo' andare a un indice negativo).
      * <p>
-     * Preconditions: Una `ListAdapter` popolata.
+     * Test Description: 1) Si tenta di creare un iteratore con un indice negativo (-1) su una lista.
+     * <p>
+     * Preconditions: Una lista popolata con 3 elementi: ["zero", "uno", "due"].
      * <p>
      * Postconditions: Nessuna modifica alla lista. Viene lanciata un'eccezione.
      * <p>
-     * Expected Result: {@code IndexOutOfBoundsException} deve essere lanciata.
+     * Expected Result: {@code IndexOutOfBoundsException} deve essere lanciata nel momento della chiamata al metodo {@code list.listIterator(-1)}.
      */
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testConstructorIndexOutOfBoundsNegative() {
-        new ListAdapter().listIterator(-1);
+    public void testConstructorIndexOutOfBoundsNegative() 
+    {
+        list.listIterator(-1);
     }
 
     /**
-     * Test del costruttore con indice fuori limite superiore.
+     * Test del costruttore {@link myAdapter.ListIterator#ListIterator(myAdapter.ListAdapter, int)} con indice fuori limite superiore.
      * <p>
-     * Verifica che il costruttore {@code ListIterator(list, index)} lanci
-     * {@code IndexOutOfBoundsException} se l'indice è maggiore della dimensione della lista.
+     * Summary: Il test verifica che il costruttore {@code IndexOutOfBoundsException} lanci {@code IndexOutOfBoundsException} se l'indice è maggiore della dimensione della lista.
      * <p>
-     * Test Case Design: Assicurarsi che l'iteratore non possa essere inizializzato con
-     * un indice superiore alla dimensione della lista, rispettando il contratto.
+     * Test Case Design: La motivazione dietro a questo test è garantire che il costruttore rispetti i limiti della lista e non permetta di creare un iteratore in una posizione 
+     * maggiore rispetto alla dimensione della lista.
      * <p>
-     * Preconditions: Una `ListAdapter` popolata.
+     * Test Description: 1) Si tenta di creare un iteratore con un indice maggiore della dimensione della lista (ad esempio indice 10 su una lista contenente ["zero", "uno", "due"]).
+     * <p>
+     * Preconditions: Lista popolata con 3 elementi: ["zero", "uno", "due"].
      * <p>
      * Postconditions: Nessuna modifica alla lista. Viene lanciata un'eccezione.
      * <p>
-     * Expected Result: {@code IndexOutOfBoundsException} deve essere lanciata.
+     * Expected Result: {@code IndexOutOfBoundsException} deve essere lanciata nel momento della chiamata al metodo {@code list.listIterator(10)}.
      */
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testConstructorIndexOutOfBoundsGreaterThanSize() {
-        new ListAdapter().listIterator(10); // Lista vuota
-        // o per una lista popolata: new ListAdapter().listIterator(list.size() + 1);
+    public void testConstructorIndexOutOfBoundsGreaterThanSize() 
+    {
+        list.listIterator(10);
     }
 
     /**
-     * Test del costruttore con indice uguale alla dimensione della lista.
+     * Test del costruttore{@link myAdapter.ListIterator#ListIterator(myAdapter.ListAdapter, int)} con indice uguale alla dimensione della lista.
      * <p>
-     * Verifica che l'iteratore possa essere inizializzato correttamente alla fine della lista.
+     * Summary: Verifica che l'iteratore possa essere inizializzato correttamente alla fine della lista.
      * <p>
-     * Test Case Design: Assicurarsi che l'indice pari alla dimensione della lista sia un
-     * valore valido per posizionare l'iteratore dopo l'ultimo elemento.
+     * Test Case Design: Il motivo di questo test è garantire che l'iteratore possa essere creato all'indice uguale alla dimensione della lista, quindi alla fine della lista.
      * <p>
-     * Preconditions: Una `ListAdapter` popolata.
+     * Test Description: 1) Si crea un iteratore con un indice uguale alla dimensione della lista (3 in questo caso).
+     *                   2) Si verifica che {@code nextIndex()} restituisca la dimensione della lista (3).
+     *                   3) Si verifica che {@code hasNext()} restituisca false e {@code hasPrevious()} restituisca true.
      * <p>
-     * Postconditions: L'iteratore è posizionato alla fine della lista.
+     * Preconditions: Lista popolata con 3 elementi: "zero", "uno", "due" e un iteratore posizionato alla fine della lista, cioe' dopo "due".
+     * <p>
+     * Postconditions: Nessuna modifica della lista. L'iteratore rimane alla fine della lista.
      * <p>
      * Expected Result: {@code nextIndex()} deve essere uguale alla dimensione della lista,
      * {@code hasNext()} deve essere false, {@code hasPrevious()} deve essere true.
      */
     @Test
-    public void testConstructorIndexAtSize() {
+    public void testConstructorIndexAtSize() 
+    {
         iterator = list.listIterator(list.size());
         assertEquals(list.size(), iterator.nextIndex());
         assertEquals(list.size() - 1, iterator.previousIndex());
@@ -168,7 +185,8 @@ public class TestListIterator
      * Expected Result: {@code hasNext()} deve restituire {@code true}.
      */
     @Test
-    public void testHasNextTrue() {
+    public void testHasNextTrue() 
+    {
         assertTrue(iterator.hasNext());
     }
 
@@ -186,7 +204,8 @@ public class TestListIterator
      * Expected Result: {@code hasNext()} deve restituire {@code false}.
      */
     @Test
-    public void testHasNextFalseEmptyList() {
+    public void testHasNextFalseEmptyList() 
+    {
         list = new ListAdapter();
         iterator = list.listIterator();
         assertFalse(iterator.hasNext());
@@ -208,7 +227,8 @@ public class TestListIterator
      * {@code previousIndex()} deve essere 0.
      */
     @Test
-    public void testNext() {
+    public void testNext() 
+    {
         assertEquals("zero", iterator.next());
         assertEquals(1, iterator.nextIndex());
         assertEquals(0, iterator.previousIndex());
@@ -224,18 +244,55 @@ public class TestListIterator
      * <p>
      * Test Case Design: Assicurarsi che il metodo segnali correttamente la mancanza di elementi successivi.
      * <p>
-     * Preconditions: L'iteratore ha iterato attraverso tutti gli elementi della lista.
+     * Test Description: 1) Si chiama {@code next()} fino a raggiungere l'ultimo elemento della lista.                
      * <p>
-     * Postconditions: Nessuna modifica allo stato dell'iteratore o della lista. Viene lanciata un'eccezione.
+     * Preconditions: Iteratore posizionato prima di "zero"; la lista su cui l'iteraore itera ha tre elementi: ["zero", "uno", "due"].
      * <p>
-     * Expected Result: {@code NoSuchElementException} deve essere lanciata.
+     * Postconditions: L'iteratore si trova dopo l'ultimo elemento della lista, ossia dopo "tre". La lista rimane invariata
+     * <p>
+     * Expected Result: Il listIterator scorre la lista, ritorna i valori nell'ordine con cui sono stati inseriti e con valori coerenti a quelli inseriti.
+     * {@code NoSuchElementException} deve essere lanciata quando si tenta di chiamare {@code next()} dopo l'ultimo elemento.
      */
     @Test(expected = java.util.NoSuchElementException.class)
-    public void testNextThrowsNoSuchElementException() {
-        iterator.next(); // "zero"
-        iterator.next(); // "uno"
-        iterator.next(); // "due"
-        iterator.next(); // Dovrebbe lanciare l'eccezione
+    public void testNextThrowsNoSuchElementException() 
+    {
+        assertEquals("zero", iterator.next()); // "zero"
+        assertEquals("uno", iterator.next());  // "uno"
+        assertEquals("due", iterator.next());  // "due"
+        iterator.next(); // Dovrebbe lanciare NoSuchElementException, essendo alla fine della lista
+    }
+
+    /**
+     * Test del metodo {@link myAdapter.ListIterator#next()} e del metodo {@link myAdapter.ListIterator#previous()}.
+     * <p>
+     * Verifica che chiamate alternate di {@code next()} e {@code previous()} restituiscano lo stesso elemento.
+     * <p>
+     * Test Case Design: La motivazione dietro a questo test è garantire che i metodi {@link myAdapter.ListIterator#next()} e {@link myAdapter.ListIterator#previous()}
+     * non alterino la lista, ma anzi restituiscano lo stesso.
+     * <p>
+     * Test Description: 1) Si chiama {@code next()} per avanzare di un elemento, ossia da "zero" a "uno".
+     *                   2) Inizializzo una variabile intera {@code i} a 0.
+     *                   3) In un ciclo che si ripete 100 volte, si chiama {@code previous()} e poi {@code next()}.
+     *                   4) Si verifica che entrambi i metodi restituiscano lo stesso elemento, ossia "zero" ad ogni interazione.
+     * <p>
+     * Preconditions: Una `ListAdapter` popolata con tre elementi: "zero", "uno", "due". L'iteratore è posizionato tra "zero" e "uno".
+     * <p>
+     * Postconditions: Nessuna modifica alla lista.
+     * <p>
+     * Expected Result: Il metodo {@code next()} deve restituire "zero" e il metodo {@code previous()} deve restituire "zero" in ogni iterazione del ciclo.
+     */
+    @Test
+    public void testNextAndPreviousConsistency() 
+    {
+        //Mi sposto tra zero e uno
+        iterator.next();
+        int i = 0;          
+        while(i < 100)
+        {
+            assertEquals("zero", iterator.previous());
+            assertEquals("zero", iterator.next());
+            i++;
+        }
     }
 
     /**
@@ -294,7 +351,8 @@ public class TestListIterator
      * {@code nextIndex()} deve essere 2, {@code previousIndex()} deve essere 1.
      */
     @Test
-    public void testPrevious() {
+    public void testPrevious() 
+    {
         iterator.next(); // "zero"
         iterator.next(); // "uno"
         iterator.next(); // "due" (cursore a 3)
@@ -321,7 +379,8 @@ public class TestListIterator
      * Expected Result: {@code NoSuchElementException} deve essere lanciata.
      */
     @Test(expected = java.util.NoSuchElementException.class)
-    public void testPreviousThrowsNoSuchElementException() {
+    public void testPreviousThrowsNoSuchElementException() 
+    {
         iterator.previous(); // Dovrebbe lanciare l'eccezione, essendo all'inizio
     }
 
@@ -790,4 +849,5 @@ public class TestListIterator
         assertNull(iterator.next()); // Il primo elemento è null
         assertEquals("zero", iterator.next()); // Il secondo è "zero"
     }
+
 }

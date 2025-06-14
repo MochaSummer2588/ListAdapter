@@ -8,7 +8,8 @@ import org.junit.runners.Suite;
     TestListAdapterEmpty.class,
     TestListAdapterPopulated.class,
     TestSubListAdapter.class,
-    TestListIterator.class,
+    TestListIteratorPopulated.class,
+    TestListIteratorEmpty.class,
 })
 public class AllTestsSuite 
 {
