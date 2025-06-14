@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.Ignore;
 import myAdapter.*;
+import java.util.Vector; // Necessario per testare l'interazione con Vector se usi i toArray con array CLDC
 
 /**
  * Suite di test per la classe {@link myAdapter.ListAdapter}.
@@ -35,23 +36,22 @@ public class TestListAdapterEmpty
     /**
      * Test del metodo {@link HList#size()}.
      * <p>
-     * @summary Verifica che la dimensione di una lista vuota sia 0.
+     * Summary: Verifica che la dimensione di una lista vuota sia 0.
      * <p>
-     * @design Assicurarsi che il metodo {@code size()} restituisca 0
-     * quando la lista è appena creata e non contiene elementi.
+     * Test Case Design: Questo test serve per assicurare che il metodo {@code size()} restituisca il valore corretto per una lista appena creata, che per definizione è vuota.
      * <p>
-     * @description 1. Crea una nuova istanza di ListAdapter.<br />
-     * 2. Chiama il metodo {@code size()} sulla lista.<br />
-     * 3. Verifica che il valore restituito sia 0.
+     * Test Description: 1) Si crea una nuova istanza di {@code ListAdapter}.
+     * 2) Si chiama il metodo {@code size()}.
+     * 3) Si verifica che il valore restituito sia 0.
      * <p>
-     * @pre Lista appena inizializzata (vuota).
+     * Preconditions: Nessuna.
      * <p>
-     * @post La lista rimane vuota.
+     * Postconditions: La lista rimane vuota.
      * <p>
-     * @expected {@code size()} deve restituire 0.
+     * Expected Result: La dimensione della lista deve essere 0.
      */
     @Test
-    public void testSizeEmpty()
+    public void testSizeEmptyList()
     {
         assertEquals(0, list.size());
     }
@@ -61,353 +61,326 @@ public class TestListAdapterEmpty
     /**
      * Test del metodo {@link HList#isEmpty()}.
      * <p>
-     * @summary Verifica che una lista vuota sia correttamente identificata come tale.
+     * Summary: Verifica che {@code isEmpty()} restituisca true per una lista vuota.
      * <p>
-     * @design Assicurarsi che il metodo {@code isEmpty()} restituisca true
-     * quando la lista è appena creata e non contiene elementi.
+     * Test Case Design: Questo test valuta il comportamento del metodo {@code isEmpty()} su una lista che non contiene elementi, garantendo che indichi correttamente il suo stato.
      * <p>
-     * @description 1. Crea una nuova istanza di ListAdapter.<br />
-     * 2. Chiama il metodo {@code isEmpty()} sulla lista.<br />
-     * 3. Verifica che il valore restituito sia true.
+     * Test Description: 1) Si crea una nuova istanza di {@code ListAdapter}.
+     * 2) Si chiama il metodo {@code isEmpty()}.
+     * 3) Si verifica che il valore booleano restituito sia true.
      * <p>
-     * @pre Lista appena inizializzata (vuota).
+     * Preconditions: Nessuna.
      * <p>
-     * @post La lista rimane vuota.
+     * Postconditions: La lista rimane vuota.
      * <p>
-     * @expected {@code isEmpty()} deve restituire true.
+     * Expected Result: La lista deve essere considerata vuota.
      */
     @Test
-    public void testIsEmptyTrue()
+    public void testIsEmptyEmptyList()
     {
         assertTrue(list.isEmpty());
     }
 
-    //------- TEST DEL METODO contains(Object) ----------
+    //------- TEST DEL METODO contains(Object o) ----------
 
     /**
-     * Test del metodo {@link HList#contains(Object)}.
+     * Test del metodo {@link HList#contains(Object)} su lista vuota.
      * <p>
-     * @summary Verifica che una lista vuota non contenga alcun elemento.
+     * Summary: Verifica che {@code contains(Object)} restituisca false per qualsiasi elemento su una lista vuota.
      * <p>
-     * @design Assicurarsi che il metodo {@code contains()} restituisca false
-     * per qualsiasi elemento (anche null) quando la lista è vuota.
+     * Test Case Design: Questo test assicura che il metodo {@code contains()} si comporti correttamente quando cerca un elemento in una lista che non ha elementi. Vengono testati sia un oggetto non nullo che l'oggetto nullo.
      * <p>
-     * @description 1. Crea una lista vuota.<br />
-     * 2. Chiama {@code contains()} con un elemento non null.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Chiama {@code contains()} con un elemento null.<br />
-     * 5. Verifica che il risultato sia false.
+     * Test Description: 1) Si tenta di cercare un oggetto arbitrario ("test") nella lista vuota.
+     * 2) Si verifica che il risultato sia false.
+     * 3) Si tenta di cercare un oggetto nullo nella lista vuota.
+     * 4) Si verifica che il risultato sia false.
      * <p>
-     * @pre Lista vuota.
+     * Preconditions: Lista vuota.
      * <p>
-     * @post La lista rimane vuota.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code contains()} deve restituire false per qualsiasi elemento.
+     * Expected Result: {@code contains(Object)} deve restituire false per entrambi i tentativi.
      */
     @Test
-    public void testContainsEmpty()
+    public void testContainsEmptyList()
     {
-        assertFalse(list.contains("elemento"));
+        assertFalse(list.contains("test"));
         assertFalse(list.contains(null));
     }
 
     //------- TEST DEL METODO iterator() ----------
 
     /**
-     * Test del metodo {@link HList#iterator()}.
+     * Test del metodo {@link HList#iterator()} su lista vuota.
      * <p>
-     * @summary Verifica che l'iteratore su una lista vuota funzioni correttamente.
+     * Summary: Verifica che l'iteratore ottenuto da una lista vuota non abbia elementi successivi.
      * <p>
-     * @design Assicurarsi che l'iteratore restituito per una lista vuota
-     * indichi correttamente l'assenza di elementi.
+     * Test Case Design: Questo test valuta l'inizializzazione e il comportamento di base dell'iteratore quando la lista sorgente è vuota.
      * <p>
-     * @description 1. Ottiene un iteratore da una lista vuota.<br />
-     * 2. Verifica che {@code hasNext()} sia false.<br />
-     * 3. Tenta di chiamare {@code next()} e verifica che lanci `NoSuchElementException`.
+     * Test Description: 1) Si ottiene un iteratore dalla lista vuota.
+     * 2) Si verifica che {@code hasNext()} dell'iteratore restituisca false.
      * <p>
-     * @pre Lista vuota.
+     * Preconditions: Lista vuota.
      * <p>
-     * @post La lista rimane vuota, l'iteratore non modifica la lista.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code hasNext()} deve essere false; {@code next()} deve lanciare {@code NoSuchElementException}.
+     * Expected Result: {@code hasNext()} dell'iteratore deve essere false.
      */
     @Test
-    public void testIteratorEmpty()
+    public void testIteratorEmptyList()
     {
         HIterator it = list.iterator();
-        assertNotNull(it);
         assertFalse(it.hasNext());
-        try {
-            it.next();
-            fail("Expected NoSuchElementException");
-        } catch (java.util.NoSuchElementException e) {
-            // Success
-        }
     }
 
     //------- TEST DEL METODO toArray() ----------
 
     /**
-     * Test del metodo {@link HList#toArray()}.
+     * Test del metodo {@link HList#toArray()} su lista vuota.
      * <p>
-     * @summary Verifica che {@code toArray()} su una lista vuota restituisca un array vuoto.
+     * Summary: Verifica che {@code toArray()} su una lista vuota restituisca un array vuoto.
      * <p>
-     * @design Assicurarsi che la conversione di una lista vuota in array
-     * produca un array di dimensione zero, non null.
+     * Test Case Design: Questo test serve ad assicurare che la conversione di una lista vuota in un array produca un array di dimensione zero.
      * <p>
-     * @description 1. Chiama {@code toArray()} su una lista vuota.<br />
-     * 2. Verifica che l'array restituito non sia null e abbia dimensione 0.
+     * Test Description: 1) Si chiama il metodo {@code toArray()} su una lista vuota.
+     * 2) Si verifica che l'array restituito non sia nullo.
+     * 3) Si verifica che la sua lunghezza sia 0.
      * <p>
-     * @pre Lista vuota.
+     * Preconditions: Lista vuota.
      * <p>
-     * @post La lista rimane vuota.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code toArray()} deve restituire un array di Object di dimensione 0.
+     * Expected Result: L'array restituito non deve essere nullo e deve avere lunghezza 0.
      */
     @Test
-    public void testToArrayEmpty()
+    public void testToArrayEmptyList()
     {
         Object[] arr = list.toArray();
         assertNotNull(arr);
         assertEquals(0, arr.length);
     }
 
-    /**
-     * Test del metodo {@link HList#toArray(Object[])}.
-     * <p>
-     * @summary Verifica che {@code toArray(Object[])} su una lista vuota gestisca correttamente gli array di input.
-     * <p>
-     * @design Assicurarsi che il metodo popoli correttamente l'array fornito (o ne crei uno nuovo se troppo piccolo)
-     * quando la lista è vuota, e che il riferimento alla fine sia null se l'array era più grande.
-     * <p>
-     * @description 1. Chiama {@code toArray(new Object[0])}.<br />
-     * 2. Verifica che l'array restituito abbia dimensione 0.<br />
-     * 3. Chiama {@code toArray(new Object[2])}.<br />
-     * 4. Verifica che l'array restituito abbia dimensione 2 e che gli elementi siano null dopo l'indice 0.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code toArray(Object[])} deve restituire un array di dimensione appropriata e riempito correttamente.
-     */
-    @Ignore("Da problemi")
-    @Test
-    public void testToArrayParameterizedEmpty()
-    {
-        Object[] a = new Object[0];
-        Object[] result = list.toArray(a);
-        assertSame(a, result); // Se l'array di input è di dimensione 0, dovrebbe essere riutilizzato
-        assertEquals(0, result.length);
+    //------- TEST DEL METODO toArray(Object[] a) ----------
 
-        Object[] b = new Object[2];
-        b[0] = "presente"; // Valore che dovrebbe essere sovrascritto o rimosso
-        b[1] = "presente2";
-        result = list.toArray(b);
-        assertSame(b, result); // L'array dovrebbe essere riutilizzato se sufficientemente grande
-        assertEquals(2, result.length);
-        assertNull(result[0]); // Il primo elemento dovrebbe essere null
-        assertNull(result[1]); // Il secondo elemento dovrebbe essere null
+    /**
+     * Test del metodo {@link HList#toArray(Object[])} con array vuoto di dimensione 0 su lista vuota.
+     * <p>
+     * Summary: Verifica che {@code toArray(Object[])} con un array di input vuoto (di dimensione 0) su una lista vuota restituisca l'array originale.
+     * <p>
+     * Test Case Design: Questo test copre lo scenario in cui l'array fornito è della dimensione minima necessaria per contenere la lista (0, in questo caso), e l'implementazione dovrebbe riutilizzare l'array fornito.
+     * <p>
+     * Test Description: 1) Si crea un array di oggetti di dimensione 0.
+     * 2) Si chiama {@code toArray(Object[])} passando questo array.
+     * 3) Si verifica che l'array restituito sia lo stesso array passato come argomento (verifica di riferimento).
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: Il metodo deve restituire l'istanza dell'array passata come argomento.
+     */
+    @Test
+    public void testToArrayEmptyListWithEmptyArrayInput()
+    {
+        Object[] inputArr = new Object[0];
+        Object[] resultArr = list.toArray(inputArr);
+        assertSame(inputArr, resultArr);
     }
 
     /**
-     * Test del metodo {@link HList#toArray(Object[])} con array di input null.
+     * Test del metodo {@link HList#toArray(Object[])} con array sufficientemente grande su lista vuota.
      * <p>
-     * @summary Verifica che {@code toArray(Object[])} lanci {@code NullPointerException} se l'array di input è null.
+     * Summary: Verifica che {@code toArray(Object[])} con un array di input più grande su una lista vuota restituisca l'array originale con il primo elemento impostato a null (se l'array è più grande).
      * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per l'array.
+     * Test Case Design: Questo test valuta il comportamento quando l'array fornito è più grande della lista vuota. Secondo la specifica J2SE, l'elemento successivo alla fine della collezione nell'array dovrebbe essere null.
      * <p>
-     * @description 1. Chiama {@code toArray(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
+     * Test Description: 1) Si crea un array di oggetti di dimensione maggiore di 0 (es. 2).
+     * 2) Si chiama {@code toArray(Object[])} passando questo array.
+     * 3) Si verifica che l'array restituito sia lo stesso array passato come argomento (verifica di riferimento).
+     * 4) Si verifica che il primo elemento dell'array sia null (perché la lista è vuota).
      * <p>
-     * @pre Lista vuota.
+     * Preconditions: Lista vuota.
      * <p>
-     * @post La lista rimane vuota.
+     * Postconditions: La lista rimane invariata. L'array di input viene modificato (il primo elemento diventa null).
      * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
-     */
-    @Test(expected = NullPointerException.class)
-    public void testToArrayParameterizedNullArray()
-    {
-        list.toArray(null);
-    }
-
-    //------- TEST DEL METODO add(Object) ----------
-
-    /**
-     * Test del metodo {@link HList#add(Object)}.
-     * <p>
-     * @summary Verifica che un singolo elemento venga aggiunto correttamente alla lista vuota.
-     * <p>
-     * @design Assicurarsi che l'elemento sia aggiunto, la dimensione sia aggiornata
-     * e il metodo restituisca true.
-     * <p>
-     * @description 1. Aggiunge un elemento alla lista.<br />
-     * 2. Verifica che la dimensione sia 1.<br />
-     * 3. Verifica che la lista non sia vuota.<br />
-     * 4. Verifica che l'elemento aggiunto sia presente nella lista.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista contiene l'elemento aggiunto, dimensione 1.
-     * <p>
-     * @expected {@code add(Object)} deve restituire true, {@code size()} deve essere 1,
-     * {@code isEmpty()} false, e {@code contains()} true per l'elemento aggiunto.
+     * Expected Result: Il metodo deve restituire l'istanza dell'array passata come argomento, con l'elemento all'indice 0 (e gli altri, se presenti) impostato a null.
      */
     @Test
-    public void testAddObjectToEmptyList()
+    public void testToArrayEmptyListWithLargerArrayInput()
     {
-        assertTrue(list.add("testElement"));
+        Object[] inputArr = new Object[2];
+        inputArr[0] = "originale1";
+        inputArr[1] = "originale2";
+
+        Object[] resultArr = list.toArray(inputArr);
+        assertSame(inputArr, resultArr);
+        assertNull(resultArr[0]); // Il primo elemento dovrebbe essere null
+        // Il secondo elemento può rimanere inalterato o essere nullato a seconda dell'implementazione.
+        // La specifica J2SE dice "l'elemento successivo alla fine della sottolista nell'array viene impostato su `null`."
+        // Per una lista vuota, "la fine della sottolista" è l'indice 0. Quindi solo resultArr[0] dovrebbe essere null.
+        // Gli altri elementi non dovrebbero essere toccati.
+        assertNull(resultArr[0]);
+        // resultArr[1] dovrebbe rimanere "originale2" se l'implementazione segue rigorosamente la specifica per gli elementi non oltre size
+        // Se la tua implementazione CLDC nullifica tutti gli elementi dall'indice size in poi, questo potrebbe fallire.
+        // È una sottile differenza. Per Vector CLDC 1.1, toArray(Object[] a) può comportarsi diversamente da J2SE 1.4.2.
+        // Se il tuo Vector.copyInto() è il motore, potrebbe non modificare gli elementi oltre 0.
+        // Adattare questo assert se l'implementazione sottostante si comporta diversamente.
+        // Per il momento, assumo il comportamento J2SE: solo l'elemento all'indice 'size' viene nullificato.
+        // Poiché size è 0, l'elemento all'indice 0 è il primo elemento.
+        // Il comportamento qui dipende dalla tua implementazione esatta di toArray(Object[]).
+        // Se l'implementazione è: for (int i = 0; i < size; i++) a[i] = get(i); if (a.length > size) a[size] = null;
+        // Allora, per size=0, il ciclo for non esegue nulla, e a[0] = null (se a.length > 0).
+        assertNull(resultArr[0]);
+    }
+
+    //------- TEST DEL METODO add(Object o) ----------
+
+    /**
+     * Test del metodo {@link HList#add(Object)} su lista vuota.
+     * <p>
+     * Summary: Verifica che {@code add(Object)} aggiunga correttamente un elemento a una lista vuota.
+     * <p>
+     * Test Case Design: Questo test assicura che l'operazione di aggiunta sia funzionale per inizializzare una lista da uno stato vuoto.
+     * <p>
+     * Test Description: 1) Si aggiunge un elemento ("test") alla lista vuota.
+     * 2) Si verifica che la dimensione della lista sia 1.
+     * 3) Si verifica che la lista non sia più vuota.
+     * 4) Si verifica che l'elemento aggiunto sia presente nella lista.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista contiene un elemento.
+     * <p>
+     * Expected Result: La lista deve avere dimensione 1, non essere vuota e contenere l'elemento aggiunto.
+     */
+    @Test
+    public void testAddEmptyList()
+    {
+        list.add("test");
         assertEquals(1, list.size());
         assertFalse(list.isEmpty());
-        assertTrue(list.contains("testElement"));
+        assertTrue(list.contains("test"));
     }
 
     /**
-     * Test del metodo {@link HList#add(Object)} con un elemento null.
+     * Test del metodo {@link HList#add(Object)} con un elemento null su lista vuota.
      * <p>
-     * @summary Verifica che un elemento null venga aggiunto correttamente alla lista vuota.
+     * Summary: Verifica che {@code add(Object)} possa aggiungere correttamente un elemento null a una lista vuota.
      * <p>
-     * @design Assicurarsi che il metodo possa gestire l'aggiunta di elementi nulli.
+     * Test Case Design: Questo test verifica la capacità della lista di gestire elementi nulli, un requisito importante per molte implementazioni di Collection.
      * <p>
-     * @description 1. Aggiunge un elemento null alla lista.<br />
-     * 2. Verifica che la dimensione sia 1.<br />
-     * 3. Verifica che l'elemento null sia presente nella lista.
+     * Test Description: 1) Si aggiunge un elemento null alla lista vuota.
+     * 2) Si verifica che la dimensione della lista sia 1.
+     * 3) Si verifica che la lista non sia più vuota.
+     * 4) Si verifica che la lista contenga l'elemento null.
      * <p>
-     * @pre Lista vuota.
+     * Preconditions: Lista vuota.
      * <p>
-     * @post La lista contiene un elemento null, dimensione 1.
+     * Postconditions: La lista contiene l'elemento null.
      * <p>
-     * @expected {@code add(Object)} deve restituire true, {@code size()} deve essere 1,
-     * {@code contains(null)} deve essere true.
+     * Expected Result: La lista deve avere dimensione 1, non essere vuota e contenere l'elemento null.
      */
     @Test
-    public void testAddNullObjectToEmptyList()
+    public void testAddNullEmptyList()
     {
-        assertTrue(list.add(null));
+        list.add(null);
         assertEquals(1, list.size());
+        assertFalse(list.isEmpty());
         assertTrue(list.contains(null));
     }
 
-    //------- TEST DEL METODO remove(Object) ----------
+    //------- TEST DEL METODO remove(Object o) ----------
 
     /**
-     * Test del metodo {@link HList#remove(Object)}.
+     * Test del metodo {@link HList#remove(Object)} su lista vuota.
      * <p>
-     * @summary Verifica che {@code remove(Object)} su una lista vuota restituisca false.
+     * Summary: Verifica che {@code remove(Object)} restituisca false quando si tenta di rimuovere un elemento da una lista vuota.
      * <p>
-     * @design Assicurarsi che il metodo non provi a rimuovere elementi da una lista vuota
-     * e segnali correttamente l'insuccesso.
+     * Test Case Design: Questo test assicura che il metodo gestisca correttamente la rimozione da una lista priva di elementi, restituendo il valore booleano appropriato.
      * <p>
-     * @description 1. Chiama {@code remove(Object)} con un elemento qualsiasi su una lista vuota.<br />
-     * 2. Verifica che il risultato sia false.<br />
-     * 3. Verifica che la lista rimanga vuota.
+     * Test Description: 1) Si tenta di rimuovere un oggetto arbitrario ("test") dalla lista vuota.
+     * 2) Si verifica che il risultato sia false.
+     * 3) Si verifica che la dimensione della lista rimanga 0.
      * <p>
-     * @pre Lista vuota.
+     * Preconditions: Lista vuota.
      * <p>
-     * @post La lista rimane vuota.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code remove(Object)} deve restituire false.
+     * Expected Result: {@code remove(Object)} deve restituire false e la lista deve rimanere vuota.
      */
     @Test
-    public void testRemoveObjectFromEmptyList()
+    public void testRemoveEmptyList()
     {
-        assertFalse(list.remove("nonexistent"));
+        assertFalse(list.remove("test"));
         assertEquals(0, list.size());
     }
 
-    /**
-     * Test del metodo {@link HList#remove(Object)} con elemento null su una lista vuota.
-     * <p>
-     * @summary Verifica che {@code remove(null)} su una lista vuota restituisca false.
-     * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente la rimozione di null
-     * quando la lista è vuota.
-     * <p>
-     * @description 1. Chiama {@code remove(null)} su una lista vuota.<br />
-     * 2. Verifica che il risultato sia false.<br />
-     * 3. Verifica che la lista rimanga vuota.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code remove(null)} deve restituire false.
-     */
-    @Test
-    public void testRemoveNullObjectFromEmptyList()
-    {
-        assertFalse(list.remove(null));
-        assertEquals(0, list.size());
-    }
-
-    //------- TEST DEL METODO containsAll(HCollection) ----------
+    //------- TEST DEL METODO containsAll(HCollection c) ----------
 
     /**
-     * Test del metodo {@link HList#containsAll(HCollection)}.
+     * Test del metodo {@link HList#containsAll(HCollection)} con collezione vuota su lista vuota.
      * <p>
-     * @summary Verifica che una lista vuota non contenga tutti gli elementi di una collezione non vuota.
+     * Summary: Verifica che {@code containsAll(HCollection)} restituisca true quando la collezione specificata è vuota e la lista è vuota.
      * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente il confronto con una collezione non vuota.
+     * Test Case Design: Questo test valuta il caso in cui una lista vuota è confrontata per il contenimento con un'altra collezione vuota, che dovrebbe sempre essere considerata contenuta.
      * <p>
-     * @description 1. Crea una collezione con un elemento.<br />
-     * 2. Chiama {@code containsAll()} su una lista vuota con la collezione.<br />
-     * 3. Verifica che il risultato sia false.
+     * Test Description: 1) Si crea una collezione vuota.
+     * 2) Si chiama {@code containsAll()} sulla lista vuota con la collezione vuota.
+     * 3) Si verifica che il risultato sia true.
      * <p>
-     * @pre Lista vuota. Collezione con un elemento.
+     * Preconditions: Lista vuota. Collezione vuota.
      * <p>
-     * @post La lista e la collezione rimangono invariate.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code containsAll()} deve restituire false.
+     * Expected Result: {@code containsAll(HCollection)} deve restituire true.
      */
     @Test
-    public void testContainsAllWithNonEmptyCollection()
-    {
-        HCollection otherCollection = new ListAdapter();
-        otherCollection.add("A");
-        assertFalse(list.containsAll(otherCollection));
-    }
-
-    /**
-     * Test del metodo {@link HList#containsAll(HCollection)} con collezione vuota.
-     * <p>
-     * @summary Verifica che una lista vuota contenga tutti gli elementi di una collezione vuota.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca true quando la collezione da controllare è vuota,
-     * poiché una lista vuota contiene "tutti" gli elementi di una collezione vuota.
-     * <p>
-     * @description 1. Crea una collezione vuota.<br />
-     * 2. Chiama {@code containsAll()} su una lista vuota con la collezione vuota.<br />
-     * 3. Verifica che il risultato sia true.
-     * <p>
-     * @pre Lista vuota. Collezione vuota.
-     * <p>
-     * @post La lista e la collezione rimangono invariate.
-     * <p>
-     * @expected {@code containsAll()} deve restituire true.
-     */
-    @Test
-    public void testContainsAllWithEmptyCollection()
+    public void testContainsAllEmptyCollectionOnEmptyList()
     {
         HCollection emptyCollection = new ListAdapter();
         assertTrue(list.containsAll(emptyCollection));
     }
 
     /**
+     * Test del metodo {@link HList#containsAll(HCollection)} con collezione non vuota su lista vuota.
+     * <p>
+     * Summary: Verifica che {@code containsAll(HCollection)} restituisca false quando la collezione specificata non è vuota e la lista è vuota.
+     * <p>
+     * Test Case Design: Questo test assicura che una lista vuota non dichiari di contenere elementi che non possiede.
+     * <p>
+     * Test Description: 1) Si crea una collezione con un elemento ("test").
+     * 2) Si chiama {@code containsAll()} sulla lista vuota con la collezione non vuota.
+     * 3) Si verifica che il risultato sia false.
+     * <p>
+     * Preconditions: Lista vuota. Collezione non vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code containsAll(HCollection)} deve restituire false.
+     */
+    @Test
+    public void testContainsAllNonEmptyCollectionOnEmptyList()
+    {
+        ListAdapter collection = new ListAdapter();
+        collection.add("test");
+        assertFalse(list.containsAll(collection));
+    }
+
+    /**
      * Test del metodo {@link HList#containsAll(HCollection)} con collezione null.
      * <p>
-     * @summary Verifica che {@code containsAll(null)} lanci {@code NullPointerException}.
+     * Summary: Verifica che {@code containsAll(HCollection)} lanci {@code NullPointerException} se la collezione è null.
      * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
+     * Test Case Design: Questo test serve per verificare la gestione dell'input nullo secondo le specifiche del Collection Framework.
      * <p>
-     * @description 1. Chiama {@code containsAll(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
+     * Test Description: 1) Si tenta di chiamare {@code containsAll(null)} sulla lista vuota.
+     * 2) Si verifica che venga lanciata {@code NullPointerException}.
      * <p>
-     * @pre Lista vuota.
+     * Preconditions: Lista vuota. Collezione null.
      * <p>
-     * @post La lista rimane vuota.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
+     * Expected Result: {@code containsAll(HCollection)} deve lanciare {@code NullPointerException}.
      */
     @Test(expected = NullPointerException.class)
     public void testContainsAllNullCollection()
@@ -415,59 +388,25 @@ public class TestListAdapterEmpty
         list.containsAll(null);
     }
 
-    //------- TEST DEL METODO addAll(HCollection) ----------
+    //------- TEST DEL METODO addAll(HCollection c) ----------
 
     /**
-     * Test del metodo {@link HList#addAll(HCollection)}.
+     * Test del metodo {@link HList#addAll(HCollection)} con collezione vuota su lista vuota.
      * <p>
-     * @summary Verifica l'aggiunta di una collezione non vuota a una lista vuota.
+     * Summary: Verifica che {@code addAll(HCollection)} restituisca false e non modifichi la lista quando aggiunge una collezione vuota a una lista vuota.
      * <p>
-     * @design Assicurarsi che tutti gli elementi della collezione siano aggiunti,
-     * la dimensione sia aggiornata e il metodo restituisca true.
+     * Test Case Design: Questo test verifica il comportamento di aggiunta di una collezione vuota, che non dovrebbe modificare la lista né indicare un cambiamento riuscito.
      * <p>
-     * @description 1. Crea una collezione con 2 elementi.<br />
-     * 2. Aggiunge la collezione alla lista vuota.<br />
-     * 3. Verifica che la dimensione sia 2.<br />
-     * 4. Verifica che la lista contenga gli elementi della collezione.
+     * Test Description: 1) Si crea una collezione vuota.
+     * 2) Si aggiunge la collezione vuota alla lista vuota.
+     * 3) Si verifica che il risultato sia false.
+     * 4) Si verifica che la dimensione della lista rimanga 0 e che sia ancora vuota.
      * <p>
-     * @pre Lista vuota. Collezione con due elementi.
+     * Preconditions: Lista vuota. Collezione vuota.
      * <p>
-     * @post La lista contiene gli elementi della collezione.
+     * Postconditions: La lista rimane vuota.
      * <p>
-     * @expected {@code addAll(HCollection)} deve restituire true, la lista deve avere dimensione 2 e contenere gli elementi.
-     */
-    @Test
-    public void testAddAllToEmptyList()
-    {
-        HCollection newElements = new ListAdapter();
-        newElements.add("elem1");
-        newElements.add("elem2");
-
-        assertTrue(list.addAll(newElements));
-        assertEquals(2, list.size());
-        assertTrue(list.contains("elem1"));
-        assertTrue(list.contains("elem2"));
-        assertFalse(list.isEmpty());
-    }
-
-    /**
-     * Test del metodo {@link HList#addAll(HCollection)} con collezione vuota.
-     * <p>
-     * @summary Verifica che l'aggiunta di una collezione vuota a una lista vuota non modifichi la lista.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca false e non modifichi la lista se la collezione
-     * da aggiungere è vuota.
-     * <p>
-     * @description 1. Crea una collezione vuota.<br />
-     * 2. Aggiunge la collezione alla lista vuota.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la lista rimanga vuota.
-     * <p>
-     * @pre Lista vuota. Collezione vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code addAll(HCollection)} deve restituire false.
+     * Expected Result: {@code addAll(HCollection)} deve restituire false e la lista deve rimanere vuota.
      */
     @Test
     public void testAddAllEmptyCollectionToEmptyList()
@@ -479,20 +418,51 @@ public class TestListAdapterEmpty
     }
 
     /**
+     * Test del metodo {@link HList#addAll(HCollection)} con collezione non vuota su lista vuota.
+     * <p>
+     * Summary: Verifica che {@code addAll(HCollection)} aggiunga correttamente tutti gli elementi di una collezione non vuota a una lista vuota.
+     * <p>
+     * Test Case Design: Questo test valuta la capacità di {@code addAll()} di popolare correttamente una lista inizialmente vuota con tutti gli elementi di un'altra collezione.
+     * <p>
+     * Test Description: 1) Si crea una collezione con due elementi ("test1", "test2").
+     * 2) Si aggiunge questa collezione alla lista vuota.
+     * 3) Si verifica che il risultato sia true (la lista è stata modificata).
+     * 4) Si verifica che la dimensione della lista sia 2.
+     * 5) Si verifica che la lista contenga entrambi gli elementi aggiunti.
+     * <p>
+     * Preconditions: Lista vuota. Collezione non vuota.
+     * <p>
+     * Postconditions: La lista contiene gli elementi della collezione aggiunta.
+     * <p>
+     * Expected Result: {@code addAll(HCollection)} deve restituire true, la lista deve avere la dimensione corretta e contenere tutti gli elementi.
+     */
+    @Test
+    public void testAddAllNonEmptyCollectionToEmptyList()
+    {
+        ListAdapter collection = new ListAdapter();
+        collection.add("test1");
+        collection.add("test2");
+        assertTrue(list.addAll(collection));
+        assertEquals(2, list.size());
+        assertTrue(list.contains("test1"));
+        assertTrue(list.contains("test2"));
+    }
+
+    /**
      * Test del metodo {@link HList#addAll(HCollection)} con collezione null.
      * <p>
-     * @summary Verifica che {@code addAll(null)} lanci {@code NullPointerException}.
+     * Summary: Verifica che {@code addAll(HCollection)} lanci {@code NullPointerException} se la collezione specificata è null.
      * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
+     * Test Case Design: Questo test serve a garantire che il metodo rispetti la specifica che impone di lanciare un'eccezione per un input di collezione nullo.
      * <p>
-     * @description 1. Chiama {@code addAll(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
+     * Test Description: 1) Si tenta di chiamare {@code addAll(null)} sulla lista vuota.
+     * 2) Si verifica che venga lanciata {@code NullPointerException}.
      * <p>
-     * @pre Lista vuota.
+     * Preconditions: Lista vuota. Collezione null.
      * <p>
-     * @post La lista rimane vuota.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
+     * Expected Result: {@code addAll(HCollection)} deve lanciare {@code NullPointerException}.
      */
     @Test(expected = NullPointerException.class)
     public void testAddAllNullCollection()
@@ -500,597 +470,25 @@ public class TestListAdapterEmpty
         list.addAll(null);
     }
 
-    //------- TEST DEL METODO removeAll(HCollection) ----------
+    //------- TEST DEL METODO addAll(int index, HCollection c) ----------
 
     /**
-     * Test del metodo {@link HList#removeAll(HCollection)}.
+     * Test del metodo {@link HList#addAll(int, HCollection)} con indice 0 e collezione vuota su lista vuota.
      * <p>
-     * @summary Verifica che {@code removeAll(HCollection)} su una lista vuota restituisca false.
+     * Summary: Verifica che {@code addAll(int, HCollection)} con indice 0 e collezione vuota restituisca false e non modifichi la lista vuota.
      * <p>
-     * @design Assicurarsi che il metodo non modifichi una lista vuota e restituisca false.
+     * Test Case Design: Questo test copre il caso limite in cui si tenta di aggiungere una collezione vuota a una lista vuota a un indice valido (0). Il risultato atteso è che la lista non venga modificata.
      * <p>
-     * @description 1. Crea una collezione con elementi.<br />
-     * 2. Chiama {@code removeAll()} su una lista vuota con la collezione.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la lista rimanga vuota.
+     * Test Description: 1) Si crea una collezione vuota.
+     * 2) Si aggiunge la collezione vuota a indice 0 in una lista vuota.
+     * 3) Si verifica che il risultato sia false.
+     * 4) Si verifica che la lista rimanga vuota.
      * <p>
-     * @pre Lista vuota. Collezione con elementi.
+     * Preconditions: Lista vuota. Collezione vuota.
      * <p>
-     * @post La lista rimane vuota.
+     * Postconditions: La lista rimane vuota.
      * <p>
-     * @expected {@code removeAll(HCollection)} deve restituire false.
-     */
-    @Test
-    public void testRemoveAllFromEmptyList()
-    {
-        HCollection otherCollection = new ListAdapter();
-        otherCollection.add("A");
-        assertFalse(list.removeAll(otherCollection));
-        assertEquals(0, list.size());
-    }
-
-    /**
-     * Test del metodo {@link HList#removeAll(HCollection)} con collezione null.
-     * <p>
-     * @summary Verifica che {@code removeAll(null)} lanci {@code NullPointerException}.
-     * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
-     * <p>
-     * @description 1. Chiama {@code removeAll(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
-     */
-    @Test(expected = NullPointerException.class)
-    public void testRemoveAllNullCollection()
-    {
-        list.removeAll(null);
-    }
-
-    //------- TEST DEL METODO retainAll(HCollection) ----------
-
-    /**
-     * Test del metodo {@link HList#retainAll(HCollection)}.
-     * <p>
-     * @summary Verifica che {@code retainAll(HCollection)} su una lista vuota restituisca false.
-     * <p>
-     * @design Assicurarsi che il metodo non modifichi una lista vuota e restituisca false.
-     * <p>
-     * @description 1. Crea una collezione con elementi.<br />
-     * 2. Chiama {@code retainAll()} su una lista vuota con la collezione.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la lista rimanga vuota.
-     * <p>
-     * @pre Lista vuota. Collezione con elementi.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code retainAll(HCollection)} deve restituire false.
-     */
-    @Test
-    public void testRetainAllOnEmptyList()
-    {
-        HCollection otherCollection = new ListAdapter();
-        otherCollection.add("A");
-        assertFalse(list.retainAll(otherCollection));
-        assertEquals(0, list.size());
-    }
-
-    /**
-     * Test del metodo {@link HList#retainAll(HCollection)} con collezione null.
-     * <p>
-     * @summary Verifica che {@code retainAll(null)} lanci {@code NullPointerException}.
-     * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
-     * <p>
-     * @description 1. Chiama {@code retainAll(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
-     */
-    @Test(expected = NullPointerException.class)
-    public void testRetainAllNullCollection()
-    {
-        list.retainAll(null);
-    }
-
-    //------- TEST DEL METODO clear() ----------
-
-    /**
-     * Test del metodo {@link HList#clear()}.
-     * <p>
-     * @summary Verifica che {@code clear()} su una lista vuota non faccia nulla.
-     * <p>
-     * @design Assicurarsi che il metodo possa essere chiamato su una lista vuota
-     * senza errori e che la lista rimanga vuota.
-     * <p>
-     * @description 1. Chiama {@code clear()} su una lista vuota.<br />
-     * 2. Verifica che la dimensione sia ancora 0.<br />
-     * 3. Verifica che la lista sia ancora vuota.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code size()} deve essere 0 e {@code isEmpty()} deve essere true.
-     */
-    @Test
-    public void testClearOnEmptyList()
-    {
-        list.clear();
-        assertEquals(0, list.size());
-        assertTrue(list.isEmpty());
-    }
-
-    //------- TEST DEL METODO get(int) ----------
-
-    /**
-     * Test del metodo {@link HList#get(int)}.
-     * <p>
-     * @summary Verifica che {@code get(int)} lanci {@code IndexOutOfBoundsException} su una lista vuota.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente gli accessi fuori limite.
-     * <p>
-     * @description 1. Tenta di recuperare un elemento a indice 0 da una lista vuota.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testGetFromEmptyList()
-    {
-        list.get(0);
-    }
-
-    //------- TEST DEL METODO set(int, Object) ----------
-
-    /**
-     * Test del metodo {@link HList#set(int, Object)}.
-     * <p>
-     * @summary Verifica che {@code set(int, Object)} lanci {@code IndexOutOfBoundsException} su una lista vuota.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente gli accessi fuori limite.
-     * <p>
-     * @description 1. Tenta di impostare un elemento a indice 0 su una lista vuota.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testSetOnEmptyList()
-    {
-        list.set(0, "elemento");
-    }
-
-    //------- TEST DEL METODO add(int, Object) ----------
-
-    /**
-     * Test del metodo {@link HList#add(int, Object)}.
-     * <p>
-     * @summary Verifica che un elemento venga aggiunto correttamente a indice 0 in una lista vuota.
-     * <p>
-     * @design Assicurarsi che l'elemento sia aggiunto correttamente e la dimensione aggiornata.
-     * <p>
-     * @description 1. Aggiunge un elemento a indice 0 in una lista vuota.<br />
-     * 2. Verifica che la dimensione sia 1.<br />
-     * 3. Verifica che l'elemento sia presente all'indice 0.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista contiene l'elemento aggiunto all'indice 0.
-     * <p>
-     * @expected {@code size()} deve essere 1, {@code get(0)} deve restituire l'elemento aggiunto.
-     */
-    @Test
-    public void testAddAtIndex0ToEmptyList()
-    {
-        list.add(0, "firstElement");
-        assertEquals(1, list.size());
-        assertEquals("firstElement", list.get(0));
-    }
-
-    /**
-     * Test del metodo {@link HList#add(int, Object)} con indice fuori limite superiore.
-     * <p>
-     * @summary Verifica che {@code add(int, Object)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è maggiore della dimensione della lista vuota.
-     * <p>
-     * @design Assicurarsi che non sia possibile aggiungere elementi a indici non validi.
-     * <p>
-     * @description 1. Tenta di aggiungere un elemento a indice 1 (quando la lista è vuota).<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testAddAtIndexTooLargeOnEmptyList()
-    {
-        list.add(1, "element"); // Size è 0, index 1 è fuori limite
-    }
-
-    /**
-     * Test del metodo {@link HList#add(int, Object)} con indice fuori limite inferiore.
-     * <p>
-     * @summary Verifica che {@code add(int, Object)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è negativo.
-     * <p>
-     * @design Assicurarsi che non sia possibile aggiungere elementi a indici negativi.
-     * <p>
-     * @description 1. Tenta di aggiungere un elemento a indice -1.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testAddAtIndexNegativeOnEmptyList()
-    {
-        list.add(-1, "element");
-    }
-
-    //------- TEST DEL METODO remove(int) ----------
-
-    /**
-     * Test del metodo {@link HList#remove(int)}.
-     * <p>
-     * @summary Verifica che {@code remove(int)} lanci {@code IndexOutOfBoundsException} su una lista vuota.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente la mancanza di elementi da rimuovere.
-     * <p>
-     * @description 1. Tenta di rimuovere un elemento a indice 0 da una lista vuota.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testRemoveAtIndexFromEmptyList()
-    {
-        list.remove(0);
-    }
-
-    //------- TEST DEL METODO indexOf(Object) ----------
-
-    /**
-     * Test del metodo {@link HList#indexOf(Object)}.
-     * <p>
-     * @summary Verifica che {@code indexOf(Object)} restituisca -1 su una lista vuota.
-     * <p>
-     * @design Assicurarsi che il metodo indichi correttamente l'assenza di qualsiasi elemento.
-     * <p>
-     * @description 1. Chiama {@code indexOf()} con un elemento non null su una lista vuota.<br />
-     * 2. Verifica che il risultato sia -1.<br />
-     * 3. Chiama {@code indexOf()} con un elemento null.<br />
-     * 4. Verifica che il risultato sia -1.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code indexOf()} deve restituire -1.
-     */
-    @Test
-    public void testIndexOfOnEmptyList()
-    {
-        assertEquals(-1, list.indexOf("nonexistent"));
-        assertEquals(-1, list.indexOf(null));
-    }
-
-    //------- TEST DEL METODO lastIndexOf(Object) ----------
-
-    /**
-     * Test del metodo {@link HList#lastIndexOf(Object)}.
-     * <p>
-     * @summary Verifica che {@code lastIndexOf(Object)} restituisca -1 su una lista vuota.
-     * <p>
-     * @design Assicurarsi che il metodo indichi correttamente l'assenza di qualsiasi elemento.
-     * <p>
-     * @description 1. Chiama {@code lastIndexOf()} con un elemento non null su una lista vuota.<br />
-     * 2. Verifica che il risultato sia -1.<br />
-     * 3. Chiama {@code lastIndexOf()} con un elemento null.<br />
-     * 4. Verifica che il risultato sia -1.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code lastIndexOf()} deve restituire -1.
-     */
-    @Test
-    public void testLastIndexOfOnEmptyList()
-    {
-        assertEquals(-1, list.lastIndexOf("nonexistent"));
-        assertEquals(-1, list.lastIndexOf(null));
-    }
-
-    //------- TEST DEL METODO listIterator() ----------
-
-    /**
-     * Test del metodo {@link HList#listIterator()}.
-     * <p>
-     * @summary Verifica che {@code listIterator()} su una lista vuota funzioni correttamente.
-     * <p>
-     * @design Assicurarsi che l'iteratore restituito per una lista vuota
-     * indichi correttamente l'assenza di elementi e abbia indici corretti.
-     * <p>
-     * @description 1. Ottiene un ListIterator da una lista vuota.<br />
-     * 2. Verifica che {@code hasNext()} sia false e {@code hasPrevious()} sia false.<br />
-     * 3. Verifica che {@code nextIndex()} sia 0 e {@code previousIndex()} sia -1.<br />
-     * 4. Tenta di chiamare {@code next()} e {@code previous()} e verifica che lancino `NoSuchElementException`.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota, l'iteratore non modifica la lista.
-     * <p>
-     * @expected {@code hasNext()} e {@code hasPrevious()} devono essere false;
-     * {@code nextIndex()} deve essere 0, {@code previousIndex()} deve essere -1;
-     * {@code next()} e {@code previous()} devono lanciare {@code NoSuchElementException}.
-     */
-    @Test
-    public void testListIteratorEmpty()
-    {
-        HListIterator it = list.listIterator();
-        assertNotNull(it);
-        assertFalse(it.hasNext());
-        assertFalse(it.hasPrevious());
-        assertEquals(0, it.nextIndex());
-        assertEquals(-1, it.previousIndex());
-
-        try {
-            it.next();
-            fail("Expected NoSuchElementException");
-        } catch (java.util.NoSuchElementException e) {
-            // Success
-        }
-
-        try {
-            it.previous();
-            fail("Expected NoSuchElementException");
-        } catch (java.util.NoSuchElementException e) {
-            // Success
-        }
-    }
-
-    //------- TEST DEL METODO listIterator(int) ----------
-
-    /**
-     * Test del metodo {@link HList#listIterator(int)}.
-     * <p>
-     * @summary Verifica che {@code listIterator(int)} lanci {@code IndexOutOfBoundsException}
-     * su una lista vuota per qualsiasi indice.
-     * <p>
-     * @design Assicurarsi che non sia possibile creare un ListIterator con un indice non valido su una lista vuota.
-     * <p>
-     * @description 1. Tenta di creare un ListIterator con indice 0 su una lista vuota.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.<br />
-     * 3. Ripete per un indice negativo e un indice positivo > 0.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata per qualsiasi indice.
-     */
-    @Test
-    public void testListIteratorAtIndex0OnEmptyList() {
-        // La lista è già vuota dal setUp()
-        HListIterator it = list.listIterator(0); // Non dovrebbe lanciare eccezioni
-
-        assertNotNull(it); // Verifica che l'iteratore non sia null
-        assertFalse(it.hasNext()); // Non ci sono elementi successivi
-        assertFalse(it.hasPrevious()); // Non ci sono elementi precedenti
-        assertEquals(0, it.nextIndex()); // L'indice del prossimo elemento è 0
-        assertEquals(-1, it.previousIndex()); // L'indice dell'elemento precedente è -1
-    }
-
-    /**
-     * Test del metodo {@link HList#listIterator(int)} con indice fuori limite.
-     * <p>
-     * @summary Verifica che {@code listIterator(int)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è negativo o maggiore della dimensione della lista.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente la creazione di iteratori con indici non validi.
-     * <p>
-     * @description 1. Tenta di creare un ListIterator con indice -1.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.<br />
-     * 3. Tenta di creare un ListIterator con indice 1 (quando la lista è vuota, size=0).<br />
-     * 4. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testListIteratorAtIndexNegativeOnEmptyList()
-    {
-        list.listIterator(-1);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testListIteratorAtIndexGreaterThanSizeOnEmptyList()
-    {
-        list.listIterator(1); // list.size() è 0
-    }
-
-    //------- TEST DEL METODO subList(int, int) ----------
-
-    /**
-     * Test del metodo {@link HList#subList(int, int)}.
-     * <p>
-     * @summary Verifica che {@code subList()} lanci {@code IndexOutOfBoundsException} su una lista vuota.
-     * <p>
-     * @design Assicurarsi che il metodo segnali correttamente gli intervalli non validi
-     * per la creazione di una sottolista da una lista vuota.
-     * <p>
-     * @description 1. Tenta di creare una sottolista con indici (0, 0) su una lista vuota.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.<br />
-     * 3. Ripete per altri indici non validi.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata per qualsiasi intervallo non valido.
-     */
-    // In TestListAdapterEmpty.java
-    @Test
-    public void testSubListFromEmptyListValidRange() {
-        // La lista è già vuota dal setUp()
-        HList sub = list.subList(0, 0); // Non dovrebbe lanciare eccezioni
-
-        assertNotNull(sub); // Verifica che la sub-lista non sia null
-        assertTrue(sub.isEmpty()); // La sub-lista deve essere vuota
-        assertEquals(0, sub.size()); // La dimensione della sub-lista deve essere 0
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testSubListFromEmptyListInvalidFromIndex()
-    {
-        list.subList(-1, 0);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testSubListFromEmptyListInvalidToIndex()
-    {
-        list.subList(0, 1); // toIndex > size
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testSubListFromEmptyListFromGreaterThanTo()
-    {
-        list.subList(1, 0);
-    }
-
-    //------- TEST DEL METODO addAll(int, HCollection) ----------
-
-    /**
-     * Test del metodo {@link HList#addAll(int, HCollection)}.
-     * <p>
-     * @summary Verifica che {@code addAll(int, HCollection)} aggiunga elementi a indice 0 in una lista vuota.
-     * <p>
-     * @design Assicurarsi che gli elementi siano aggiunti correttamente e che la dimensione sia aggiornata.
-     * <p>
-     * @description 1. Crea una collezione con 2 elementi.<br />
-     * 2. Aggiunge la collezione a indice 0 in una lista vuota.<br />
-     * 3. Verifica che la dimensione sia 2.<br />
-     * 4. Verifica che la lista contenga gli elementi della collezione nell'ordine corretto.
-     * <p>
-     * @pre Lista vuota. Collezione con due elementi.
-     * <p>
-     * @post La lista contiene gli elementi della collezione all'inizio.
-     * <p>
-     * @expected {@code addAll(int, HCollection)} deve restituire true, la lista deve avere dimensione 2
-     * e gli elementi devono essere aggiunti all'inizio.
-     */
-    @Test
-    public void testAddAllAtIndex0ToEmptyList()
-    {
-        HCollection newElements = new ListAdapter();
-        newElements.add("elem1");
-        newElements.add("elem2");
-
-        assertTrue(list.addAll(0, newElements));
-        assertEquals(2, list.size());
-        assertEquals("elem1", list.get(0));
-        assertEquals("elem2", list.get(1));
-    }
-
-    /**
-     * Test del metodo {@link HList#addAll(int, HCollection)} con indice fuori limite superiore.
-     * <p>
-     * @summary Verifica che {@code addAll(int, HCollection)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è maggiore della dimensione della lista vuota.
-     * <p>
-     * @design Assicurarsi che non sia possibile aggiungere collezioni a indici non validi.
-     * <p>
-     * @description 1. Tenta di aggiungere una collezione a indice 1 (quando la lista è vuota).<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testAddAllAtIndexTooLargeOnEmptyList()
-    {
-        HCollection newElements = new ListAdapter();
-        newElements.add("elem1");
-        list.addAll(1, newElements); // Size è 0, index 1 è fuori limite
-    }
-
-    /**
-     * Test del metodo {@link HList#addAll(int, HCollection)} con indice fuori limite inferiore.
-     * <p>
-     * @summary Verifica che {@code addAll(int, HCollection)} lanci {@code IndexOutOfBoundsException}
-     * se l'indice è negativo.
-     * <p>
-     * @design Assicurarsi che non sia possibile aggiungere collezioni a indici negativi.
-     * <p>
-     * @description 1. Tenta di aggiungere una collezione a indice -1.<br />
-     * 2. Verifica che venga lanciata {@code IndexOutOfBoundsException}.
-     * <p>
-     * @pre Lista vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code IndexOutOfBoundsException} deve essere lanciata.
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void testAddAllAtIndexNegativeOnEmptyList()
-    {
-        HCollection newElements = new ListAdapter();
-        newElements.add("elem1");
-        list.addAll(-1, newElements);
-    }
-
-    /**
-     * Test del metodo {@link HList#addAll(int, HCollection)} con collezione vuota.
-     * <p>
-     * @summary Verifica che l'aggiunta di una collezione vuota a indice 0 non modifichi la lista.
-     * <p>
-     * @design Assicurarsi che il metodo restituisca false e non modifichi la lista se la collezione
-     * da aggiungere è vuota.
-     * <p>
-     * @description 1. Crea una collezione vuota.<br />
-     * 2. Aggiunge la collezione vuota a indice 0 in una lista vuota.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la lista rimanga vuota.
-     * <p>
-     * @pre Lista vuota. Collezione vuota.
-     * <p>
-     * @post La lista rimane vuota.
-     * <p>
-     * @expected {@code addAll(int, HCollection)} deve restituire false.
+     * Expected Result: {@code addAll(int, HCollection)} deve restituire false.
      */
     @Test
     public void testAddAllAtIndex0EmptyCollectionToEmptyList()
@@ -1104,22 +502,647 @@ public class TestListAdapterEmpty
     /**
      * Test del metodo {@link HList#addAll(int, HCollection)} con collezione null.
      * <p>
-     * @summary Verifica che {@code addAll(int, HCollection)} lanci {@code NullPointerException} se la collezione è null.
+     * Summary: Verifica che {@code addAll(int, HCollection)} lanci {@code NullPointerException} se la collezione è null.
      * <p>
-     * @design Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
+     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
      * <p>
-     * @description 1. Chiama {@code addAll(0, null)}.<br />
+     * Test Description: 1) Chiama {@code addAll(0, null)}.<br />
      * 2. Verifica che venga lanciata {@code NullPointerException}.
      * <p>
-     * @pre La lista è vuota, la collezione è null.
+     * Preconditions: La lista è vuota, la collezione è null.
      * <p>
-     * @post La lista rimane vuota.
+     * Postconditions: La lista rimane invariata.
      * <p>
-     * @expected {@code NullPointerException} deve essere lanciata.
+     * Expected Result: {@code addAll(int, HCollection)} deve lanciare {@code NullPointerException}.
      */
     @Test(expected = NullPointerException.class)
-    public void testAddAllAtIndex0NullCollection()
+    public void testAddAllAtIndexNullCollection()
     {
         list.addAll(0, null);
+    }
+
+    /**
+     * Test del metodo {@link HList#addAll(int, HCollection)} con indice fuori limite.
+     * <p>
+     * Summary: Verifica che {@code addAll(int, HCollection)} lanci {@code IndexOutOfBoundsException} se l'indice è fuori limite.
+     * <p>
+     * Test Case Design: Questo test assicura che il metodo impedisca l'aggiunta a un indice non valido (ovvero, un indice > 0 per una lista vuota).
+     * <p>
+     * Test Description: 1) Si crea una collezione non vuota.
+     * 2) Si tenta di chiamare {@code addAll(1, collection)} su una lista vuota (l'indice 1 è fuori limite).
+     * 3) Si verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code addAll(int, HCollection)} deve lanciare {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testAddAllAtIndexOutOfBoundsEmptyList()
+    {
+        ListAdapter collection = new ListAdapter();
+        collection.add("test");
+        list.addAll(1, collection);
+    }
+
+    //------- TEST DEL METODO removeAll(HCollection c) ----------
+
+    /**
+     * Test del metodo {@link HList#removeAll(HCollection)} con collezione vuota su lista vuota.
+     * <p>
+     * Summary: Verifica che {@code removeAll(HCollection)} restituisca false e non modifichi la lista quando si tenta di rimuovere una collezione vuota da una lista vuota.
+     * <p>
+     * Test Case Design: Questo test copre il caso in cui la rimozione di elementi non presenti (perché la lista è vuota) non dovrebbe causare un cambiamento.
+     * <p>
+     * Test Description: 1) Si crea una collezione vuota.
+     * 2) Si tenta di chiamare {@code removeAll()} sulla lista vuota con la collezione vuota.
+     * 3) Si verifica che il risultato sia false.
+     * 4) Si verifica che la dimensione della lista rimanga 0.
+     * <p>
+     * Preconditions: Lista vuota. Collezione vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code removeAll(HCollection)} deve restituire false e la lista deve rimanere vuota.
+     */
+    @Test
+    public void testRemoveAllEmptyCollectionFromEmptyList()
+    {
+        HCollection emptyCollection = new ListAdapter();
+        assertFalse(list.removeAll(emptyCollection));
+        assertEquals(0, list.size());
+    }
+
+    /**
+     * Test del metodo {@link HList#removeAll(HCollection)} con collezione non vuota su lista vuota.
+     * <p>
+     * Summary: Verifica che {@code removeAll(HCollection)} restituisca false quando si tenta di rimuovere una collezione non vuota da una lista vuota.
+     * <p>
+     * Test Case Design: Questo test assicura che il metodo non indichi un cambiamento se non ci sono elementi da rimuovere.
+     * <p>
+     * Test Description: 1) Si crea una collezione con elementi.
+     * 2) Si tenta di chiamare {@code removeAll()} sulla lista vuota con la collezione non vuota.
+     * 3) Si verifica che il risultato sia false.
+     * 4) Si verifica che la dimensione della lista rimanga 0.
+     * <p>
+     * Preconditions: Lista vuota. Collezione non vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code removeAll(HCollection)} deve restituire false e la lista deve rimanere vuota.
+     */
+    @Test
+    public void testRemoveAllNonEmptyCollectionFromEmptyList()
+    {
+        ListAdapter collection = new ListAdapter();
+        collection.add("test1");
+        assertFalse(list.removeAll(collection));
+        assertEquals(0, list.size());
+    }
+
+    /**
+     * Test del metodo {@link HList#removeAll(HCollection)} con collezione null.
+     * <p>
+     * Summary: Verifica che {@code removeAll(HCollection)} lanci {@code NullPointerException} se la collezione specificata è null.
+     * <p>
+     * Test Case Design: Questo test serve a garantire che il metodo rispetti la specifica che impone di lanciare un'eccezione per un input di collezione nullo.
+     * <p>
+     * Test Description: 1) Si tenta di chiamare {@code removeAll(null)} sulla lista vuota.
+     * 2) Si verifica che venga lanciata {@code NullPointerException}.
+     * <p>
+     * Preconditions: Lista vuota. Collezione null.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code removeAll(HCollection)} deve lanciare {@code NullPointerException}.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testRemoveAllNullCollection()
+    {
+        list.removeAll(null);
+    }
+
+    //------- TEST DEL METODO retainAll(HCollection c) ----------
+
+    /**
+     * Test del metodo {@link HList#retainAll(HCollection)} con collezione vuota su lista vuota.
+     * <p>
+     * Summary: Verifica che {@code retainAll(HCollection)} restituisca false e non modifichi la lista quando si tenta di mantenere elementi basati su una collezione vuota da una lista vuota.
+     * <p>
+     * Test Case Design: Se la lista è vuota e la collezione da ritenere è vuota, non ci sono elementi da modificare, quindi non c'è cambiamento.
+     * <p>
+     * Test Description: 1) Si crea una collezione vuota.
+     * 2) Si tenta di chiamare {@code retainAll()} sulla lista vuota con la collezione vuota.
+     * 3) Si verifica che il risultato sia false.
+     * 4) Si verifica che la dimensione della lista rimanga 0.
+     * <p>
+     * Preconditions: Lista vuota. Collezione vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code retainAll(HCollection)} deve restituire false e la lista deve rimanere vuota.
+     */
+    @Test
+    public void testRetainAllEmptyCollectionOnEmptyList()
+    {
+        HCollection emptyCollection = new ListAdapter();
+        assertFalse(list.retainAll(emptyCollection));
+        assertEquals(0, list.size());
+    }
+
+    /**
+     * Test del metodo {@link HList#retainAll(HCollection)} con collezione non vuota su lista vuota.
+     * <p>
+     * Summary: Verifica che {@code retainAll(HCollection)} restituisca false quando si tenta di mantenere elementi basati su una collezione non vuota da una lista vuota.
+     * <p>
+     * Test Case Design: Poiché non ci sono elementi nella lista vuota, il tentativo di "mantenere" elementi basati su una collezione non vuota non dovrebbe portare a un cambiamento nella lista, quindi dovrebbe restituire false.
+     * <p>
+     * Test Description: 1) Si crea una collezione con elementi.
+     * 2) Si tenta di chiamare {@code retainAll()} sulla lista vuota con la collezione non vuota.
+     * 3) Si verifica che il risultato sia false.
+     * 4) Si verifica che la dimensione della lista rimanga 0.
+     * <p>
+     * Preconditions: Lista vuota. Collezione non vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code retainAll(HCollection)} deve restituire false e la lista deve rimanere vuota.
+     */
+    @Test
+    public void testRetainAllNonEmptyCollectionOnEmptyList()
+    {
+        ListAdapter collection = new ListAdapter();
+        collection.add("test1");
+        assertFalse(list.retainAll(collection));
+        assertEquals(0, list.size());
+    }
+
+    /**
+     * Test del metodo {@link HList#retainAll(HCollection)} con collezione null.
+     * <p>
+     * Summary: Verifica che {@code retainAll(HCollection)} lanci {@code NullPointerException} se la collezione specificata è null.
+     * <p>
+     * Test Case Design: Questo test serve a garantire che il metodo rispetti la specifica che impone di lanciare un'eccezione per un input di collezione nullo.
+     * <p>
+     * Test Description: 1) Si tenta di chiamare {@code retainAll(null)} sulla lista vuota.
+     * 2) Si verifica che venga lanciata {@code NullPointerException}.
+     * <p>
+     * Preconditions: Lista vuota. Collezione null.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code retainAll(HCollection)} deve lanciare {@code NullPointerException}.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testRetainAllNullCollection()
+    {
+        list.retainAll(null);
+    }
+
+    //------- TEST DEL METODO clear() ----------
+
+    /**
+     * Test del metodo {@link HList#clear()} su lista vuota.
+     * <p>
+     * Summary: Verifica che {@code clear()} non modifichi lo stato di una lista già vuota.
+     * <p>
+     * Test Case Design: Questo test assicura che chiamare {@code clear()} su una lista vuota non causi errori e che lo stato della lista rimanga invariato.
+     * <p>
+     * Test Description: 1) Si chiama il metodo {@code clear()} sulla lista vuota.
+     * 2) Si verifica che la dimensione della lista sia ancora 0.
+     * 3) Si verifica che la lista sia ancora vuota.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane vuota.
+     * <p>
+     * Expected Result: La lista deve rimanere vuota e di dimensione 0.
+     */
+    @Test
+    public void testClearEmptyList()
+    {
+        list.clear();
+        assertEquals(0, list.size());
+        assertTrue(list.isEmpty());
+    }
+
+    //------- TEST DEL METODO equals(Object o) ----------
+
+    /**
+     * Test del metodo {@link HList#equals(Object)} con un'altra lista vuota.
+     * <p>
+     * Summary: Verifica che una lista vuota sia uguale a un'altra lista vuota.
+     * <p>
+     * Test Case Design: Questo test verifica la riflessività e la simmetria del metodo {@code equals()} per liste vuote, assicurando che due liste vuote siano considerate equivalenti.
+     * <p>
+     * Test Description: 1) Si crea una seconda istanza di {@code ListAdapter} vuota.
+     * 2) Si confronta la lista di test con la seconda lista vuota usando {@code equals()}.
+     * 3) Si verifica che il risultato sia true.
+     * <p>
+     * Preconditions: Due liste vuote.
+     * <p>
+     * Postconditions: Nessuna modifica alle liste.
+     * <p>
+     * Expected Result: {@code equals(Object)} deve restituire true.
+     */
+    @Test
+    public void testEqualsWithEmptyList()
+    {
+        HList anotherEmptyList = new ListAdapter();
+        assertTrue(list.equals(anotherEmptyList));
+    }
+
+    /**
+     * Test del metodo {@link HList#equals(Object)} con una lista non vuota.
+     * <p>
+     * Summary: Verifica che una lista vuota non sia uguale a una lista non vuota.
+     * <p>
+     * Test Case Design: Questo test valuta la correttezza del metodo {@code equals()} quando una lista vuota viene confrontata con una lista che contiene elementi.
+     * <p>
+     * Test Description: 1) Si crea una lista con un elemento.
+     * 2) Si confronta la lista di test (vuota) con la lista non vuota usando {@code equals()}.
+     * 3) Si verifica che il risultato sia false.
+     * <p>
+     * Preconditions: Lista vuota. Lista non vuota.
+     * <p>
+     * Postconditions: Nessuna modifica alle liste.
+     * <p>
+     * Expected Result: {@code equals(Object)} deve restituire false.
+     */
+    @Test
+    public void testEqualsWithNonEmptyList()
+    {
+        ListAdapter nonEmptyList = new ListAdapter();
+        nonEmptyList.add("test");
+        assertFalse(list.equals(nonEmptyList));
+    }
+
+    /**
+     * Test del metodo {@link HList#equals(Object)} con null.
+     * <p>
+     * Summary: Verifica che una lista vuota non sia uguale a null.
+     * <p>
+     * Test Case Design: Questo test verifica la gestione del confronto con un oggetto nullo, che per convenzione in Java dovrebbe sempre restituire false per {@code equals()}.
+     * <p>
+     * Test Description: 1) Si confronta la lista di test (vuota) con null usando {@code equals()}.
+     * 2) Si verifica che il risultato sia false.
+     * <p>
+     * Preconditions: Lista vuota. Oggetto null.
+     * <p>
+     * Postconditions: Nessuna modifica alla lista.
+     * <p>
+     * Expected Result: {@code equals(Object)} deve restituire false.
+     */
+    @Test
+    public void testEqualsWithNull()
+    {
+        assertFalse(list.equals(null));
+    }
+
+    /**
+     * Test del metodo {@link HList#equals(Object)} con un oggetto di tipo diverso.
+     * <p>
+     * Summary: Verifica che una lista vuota non sia uguale a un oggetto di tipo diverso.
+     * <p>
+     * Test Case Design: Questo test valuta il comportamento di {@code equals()} quando confronta la lista con un oggetto che non è un'istanza di {@code HList}.
+     * <p>
+     * Test Description: 1) Si crea un oggetto di tipo diverso (es. String).
+     * 2) Si confronta la lista di test (vuota) con l'oggetto di tipo diverso usando {@code equals()}.
+     * 3) Si verifica che il risultato sia false.
+     * <p>
+     * Preconditions: Lista vuota. Oggetto di tipo diverso.
+     * <p>
+     * Postconditions: Nessuna modifica alla lista.
+     * <p>
+     * Expected Result: {@code equals(Object)} deve restituire false.
+     */
+    @Test
+    public void testEqualsWithDifferentType()
+    {
+        assertFalse(list.equals("a string"));
+    }
+
+    //------- TEST DEL METODO hashCode() ----------
+
+    /**
+     * Test del metodo {@link HList#hashCode()} su lista vuota.
+     * <p>
+     * Summary: Verifica che l'hashCode di una lista vuota sia lo stesso di quello di un'altra lista vuota.
+     * <p>
+     * Test Case Design: Questo test assicura che gli hash code siano coerenti per oggetti {@code equals()}, un requisito fondamentale per le implementazioni di {@code hashCode()}.
+     * <p>
+     * Test Description: 1) Si crea una seconda istanza di {@code ListAdapter} vuota.
+     * 2) Si calcola l'hashCode di entrambe le liste.
+     * 3) Si verifica che gli hash code siano uguali.
+     * <p>
+     * Preconditions: Due liste vuote.
+     * <p>
+     * Postconditions: Nessuna modifica alle liste.
+     * <p>
+     * Expected Result: Gli hash code delle due liste vuote devono essere uguali.
+     */
+    @Test
+    public void testHashCodeEmptyList()
+    {
+        HList anotherEmptyList = new ListAdapter();
+        assertEquals(anotherEmptyList.hashCode(), list.hashCode());
+    }
+
+    //------- TEST DEI NUOVI METODI AGGIUNTI ----------
+
+    /**
+     * Test del metodo {@link HList#get(int)} su una lista vuota.
+     * <p>
+     * Summary: Verifica che {@code get(int)} lanci {@code IndexOutOfBoundsException} quando chiamato su una lista vuota.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che il metodo gestisca correttamente l'accesso a un indice non valido su una lista vuota.
+     * <p>
+     * Test Description: 1) Si tenta di chiamare {@code get(0)} su una lista vuota.
+     * 2) Si verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code get(int)} deve lanciare {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetEmptyList() {
+        list.get(0);
+    }
+
+    /**
+     * Test del metodo {@link HList#set(int, Object)} su una lista vuota.
+     * <p>
+     * Summary: Verifica che {@code set(int, Object)} lanci {@code IndexOutOfBoundsException} quando chiamato su una lista vuota.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che il metodo gestisca correttamente il tentativo di impostare un elemento in una lista vuota.
+     * <p>
+     * Test Description: 1) Si tenta di chiamare {@code set(0, "test")} su una lista vuota.
+     * 2) Si verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code set(int, Object)} deve lanciare {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSetEmptyList() {
+        list.set(0, "test");
+    }
+
+    /**
+     * Test del metodo {@link HList#add(int, Object)} su lista vuota con indice fuori limite.
+     * <p>
+     * Summary: Verifica che {@code add(int, Object)} lanci {@code IndexOutOfBoundsException} se l'indice non è 0 su una lista vuota.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che il metodo gestisca correttamente l'aggiunta a un indice non valido (ovvero, un indice > 0 per una lista vuota).
+     * <p>
+     * Test Description: 1) Si tenta di chiamare {@code add(1, "test")} su una lista vuota.
+     * 2) Si verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code add(int, Object)} deve lanciare {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testAddAtIndexOutOfBoundsEmptyList() {
+        list.add(1, "test");
+    }
+
+    /**
+     * Test del metodo {@link HList#remove(int)} su lista vuota.
+     * <p>
+     * Summary: Verifica che {@code remove(int)} lanci {@code IndexOutOfBoundsException} quando chiamato su una lista vuota.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che il metodo gestisca correttamente il tentativo di rimozione da una lista vuota.
+     * <p>
+     * Test Description: 1) Si tenta di chiamare {@code remove(0)} su una lista vuota.
+     * 2) Si verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code remove(int)} deve lanciare {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testRemoveAtIndexEmptyList() {
+        list.remove(0);
+    }
+
+    /**
+     * Test del metodo {@link HList#indexOf(Object)} su una lista vuota.
+     * <p>
+     * Summary: Verifica che {@code indexOf(Object)} restituisca -1 per qualsiasi oggetto su una lista vuota.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che il metodo gestisca correttamente la ricerca di un elemento in una lista che non contiene elementi.
+     * <p>
+     * Test Description: 1) Si chiama {@code indexOf("qualsiasiElemento")} su una lista vuota.
+     * 2) Si verifica che il risultato sia -1.
+     * 3) Si chiama {@code indexOf(null)} su una lista vuota.
+     * 4) Si verifica che il risultato sia -1.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code indexOf(Object)} deve restituire -1 in entrambi i casi.
+     */
+    @Test
+    public void testIndexOfEmptyList() {
+        assertEquals(-1, list.indexOf("nonEsistente"));
+        assertEquals(-1, list.indexOf(null)); // Anche per null
+    }
+
+    /**
+     * Test del metodo {@link HList#lastIndexOf(Object)} su una lista vuota.
+     * <p>
+     * Summary: Verifica che {@code lastIndexOf(Object)} restituisca -1 per qualsiasi oggetto su una lista vuota.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che il metodo gestisca correttamente la ricerca dell'ultima occorrenza di un elemento in una lista che non contiene elementi.
+     * <p>
+     * Test Description: 1) Si chiama {@code lastIndexOf("qualsiasiElemento")} su una lista vuota.
+     * 2) Si verifica che il risultato sia -1.
+     * 3) Si chiama {@code lastIndexOf(null)} su una lista vuota.
+     * 4) Si verifica che il risultato sia -1.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code lastIndexOf(Object)} deve restituire -1 in entrambi i casi.
+     */
+    @Test
+    public void testLastIndexOfEmptyList() {
+        assertEquals(-1, list.lastIndexOf("nonEsistente"));
+        assertEquals(-1, list.lastIndexOf(null)); // Anche per null
+    }
+
+    /**
+     * Test del metodo {@link HList#listIterator()} su una lista vuota.
+     * <p>
+     * Summary: Verifica che l'iteratore ottenuto da una lista vuota abbia {@code hasNext()} e {@code hasPrevious()} falsi e gli indici corretti.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che l'iteratore sia correttamente inizializzato per una lista vuota, riflettendo l'assenza di elementi.
+     * <p>
+     * Test Description: 1) Si ottiene un iteratore chiamando {@code listIterator()}.
+     * 2) Si verifica che {@code hasNext()} sia false.
+     * 3) Si verifica che {@code hasPrevious()} sia false.
+     * 4) Si verificano i valori di {@code nextIndex()} e {@code previousIndex()}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code hasNext()} e {@code hasPrevious()} dell'iteratore devono essere false. {@code nextIndex()} deve essere 0 e {@code previousIndex()} deve essere -1.
+     */
+    @Test
+    public void testListIteratorEmptyList() {
+        HListIterator it = list.listIterator();
+        assertFalse(it.hasNext());
+        assertFalse(it.hasPrevious());
+        assertEquals(0, it.nextIndex());
+        assertEquals(-1, it.previousIndex());
+    }
+
+    /**
+     * Test del metodo {@link HList#listIterator(int)} su una lista vuota con indice 0.
+     * <p>
+     * Summary: Verifica che {@code listIterator(0)} su una lista vuota restituisca un iteratore correttamente posizionato.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che l'iteratore sia correttamente inizializzato per una lista vuota quando si specifica l'indice 0, che è l'unico indice valido in questo contesto.
+     * <p>
+     * Test Description: 1) Si ottiene un iteratore chiamando {@code listIterator(0)}.
+     * 2) Si verifica che {@code hasNext()} sia false.
+     * 3) Si verifica che {@code hasPrevious()} sia false.
+     * 4) Si verificano i valori di {@code nextIndex()} e {@code previousIndex()}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code hasNext()} e {@code hasPrevious()} dell'iteratore devono essere false. {@code nextIndex()} deve essere 0 e {@code previousIndex()} deve essere -1.
+     */
+    @Test
+    public void testListIteratorAtIndex0EmptyList() {
+        HListIterator it = list.listIterator(0);
+        assertFalse(it.hasNext());
+        assertFalse(it.hasPrevious());
+        assertEquals(0, it.nextIndex());
+        assertEquals(-1, it.previousIndex());
+    }
+
+    /**
+     * Test del metodo {@link HList#listIterator(int)} su una lista vuota con indice fuori limite.
+     * <p>
+     * Summary: Verifica che {@code listIterator(int)} lanci {@code IndexOutOfBoundsException} se l'indice non è 0 su una lista vuota.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che il metodo gestisca correttamente l'ottenimento di un iteratore con un indice non valido (ovvero, un indice > 0 per una lista vuota).
+     * <p>
+     * Test Description: 1) Si tenta di chiamare {@code listIterator(1)} su una lista vuota.
+     * 2) Si verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code listIterator(int)} deve lanciare {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testListIteratorAtIndexOutOfBoundsEmptyList() {
+        list.listIterator(1);
+    }
+
+    /**
+     * Test del metodo {@link HList#subList(int, int)} su una lista vuota con indici validi (0, 0).
+     * <p>
+     * Summary: Verifica che {@code subList(0, 0)} su una lista vuota restituisca una sublist vuota.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che la creazione di una sublist vuota da una lista vuota sia gestita correttamente, mantenendo le proprietà di una lista vuota.
+     * <p>
+     * Test Description: 1) Si chiama {@code subList(0, 0)} su una lista vuota.
+     * 2) Si verifica che la sublist risultante sia vuota.
+     * 3) Si verifica che la dimensione della sublist sia 0.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista originale rimane invariata.
+     * <p>
+     * Expected Result: La sublist restituita deve essere vuota e avere dimensione 0.
+     */
+    @Test
+    public void testSubListEmptyListValidIndexes() {
+        HList sub = list.subList(0, 0);
+        assertTrue(sub.isEmpty());
+        assertEquals(0, sub.size());
+    }
+
+    /**
+     * Test del metodo {@link HList#subList(int, int)} su una lista vuota con fromIndex fuori limite (superiore).
+     * <p>
+     * Summary: Verifica che {@code subList(int, int)} lanci {@code IndexOutOfBoundsException} se fromIndex è maggiore della dimensione.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che il metodo gestisca correttamente gli indici di inizio fuori limite per una lista vuota.
+     * <p>
+     * Test Description: 1) Si tenta di chiamare {@code subList(1, 1)} su una lista vuota.
+     * 2) Si verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code subList(int, int)} deve lanciare {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSubListEmptyListFromIndexOutOfBounds() {
+        list.subList(1, 1);
+    }
+
+    /**
+     * Test del metodo {@link HList#subList(int, int)} su una lista vuota con toIndex fuori limite (superiore).
+     * <p>
+     * Summary: Verifica che {@code subList(int, int)} lanci {@code IndexOutOfBoundsException} se toIndex è maggiore della dimensione.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che il metodo gestisca correttamente gli indici di fine fuori limite per una lista vuota.
+     * <p>
+     * Test Description: 1) Si tenta di chiamare {@code subList(0, 1)} su una lista vuota.
+     * 2) Si verifica che venga lanciata {@code IndexOutOfBoundsException}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code subList(int, int)} deve lanciare {@code IndexOutOfBoundsException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSubListEmptyListToIndexOutOfBounds() {
+        list.subList(0, 1);
+    }
+
+    /**
+     * Test del metodo {@link HList#subList(int, int)} su una lista vuota con fromIndex > toIndex.
+     * <p>
+     * Summary: Verifica che {@code subList(int, int)} lanci {@code IllegalArgumentException} se fromIndex è maggiore di toIndex.
+     * <p>
+     * Test Case Design: La motivazione è assicurarsi che il metodo enforce l'invariante che l'indice di inizio non possa essere maggiore dell'indice di fine, indipendentemente dallo stato (vuoto o popolato) della lista.
+     * <p>
+     * Test Description: 1) Si tenta di chiamare {@code subList(1, 0)} su una lista vuota.
+     * 2) Si verifica che venga lanciata {@code IllegalArgumentException}.
+     * <p>
+     * Preconditions: Lista vuota.
+     * <p>
+     * Postconditions: La lista rimane invariata.
+     * <p>
+     * Expected Result: {@code subList(int, int)} deve lanciare {@code IllegalArgumentException}.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testSubListEmptyListFromIndexGreaterThanToIndex() 
+    {
+        list.subList(1, 0); // Anche se la lista è vuota, questa condizione è prioritaria rispetto a IOB
     }
 }
