@@ -157,7 +157,7 @@ public class TestListIteratorPopulated
      * Postconditions: Nessuna modifica della lista. L'iteratore rimane alla fine della lista.
      * <p>
      * Expected Result: {@code nextIndex()} deve essere uguale alla dimensione della lista,
-     * {@code hasNext()} deve essere false, {@code hasPrevious()} deve essere true.
+     * {@code hasNext()} deve essere {@code false}, {@code hasPrevious()} deve essere {@code true}.
      */
     @Test
     public void testConstructorIndexAtSize() 
@@ -174,11 +174,17 @@ public class TestListIteratorPopulated
     /**
      * Test del metodo {@link myAdapter.ListIterator#hasNext()}.
      * <p>
-     * Verifica che {@code hasNext()} restituisca {@code true} quando ci sono elementi successivi.
+     * Summary: Il test testa il metodo {@code hasNext()} per verificare se ci sono elementi successivi nella lista non vuota dalla 
+     * posizione zero a quella oltre l'ultimo elemento della lista.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo indichi correttamente la presenza di un prossimo elemento.
+     * Test Case Design: La motivazione dietro a questo test è garantire che il metodo {@code hasNext()} restituisca true quando ci sono elementi successivi dopo
+     * l'iteratore e che l'indice successivo sia corretto, ossia un indice tale per cui la lista contiene un elemento a quell'indice.
      * <p>
-     * Preconditions: L'iteratore è all'inizio di una lista non vuota.
+     * Test Description: 1) Si verifica che {@code hasNext()} restituisca true quando l'iteratore è posizionato all'inizio della lista.
+     *                   2) Si verifica tramite {@code contains()} che la lista contenga l'elemento all'indice {@code nextIndex()}, quindi che
+     *                      c'e' effettivamente un elemento successivo.
+     * <p>
+     * Preconditions: L'iteratore è all'inizio della lista non vuota: ["zero", "uno", "due"].
      * <p>
      * Postconditions: Nessuna modifica allo stato dell'iteratore o della lista.
      * <p>
@@ -188,36 +194,17 @@ public class TestListIteratorPopulated
     public void testHasNextTrue() 
     {
         assertTrue(iterator.hasNext());
-    }
-
-    /**
-     * Test del metodo {@link myAdapter.ListIterator#hasNext()} su una lista vuota.
-     * <p>
-     * Verifica che {@code hasNext()} restituisca {@code false} su una lista vuota.
-     * <p>
-     * Test Case Design: Assicurarsi che il metodo gestisca correttamente il caso di una lista vuota.
-     * <p>
-     * Preconditions: L'iteratore è stato creato su una lista vuota.
-     * <p>
-     * Postconditions: Nessuna modifica allo stato dell'iteratore o della lista.
-     * <p>
-     * Expected Result: {@code hasNext()} deve restituire {@code false}.
-     */
-    @Test
-    public void testHasNextFalseEmptyList() 
-    {
-        list = new ListAdapter();
-        iterator = list.listIterator();
-        assertFalse(iterator.hasNext());
+        assertTrue(list.contains(list.get(iterator.nextIndex()))); // Verifica che l'elemento successivo esista
     }
 
     /**
      * Test del metodo {@link myAdapter.ListIterator#next()}.
      * <p>
-     * Verifica che {@code next()} restituisca l'elemento corretto e avanzi il cursore.
+     * Summary: Il test verifica che il metodo {@code next()} restituisca l'elemento successivo nella lista e garantisca che alla chiamata di 
+     * {@code next()} l'iteratore avanzi di un elemento e quindi che {@code nextIndex()} e {@code previousIndex()} restituiscano gli indici corretti.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo recuperi l'elemento giusto e aggiorni
-     * correttamente la posizione dell'iteratore e l'indice dell'ultimo elemento restituito.
+     * Test Case Design: La motivazione dietro a questo test è garantire che il metodo {@code next()} restituisca l'elemento successivo e che l'iteratore si sposti correttamente 
+     * lungo la lista, aggiornando gli indici.
      * <p>
      * Preconditions: L'iteratore è all'inizio di una lista popolata.
      * <p>
@@ -229,22 +216,27 @@ public class TestListIteratorPopulated
     @Test
     public void testNext() 
     {
-        assertEquals("zero", iterator.next());
+        assertEquals(list.get(0), iterator.next());
         assertEquals(1, iterator.nextIndex());
         assertEquals(0, iterator.previousIndex());
-        assertEquals("uno", iterator.next());
+        assertEquals(list.get(1), iterator.next());
         assertEquals(2, iterator.nextIndex());
         assertEquals(1, iterator.previousIndex());
     }
 
     /**
-     * Test del metodo {@link myAdapter.ListIterator#next()} quando non ci sono più elementi.
+     * Test del metodo {@link myAdapter.ListIterator#next()} oltre l'ultimo elemento della lista.
      * <p>
-     * Verifica che {@code next()} lanci {@code NoSuchElementException} quando la fine della lista è raggiunta.
+     * Summary: Il test verifica che il metodo {@code next()} lanci {@code NoSuchElementException} quando si tenta di chiamarlo oltre l'ultimo elemento della lista.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo segnali correttamente la mancanza di elementi successivi.
+     * Test Case Design: La motivazione dietro a questo test è valutare che l'iteratore scorra la lista fino alla fine, restituisca i valori 
+     * corretti e lanci l'eccezione appropriata quando si tenta di andare oltre l'ultimo elemento.
      * <p>
-     * Test Description: 1) Si chiama {@code next()} fino a raggiungere l'ultimo elemento della lista.                
+     * Test Description: 1) L'iteratore si trova all'inizio della lista.
+     *                   2) Viene creato un array con dimensione maggiore rispetto a quella della lista in questo modo non si verifica {@cod IndexOutOfBoundsException}. 
+     *                   3) L'iteratore scorre la lista chiamando {@code next()} e confrontando l'elemento ottenuto con l'elemento nella posizione i-esima della lista tramite 
+     *                      e incremento i ad ogni ciclo.
+     *                   4) Si verifica che l'iteratore lanci {@code NoSuchElementException} quando si tenta di chiamare {@code next()} dopo l'ultimo elemento.                
      * <p>
      * Preconditions: Iteratore posizionato prima di "zero"; la lista su cui l'iteraore itera ha tre elementi: ["zero", "uno", "due"].
      * <p>
@@ -256,41 +248,12 @@ public class TestListIteratorPopulated
     @Test(expected = java.util.NoSuchElementException.class)
     public void testNextThrowsNoSuchElementException() 
     {
-        assertEquals("zero", iterator.next()); // "zero"
-        assertEquals("uno", iterator.next());  // "uno"
-        assertEquals("due", iterator.next());  // "due"
-        iterator.next(); // Dovrebbe lanciare NoSuchElementException, essendo alla fine della lista
-    }
-
-    /**
-     * Test del metodo {@link myAdapter.ListIterator#next()} e del metodo {@link myAdapter.ListIterator#previous()}.
-     * <p>
-     * Verifica che chiamate alternate di {@code next()} e {@code previous()} restituiscano lo stesso elemento.
-     * <p>
-     * Test Case Design: La motivazione dietro a questo test è garantire che i metodi {@link myAdapter.ListIterator#next()} e {@link myAdapter.ListIterator#previous()}
-     * non alterino la lista, ma anzi restituiscano lo stesso.
-     * <p>
-     * Test Description: 1) Si chiama {@code next()} per avanzare di un elemento, ossia da "zero" a "uno".
-     *                   2) Inizializzo una variabile intera {@code i} a 0.
-     *                   3) In un ciclo che si ripete 100 volte, si chiama {@code previous()} e poi {@code next()}.
-     *                   4) Si verifica che entrambi i metodi restituiscano lo stesso elemento, ossia "zero" ad ogni interazione.
-     * <p>
-     * Preconditions: Una `ListAdapter` popolata con tre elementi: "zero", "uno", "due". L'iteratore è posizionato tra "zero" e "uno".
-     * <p>
-     * Postconditions: Nessuna modifica alla lista.
-     * <p>
-     * Expected Result: Il metodo {@code next()} deve restituire "zero" e il metodo {@code previous()} deve restituire "zero" in ogni iterazione del ciclo.
-     */
-    @Test
-    public void testNextAndPreviousConsistency() 
-    {
-        //Mi sposto tra zero e uno
-        iterator.next();
-        int i = 0;          
-        while(i < 100)
+        int i = 0;
+        Object[] array = new Object[list.size() + 1];    // +1 per il caso in cui si chiama next() oltre l'ultimo elemento
+        list.toArray(array);                             // Converte la lista in un array per il confronto
+        while(true) 
         {
-            assertEquals("zero", iterator.previous());
-            assertEquals("zero", iterator.next());
+            assertEquals(array[i], iterator.next());
             i++;
         }
     }
@@ -298,46 +261,53 @@ public class TestListIteratorPopulated
     /**
      * Test del metodo {@link myAdapter.ListIterator#hasPrevious()}.
      * <p>
-     * Verifica che {@code hasPrevious()} restituisca {@code true} quando ci sono elementi precedenti.
+     * Summary: Il test verifica che {@code hasPrevious()} restituisca {@code true} quando ci sono elementi precedenti.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo indichi correttamente la presenza di un elemento precedente
-     * dopo che l'iteratore si è spostato in avanti.
+     * Test Case Design: La motivazione dietro a questo test è garantire che il metodo {@code hasPrevious()} restituisca true quando l'iteratore è posizionato 
+     * in modo tale da avere almeno un elemento precedente. Inoltre tramite questo test si verifica che effettivamente l'elemento precedente esista nella lista.
      * <p>
-     * Preconditions: L'iteratore è stato avanzato di almeno un elemento.
+     * Test Description: 1) Si chiama {@code next()} per avanzare l'iteratore di un elemento.
+     *                   2) Si verifica che {@code hasPrevious()} restituisca {@code true} e che l'elemento precedente esista nella lista.
+     * <p>
+     * Preconditions: L'iteratore è stato avanzato di un elemento. La lista contiene ha i seguenti elementi: ["zero", "uno", "due"].
      * <p>
      * Postconditions: Nessuna modifica allo stato dell'iteratore o della lista.
      * <p>
-     * Expected Result: {@code hasPrevious()} deve restituire {@code true}.
+     * Expected Result: {@code hasPrevious()} deve restituire {@code true} e l'elemento precedente deve essere presente nella lista.
      */
     @Test
-    public void testHasPreviousTrue() {
+    public void testHasPreviousTrue() 
+    {
         iterator.next(); // Avanza per avere un precedente
         assertTrue(iterator.hasPrevious());
+        assertTrue(list.contains(list.get(iterator.previousIndex()))); // Verifica che l'elemento successivo esista
     }
 
     /**
      * Test del metodo {@link myAdapter.ListIterator#hasPrevious()} all'inizio della lista.
      * <p>
-     * Verifica che {@code hasPrevious()} restituisca {@code false} quando l'iteratore è all'inizio.
+     * Summary: Verifica che {@code hasPrevious()} restituisca {@code false} quando l'iteratore è all'inizio.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo gestisca correttamente il caso in cui non ci sono
-     * elementi precedenti.
+     * Test Case Design: Il motivo di questo test è garantire che il metodo {@code hasPrevious()} restituisca false quando l'iteratore è posizionato all'inizio della lista.
      * <p>
-     * Preconditions: L'iteratore è all'inizio di una lista (anche vuota o popolata).
+     * Test Description: 
+     * <p>
+     * Preconditions: L'iteratore è all'inizio di una lista popolata con tre elementi: ["zero", "uno", "due"].
      * <p>
      * Postconditions: Nessuna modifica allo stato dell'iteratore o della lista.
      * <p>
      * Expected Result: {@code hasPrevious()} deve restituire {@code false}.
      */
     @Test
-    public void testHasPreviousFalseAtStart() {
+    public void testHasPreviousFalseAtStart() 
+    {
         assertFalse(iterator.hasPrevious()); // Inizialmente all'inizio
     }
 
     /**
      * Test del metodo {@link myAdapter.ListIterator#previous()}.
      * <p>
-     * Verifica che {@code previous()} restituisca l'elemento corretto e sposti il cursore indietro.
+     * Summary: Verifica che {@code previous()} restituisca l'elemento corretto e sposti il cursore indietro.
      * <p>
      * Test Case Design: Assicurarsi che il metodo recuperi l'elemento giusto e aggiorni
      * correttamente la posizione dell'iteratore e l'indice dell'ultimo elemento restituito
@@ -368,7 +338,7 @@ public class TestListIteratorPopulated
     /**
      * Test del metodo {@link myAdapter.ListIterator#previous()} quando non ci sono più elementi precedenti.
      * <p>
-     * Verifica che {@code previous()} lanci {@code NoSuchElementException} quando l'inizio della lista è raggiunto.
+     * Summary: Verifica che {@code previous()} lanci {@code NoSuchElementException} quando l'inizio della lista è raggiunto.
      * <p>
      * Test Case Design: Assicurarsi che il metodo segnali correttamente la mancanza di elementi precedenti.
      * <p>
@@ -382,6 +352,43 @@ public class TestListIteratorPopulated
     public void testPreviousThrowsNoSuchElementException() 
     {
         iterator.previous(); // Dovrebbe lanciare l'eccezione, essendo all'inizio
+    }
+
+    /**
+     * Test del metodo {@link myAdapter.ListIterator#next()} e del metodo {@link myAdapter.ListIterator#previous()}.
+     * <p>
+     * Verifica che chiamate alternate di {@code next()} e {@code previous()} restituiscano lo stesso elemento.
+     * <p>
+     * Test Case Design: La motivazione dietro a questo test è garantire che i metodi {@link myAdapter.ListIterator#next()} e {@link myAdapter.ListIterator#previous()}
+     * non alterino la lista, ma anzi restituiscano lo stesso.
+     * <p>
+     * Test Description: 1) Si chiama {@code next()} per avanzare di un elemento, ossia da "zero" a "uno".
+     *                   2) Inizializzo una variabile intera {@code i} a 0 e una variabile {@code indexFirstElement} a 0, che rappresenta l'indice del primo elemento della lista.
+     *                   3) In un ciclo che si ripete 100 volte, si chiama {@code previous()} e poi {@code next()}.
+     *                   4) Si verifica che entrambi i metodi restituiscano lo stesso elemento confrontando il risultato di {@code previous()} e {@code next()} con 
+     *                      l'elemento alla posizione indexFirstElement della lista, cioe' "zero".
+     * <p>
+     * Preconditions: Una `ListAdapter` popolata con tre elementi: "zero", "uno", "due". L'iteratore è posizionato tra "zero" e "uno".
+     * <p>
+     * Postconditions: Nessuna modifica alla lista.
+     * <p>
+     * Expected Result: Il metodo {@code next()} deve restituire "zero" e il metodo {@code previous()} deve restituire "zero" in ogni iterazione del ciclo.
+     */
+    @Test
+    public void testNextAndPreviousConsistency() 
+    {
+        //Mi sposto tra zero e uno
+        iterator.next();
+        int indexFirstElement = 0;
+        int i = 0;      
+        
+        //Vado continuamente avanti e indietro per 100 volte
+        while(i < 100)
+        {
+            assertEquals(list.get(indexFirstElement), iterator.previous());
+            assertEquals(list.get(indexFirstElement), iterator.next());
+            i++;
+        }
     }
 
     /**
