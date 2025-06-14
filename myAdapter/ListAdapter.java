@@ -543,7 +543,6 @@ public class ListAdapter implements HList
          * @return l'elemento nella posizione specificata.
          * @throws IndexOutOfBoundsException se l'indice è fuori dai limiti della sottolista.
          */
-        @Override
         public Object get(int index) 
         {
             checkRange(index);
@@ -555,7 +554,6 @@ public class ListAdapter implements HList
          * Restituisce il numero di elementi in questa sottolista.
          * @return il numero di elementi in questa sottolista.
          */
-        @Override
         public int size() 
         {
             return size;
@@ -570,7 +568,6 @@ public class ListAdapter implements HList
          * @return l'elemento precedentemente presente nella posizione specificata.
          * @throws IndexOutOfBoundsException se l'indice è fuori dai limiti della sottolista.
          */
-        @Override
         public Object set(int index, Object element) 
         {
             checkRange(index);
@@ -588,7 +585,6 @@ public class ListAdapter implements HList
          * @param element l'elemento da inserire.
          * @throws IndexOutOfBoundsException se l'indice è fuori dai limiti per l'aggiunta.
          */
-        @Override
         public void add(int index, Object element) 
         {
             checkRangeForAdd(index);
@@ -606,7 +602,6 @@ public class ListAdapter implements HList
          * @return l'elemento precedentemente nella posizione specificata.
          * @throws IndexOutOfBoundsException se l'indice è fuori dai limiti della sottolista.
          */
-        @Override
         public Object remove(int index) 
         {
             checkRange(index);
@@ -622,7 +617,6 @@ public class ListAdapter implements HList
          * @param o l'elemento da aggiungere a questa sottolista.
          * @return `true` (come specificato da `HCollection.add`).
          */
-        @Override
         public boolean add(Object o) 
         {
             parent.add(offset + size, o);
@@ -638,7 +632,6 @@ public class ListAdapter implements HList
          * @param c la collezione contenente gli elementi da aggiungere a questa sottolista.
          * @return `true` se questa sottolista è stata modificata a seguito della chiamata.
          */
-        @Override
         public boolean addAll(HCollection c) 
         {
             return addAll(size, c);
@@ -654,7 +647,6 @@ public class ListAdapter implements HList
          * @return `true` se questa sottolista è stata modificata a seguito della chiamata.
          * @throws IndexOutOfBoundsException se l'indice è fuori dai limiti per l'aggiunta.
          */
-        @Override
         public boolean addAll(int index, HCollection c) 
         {
             checkRangeForAdd(index);
@@ -674,7 +666,6 @@ public class ListAdapter implements HList
          * Rimuove tutti gli elementi da questa sottolista. La sottolista sarà vuota dopo questa chiamata.
          * Gli elementi corrispondenti vengono rimossi anche dalla lista padre.
          */
-        @Override
         public void clear() {
             for (int i = size - 1; i >= 0; i--) 
             {
@@ -689,7 +680,6 @@ public class ListAdapter implements HList
          * @param o l'elemento la cui presenza in questa sottolista deve essere verificata.
          * @return `true` se questa sottolista contiene l'elemento specificato.
          */
-        @Override
         public boolean contains(Object o) 
         {
             return indexOf(o) != -1;
@@ -701,7 +691,6 @@ public class ListAdapter implements HList
          * @param c la collezione da controllare per la contiguità in questa sottolista.
          * @return `true` se questa sottolista contiene tutti gli elementi della collezione specificata.
          */
-        @Override
         public boolean containsAll(HCollection c) 
         {
             HIterator it = c.iterator();
@@ -723,7 +712,6 @@ public class ListAdapter implements HList
          * @return l'indice della prima occorrenza dell'elemento specificato in questa sottolista,
          * o -1 se questa sottolista non contiene l'elemento.
          */
-        @Override
         public int indexOf(Object o) 
         {
             for (int i = 0; i < size; i++) 
@@ -741,7 +729,6 @@ public class ListAdapter implements HList
          * Restituisce `true` se questa sottolista non contiene elementi.
          * @return `true` se questa sottolista non contiene elementi.
          */
-        @Override
         public boolean isEmpty() 
         {
             return size == 0;
@@ -755,7 +742,6 @@ public class ListAdapter implements HList
          * @return l'indice dell'ultima occorrenza dell'elemento specificato in questa sottolista,
          * o -1 se questa sottolista non contiene l'elemento.
          */
-        @Override
         public int lastIndexOf(Object o) 
         {
             for (int i = size - 1; i >= 0; i--) 
@@ -773,7 +759,6 @@ public class ListAdapter implements HList
          * Restituisce un iteratore sugli elementi in questa sottolista nell'ordine corretto.
          * @return un iteratore sugli elementi in questa sottolista nell'ordine corretto.
          */
-        @Override
         public HIterator iterator() 
         {
             return listIterator();
@@ -784,7 +769,6 @@ public class ListAdapter implements HList
          * Restituisce un list iterator sugli elementi in questa sottolista (nell'ordine corretto).
          * @return un list iterator sugli elementi in questa sottolista (nell'ordine corretto).
          */
-        @Override
         public HListIterator listIterator() 
         {
             return listIterator(0);
@@ -798,7 +782,6 @@ public class ListAdapter implements HList
          * @return un list iterator sugli elementi in questa sottolista (nell'ordine corretto).
          * @throws IndexOutOfBoundsException se l'indice è fuori dai limiti per l'aggiunta.
          */
-        @Override
         public HListIterator listIterator(int index) 
         {
             checkRangeForAdd(index);
@@ -811,7 +794,6 @@ public class ListAdapter implements HList
          * @param o l'elemento da rimuovere da questa sottolista, se presente.
          * @return `true` se questa sottolista conteneva l'elemento specificato.
          */
-        @Override
         public boolean remove(Object o) 
         {
             int index = indexOf(o);
@@ -829,7 +811,6 @@ public class ListAdapter implements HList
          * @param c la collezione contenente gli elementi da rimuovere da questa sottolista.
          * @return `true` se questa sottolista è stata modificata a seguito della chiamata.
          */
-        @Override
         public boolean removeAll(HCollection c) 
         {
             boolean modified = false;
@@ -853,7 +834,6 @@ public class ListAdapter implements HList
          * @param c la collezione contenente gli elementi da mantenere in questa sottolista.
          * @return `true` se questa sottolista è stata modificata a seguito della chiamata.
          */
-        @Override
         public boolean retainAll(HCollection c) 
         {
             boolean modified = false;
@@ -880,7 +860,6 @@ public class ListAdapter implements HList
          * @throws IndexOutOfBoundsException se un valore dell'indice è fuori dall'intervallo
          * (fromIndex < 0 || toIndex > size || fromIndex > toIndex).
          */
-        @Override
         public HList subList(int fromIndex, int toIndex) 
         {
             if (fromIndex < 0 || toIndex > size || fromIndex > toIndex)
@@ -895,7 +874,6 @@ public class ListAdapter implements HList
          * Restituisce un array contenente tutti gli elementi di questa sottolista nell'ordine corretto.
          * @return un array contenente tutti gli elementi di questa sottolista nell'ordine corretto.
          */
-        @Override
         public Object[] toArray() 
         {
             Object[] result = new Object[size];
@@ -922,7 +900,6 @@ public class ListAdapter implements HList
          * @throws ArrayStoreException se il tipo di runtime dell'array specificato non è un supertipo
          * del tipo di runtime di ogni elemento in questa sottolista.
          */
-        @Override
         public Object[] toArray(Object[] a) 
         {
             if (a.length < size)
@@ -936,5 +913,6 @@ public class ListAdapter implements HList
             
             return a;
         }
+        
     }
 }

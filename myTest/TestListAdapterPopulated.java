@@ -34,8 +34,6 @@ public class TestListAdapterPopulated
         list.add("quattro"); // Index 3
     }
 
-    //------- TEST DEL METODO size() ----------
-
     /**
      * Test del metodo {@link HList#size()}.
      * <p>
@@ -60,8 +58,6 @@ public class TestListAdapterPopulated
         assertEquals(4, list.size());
     }
 
-    //------- TEST DEL METODO isEmpty() ----------
-
     /**
      * Test del metodo {@link HList#isEmpty()}.
      * <p>
@@ -85,8 +81,6 @@ public class TestListAdapterPopulated
     {
         assertFalse(list.isEmpty());
     }
-
-    //------- TEST DEL METODO contains(Object) ----------
 
     /**
      * Test del metodo {@link HList#contains(Object)}.
@@ -160,8 +154,6 @@ public class TestListAdapterPopulated
         assertTrue(list.contains(null));
     }
 
-    //------- TEST DEL METODO iterator() ----------
-
     /**
      * Test del metodo {@link HList#iterator()}.
      * <p>
@@ -233,8 +225,6 @@ public class TestListAdapterPopulated
         assertFalse(list.contains("due"));
         assertEquals("tre", list.get(1)); // "tre" si sposta a indice 1
     }
-
-    //------- TEST DEL METODO toArray() ----------
 
     /**
      * Test del metodo {@link HList#toArray()}.

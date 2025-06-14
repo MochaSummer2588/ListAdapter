@@ -7,9 +7,9 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
     TestListAdapterEmpty.class,
     TestListAdapterPopulated.class,
-    TestSubListAdapter.class,
     TestListIteratorPopulated.class,
     TestListIteratorEmpty.class,
+    TestSubListAdapter.class,
 })
 public class AllTestsSuite 
 {
