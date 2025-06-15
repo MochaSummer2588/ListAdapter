@@ -59,7 +59,6 @@ Queste eccezioni vengono lanciate nei metodi dell'adapter dove previsto dalle sp
 │   └── ListIterator.java
 ├── myExceptions/
 │   ├── IllegalStateException.java
-│   ├── NoSuchElementException.java        <-- Aggiunto, se implementato
 │   └── UnsupportedOperationException.java <-- Aggiunto, se implementato
 └── myTest/
     ├── AllTestsSuite.java
