@@ -6,17 +6,19 @@ import org.junit.Test;
 import myAdapter.*;
 
 /**
- * Suite di test per la classe interna {@code myAdapter.ListAdapter.SubList}.
+ * <b>Summary:</b>
  * <p>
- * Riassunto: Verifica il corretto funzionamento dei metodi della {@code SubList},
- * assicurando che agisca come una vista sulla lista padre e che le modifiche
- * siano reciprocamente riflesse. Particolare attenzione è data alla gestione
- * degli indici e alla propagazione delle operazioni alla lista sottostante.
+ * Questa classe contiene una suite esaustiva di test per la classe interna {@code myAdapter.ListAdapter.SubList}.
+ * Sono presenti test per tutti i metodi principali della sottolista: size, isEmpty, get, set, add, remove, contains, containsAll, addAll, removeAll, retainAll, clear, indexOf, lastIndexOf, e per la propagazione delle modifiche tra sottolista e lista padre.
+ * Vengono testati sia i casi standard che i casi limite (sottolista vuota, indici fuori limite, elementi null, propagazione delle modifiche, eccezioni).
+ * <br>
+ * <b>Test Case Design:</b>
  * <p>
- * Design: Utilizza JUnit 4.13.2. Ogni test case opera su una `SubList` creata
- * da una `ListAdapter` popolata, che viene ripristinata prima di ogni test.
- * Si testa il comportamento della `SubList` sia in condizioni normali che al bordo
- * dei suoi limiti, e le interazioni con la lista padre. Sono inclusi test per le eccezioni.
+ * La motivazione di questa suite è assicurare che la SubList si comporti come una vera vista sulla lista padre,
+ * riflettendo e propagando correttamente tutte le modifiche, e che rispetti i vincoli sugli indici e la gestione degli errori.
+ * Si verifica la coerenza tra sottolista e lista padre, la corretta gestione di elementi null, la robustezza contro input errati,
+ * e la conformità alle specifiche delle interfacce Java Collections.
+ * La divisione tra test di accesso, modifica e interazione con la lista padre permette di coprire tutti i possibili scenari d'uso e di errore.
  */
 public class TestSubListAdapter 
 {

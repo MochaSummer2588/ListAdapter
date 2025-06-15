@@ -11,14 +11,20 @@ import java.util.Vector;
 import java.util.Random;
 
 /**
- * Suite di test per la classe {@link myAdapter.ListAdapter}.
+ * <b>Summary:</b>
  * <p>
- * Riassunto: Verifica il corretto funzionamento dei metodi della classe {@code ListAdapter} che implementa l'interfaccia {@link myAdapter.HList}.
+ * Questa classe contiene una suite completa di test per {@link myAdapter.ListAdapter} su una lista popolata.
+ * Sono presenti test per tutti i principali metodi dell'interfaccia HList: accesso, modifica, interrogazione, conversione in array,
+ * gestione di elementi null, gestione di indici validi e non validi, aggiunta/rimozione multipla, eguaglianza e hashCode.
+ * In totale, la classe copre decine di casi: test di aggiunta (add, addAll), rimozione (remove, removeAll), ricerca (contains, indexOf, lastIndexOf),
+ * conversione (toArray), subList, iteratori, e casi di errore (eccezioni su indici o input null).
+ * <br>
+ * <b>Test Case Design:</b>
  * <p>
- * Design: Utilizza JUnit 4.13.2<br />
- * La suite include test per metodi di accesso, modifica e interrogazione di una {@link myAdapter.HList}<br />
- * attraverso la classe {@link myAdapter.ListAdapter}, con un'istanza ripopolata prima di ogni test case.<br />
- * Si suppone che la classe {@link myAdapter.ListIterator} funzioni correttamente e sarà testata nella sua propria suite.
+ * La motivazione di questa suite è assicurare che ListAdapter si comporti come una lista conforme alle specifiche J2SE,
+ * sia nei casi standard che nei casi limite. Si verifica la corretta gestione di elementi null, duplicati, inserimenti/rimozioni in posizioni arbitrarie,
+ * la propagazione delle modifiche, la robustezza contro input errati (indici fuori limite, collezioni null), e la coerenza tra metodi correlati.
+ * La divisione tra lista popolata e vuota permette di isolare i comportamenti attesi in condizioni realistiche e di bordo.
  */
 
 public class TestListAdapterPopulated
@@ -414,10 +420,6 @@ public class TestListAdapterPopulated
      * <p>
      * Test Description: 1) Si chiama il metodo {@code toArray()} sulla lista popolata,
      *                      passando intenzionalmente {@code null} come argomento per l'array di destinazione.
-     *                   2) Si usa l'annotazione JUnit `@Test(expected = NullPointerException.class)` per
-     *                      dichiarare che ci si aspetta il lancio di una {@code NullPointerException} durante l'esecuzione
-     *                      di questo test. Se l'eccezione non viene lanciata o viene lanciata un'eccezione diversa,
-     *                      il test fallirà.
      * <p>
      * Preconditions: La lista è stata inizializzata e popolata con 4 elementi.
      * <p>
@@ -723,10 +725,6 @@ public class TestListAdapterPopulated
      * Test Description: 1) Si tenta di chiamare il metodo {@code add()} sulla lista,
      *                      fornendo un indice calcolato come {@code list.size() + 1} (ad esempio, 5 per una lista di dimensione 4)
      *                      e un elemento qualsiasi ("elemento").
-     *                   2) Si utilizza l'annotazione JUnit `@Test(expected = IndexOutOfBoundsException.class)`
-     *                      per dichiarare che ci si aspetta il lancio di una {@link java.lang.IndexOutOfBoundsException}
-     *                      durante l'esecuzione di questa operazione. Se l'eccezione non viene lanciata o
-     *                      viene lanciata un'eccezione diversa, il test fallirà.
      * <p>
      * Preconditions: La lista è stata inizializzata e popolata con 4 elementi.
      * <p>
@@ -1770,10 +1768,7 @@ public class TestListAdapterPopulated
      * Test Description: 1) Si tenta di chiamare il metodo {@code addAll()} sulla lista già popolata
      *                      dal {@code setUp()}, passando un indice valido (es. 2) e {@code null} come argomento
      *                      per la collezione.
-     *                  2) Si utilizza l'annotazione JUnit {@code @Test(expected = NullPointerException.class)}
-     *                     per dichiarare che ci si aspetta che venga lanciata una {@code NullPointerException}
-     *                     durante l'esecuzione di questo test.
-     *                   3) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
+     *                   2) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
      *                     Inoltre, si assume che la lista non venga modificata se viene lanciata un'eccezione.
      * <p>
      * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
@@ -1996,10 +1991,7 @@ public class TestListAdapterPopulated
      * Test Description: 1) Si prepara una {@code collectionToAdd} con un elemento ("a").
      *                   2) Si tenta di chiamare il metodo {@code addAll()} sulla lista già popolata dal {@code setUp()},
      *                      passando un indice negativo (-1) e la {@code collectionToAdd} come argomenti.
-     *                   3) Si utilizza l'annotazione JUnit {@code @Test(expected = IndexOutOfBoundsException.class)}
-     *                      per dichiarare che ci si aspetta che venga lanciata una {@code IndexOutOfBoundsException}
-     *                      durante l'esecuzione di questo test.
-     *                   4) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
+     *                   3) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
      *                      Inoltre, si assume che la lista non venga modificata se viene lanciata un'eccezione prima dell'aggiunta.
      * <p>
      * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
@@ -2035,10 +2027,7 @@ public class TestListAdapterPopulated
      *                   2) Si tenta di chiamare il metodo {@code addAll()} sulla lista già popolata dal {@code setUp()},
      *                      passando un indice maggiore della sua dimensione attuale ({@code list.size() + 1}) e la
      *                      {@code collectionToAdd} come argomenti.
-     *                   3) Si utilizza l'annotazione JUnit {@code @Test(expected = IndexOutOfBoundsException.class)}
-     *                      per dichiarare che ci si aspetta che venga lanciata una {@code IndexOutOfBoundsException}
-     *                      durante l'esecuzione di questo test.
-     *                   4) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
+     *                   3) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
      *                      Si assume che la lista non venga modificata se viene lanciata un'eccezione prima dell'aggiunta.
      * <p>
      * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
@@ -2202,8 +2191,7 @@ public class TestListAdapterPopulated
      * Test Case Design: Questo test assicura che il metodo rispetti il contratto definito nel Javadoc per la gestione di indici fuori dai limiti validi, in particolare quelli negativi.
      * <p>
      * Test Description: 1) Si tenta di accedere a un elemento della lista specificando un indice negativo (-1).
-     *                   2) Si utilizza l'annotazione JUnit {@code @Test(expected = IndexOutOfBoundsException.class)} per dichiarare che ci si aspetta che venga lanciata una {@code IndexOutOfBoundsException} durante l'esecuzione di questo test.
-     *                   3) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce. Si assume che la lista non venga modificata da un tentativo di accesso non valido.
+     *                   2) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce. Si assume che la lista non venga modificata da un tentativo di accesso non valido.
      * <p>
      * Preconditions: La lista è stata inizializzata e popolata con elementi (ad esempio, ["uno", "due", "tre", "quattro"]).
      * <p>
@@ -2225,8 +2213,7 @@ public class TestListAdapterPopulated
      * Test Case Design: Questo test assicura che il metodo rispetti il contratto definito nel Javadoc per la gestione degli indici fuori limite superiore, in particolare quando l'indice è esattamente pari alla dimensione della lista.
      * <p>
      * Test Description: 1) Si tenta di accedere a un elemento della lista specificando un indice pari a {@code list.size()} (che è 4 per la lista di setup).
-     *                   2) Si utilizza l'annotazione JUnit {@code @Test(expected = IndexOutOfBoundsException.class)} per dichiarare che ci si aspetta che venga lanciata una {@code IndexOutOfBoundsException} durante l'esecuzione di questo test.
-     *                   3) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce. Si presume che la lista non venga modificata da un tentativo di accesso non valido.
+     *                   2) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce. Si presume che la lista non venga modificata da un tentativo di accesso non valido.
      * <p>
      * Preconditions: La lista è stata inizializzata e popolata con elementi (ad esempio, ["uno", "due", "tre", "quattro"]).
      * <p>
@@ -2369,9 +2356,7 @@ public class TestListAdapterPopulated
      * Test Description: 1) Si prepara un elemento da impostare (la stringa "elemento").
      *                   2) Si tenta di chiamare il metodo {@code set()} sulla lista popolata, specificando un indice negativo (-1)
      *                      e l'elemento da impostare.
-     *                   3) Si utilizza l'annotazione JUnit {@code @Test(expected = IndexOutOfBoundsException.class)} per dichiarare
-     *                      che ci si aspetta che venga lanciata una {@code IndexOutOfBoundsException} durante l'esecuzione di questo test.
-     *                   4) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
+     *                   3) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
      *                      Si presume che la lista non venga modificata da un tentativo di impostazione non valido.
      * <p>
      * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
@@ -2398,9 +2383,7 @@ public class TestListAdapterPopulated
      * Test Description: 1) Si prepara un elemento da impostare (la stringa "elemento").
      *                   2) Si tenta di chiamare il metodo {@code set()} sulla lista popolata, specificando un indice
      *                      pari a {@code list.size()} (che è 4 per la lista di setup) e l'elemento da impostare.
-     *                   3) Si utilizza l'annotazione JUnit {@code @Test(expected = IndexOutOfBoundsException.class)} per dichiarare
-     *                      che ci si aspetta che venga lanciata una {@code IndexOutOfBoundsException} durante l'esecuzione di questo test.
-     *                   4) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
+     *                   3) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
      *                      Si presume che la lista non venga modificata da un tentativo di impostazione non valido.
      * <p>
      * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
@@ -2680,96 +2663,119 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#retainAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code retainAll(HCollection)} mantenga solo gli elementi specificati.
+     * Summary: Verifica che {@code retainAll(HCollection)} **mantenga solo gli elementi presenti nella collezione specificata**
+     * e rimuova tutti gli altri dalla lista chiamante.
      * <p>
-     * Test Case Design: Assicurarsi che gli elementi non presenti nella collezione fornita vengano rimossi.
+     * Test Case Design: Questo test assicura che gli elementi non presenti nella collezione fornita vengano rimossi correttamente dalla lista,
+     * e che solo gli elementi comuni vengano conservati, convalidando il comportamento di filtrazione del metodo.
      * <p>
-     * Test Description: 1. Crea una collezione con elementi ("due", "quattro").<br />
-     * 2. Chiama {@code retainAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica che la dimensione sia 2.<br />
-     * 5. Verifica che solo "due" e "quattro" siano rimasti nella lista.
+     * Test Description:
+     * 1) Viene creata una nuova istanza di `ListAdapter` (denominata `collectionToRetain`) e popolata con gli elementi "due" e "quattro".
+     * 2) Il metodo {@code retainAll()} viene chiamato sulla lista di test, passando `collectionToRetain` come argomento.
+     * 3) Si verifica che il valore booleano restituito da {@code retainAll()} sia **{@code true}**, indicando che la lista è stata modificata.
+     * 4) Si assicura che la **dimensione finale della lista sia 2**, come ci si aspetta dopo la rimozione degli elementi non comuni.
+     * 5) Si verifica che la lista contenga solo gli elementi "due" e "quattro" (usando {@code contains()}).
+     * 6) Si conferma che gli elementi "uno" e "tre", che non erano presenti nella `collectionToRetain`, siano stati **rimossi** dalla lista (usando {@code !contains()}).
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["due", "quattro"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * La collezione fornita per il confronto contiene: ["due", "quattro"].
      * <p>
-     * Postconditions: Lista: ["due", "quattro"].
+     * Postconditions: La lista è stata modificata per contenere solo gli elementi comuni alla collezione fornita.
+     * La lista finale è: ["due", "quattro"]. La dimensione della lista è 2.
      * <p>
-     * @expected {@code retainAll()} deve restituire true.
+     * Expected Result: La chiamata a {@code retainAll()} deve restituire {@code true}. La lista deve contenere esclusivamente "due" e "quattro" e avere dimensione 2.
      */
     @Test
-    public void testRetainAllCollection()
-    {
+    public void testRetainAllCollection() {
+        // Inizialmente: list = ["uno", "due", "tre", "quattro"]
         ListAdapter collectionToRetain = new ListAdapter();
         collectionToRetain.add("due");
         collectionToRetain.add("quattro");
+        // collectionToRetain = ["due", "quattro"]
 
-        assertTrue(list.retainAll(collectionToRetain));
-        assertEquals(2, list.size());
-        assertTrue(list.contains("due"));
-        assertTrue(list.contains("quattro"));
-        assertFalse(list.contains("uno"));
-        assertFalse(list.contains("tre"));
+        assertTrue("Il metodo retainAll() dovrebbe restituire true se la lista è stata modificata.", list.retainAll(collectionToRetain));
+        assertEquals("La dimensione della lista dovrebbe essere 2 dopo retainAll().", 2, list.size());
+        assertTrue("La lista dovrebbe contenere 'due' dopo retainAll().", list.contains("due"));
+        assertTrue("La lista dovrebbe contenere 'quattro' dopo retainAll().", list.contains("quattro"));
+        assertFalse("La lista non dovrebbe contenere 'uno' dopo retainAll().", list.contains("uno"));
+        assertFalse("La lista non dovrebbe contenere 'tre' dopo retainAll().", list.contains("tre"));
     }
 
     /**
      * Test del metodo {@link HList#retainAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code retainAll(HCollection)} non modifichi la lista se tutti gli elementi sono da mantenere.
+     * Summary: Verifica che {@code retainAll(HCollection)} **non modifichi la lista** e restituisca {@code false}
+     * se tutti gli elementi della lista sono già presenti nella collezione specificata (ovvero, nessun elemento deve essere rimosso).
      * <p>
-     * Test Case Design: Assicurarsi che il metodo restituisca false (nessuna modifica) se tutti gli elementi sono già presenti.
+     * Test Case Design: Questo test assicura che il metodo si comporti correttamente quando non sono necessarie modifiche.
+     * Convalida che il valore di ritorno {@code false} indichi l'assenza di cambiamenti e che la lista mantenga il suo stato originale.
      * <p>
-     * Test Description: 1. Crea una collezione con tutti gli elementi della lista.<br />
-     * 2. Chiama {@code retainAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
+     * Test Description:
+     * 1) Viene creata una nuova istanza di `ListAdapter` (denominata `collectionToRetain`) e popolata con esattamente gli stessi elementi
+     * presenti nella lista di test: "uno", "due", "tre", "quattro".
+     * 2) Il metodo {@code retainAll()} viene chiamato sulla lista di test, passando `collectionToRetain` come argomento.
+     * 3) Si verifica che il valore booleano restituito da {@code retainAll()} sia **{@code false}**, indicando che la lista non è stata modificata.
+     * 4) Si assicura che la **dimensione della lista sia rimasta 4**, il suo valore originale.
+     * 5) Si verifica che tutti gli elementi originali ("uno", "due", "tre", "quattro") siano **ancora presenti** nella lista
+     * (usando {@code contains()}).
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["uno", "due", "tre", "quattro"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * La collezione fornita per il confronto contiene gli stessi elementi: ["uno", "due", "tre", "quattro"].
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata** in termini di contenuto e dimensione.
      * <p>
-     * @expected {@code retainAll()} deve restituire false.
+     * Expected Result: La chiamata a {@code retainAll()} deve restituire **{@code false}**. La lista deve rimanere ["uno", "due", "tre", "quattro"] e avere dimensione 4.
      */
     @Test
-    public void testRetainAllNoModification()
-    {
+    public void testRetainAllNoModification() {
+        // Inizialmente: list = ["uno", "due", "tre", "quattro"]
+        // Messaggi più specifici per il debug in caso di fallimento.
         ListAdapter collectionToRetain = new ListAdapter();
         collectionToRetain.add("uno");
         collectionToRetain.add("due");
         collectionToRetain.add("tre");
         collectionToRetain.add("quattro");
+        // collectionToRetain = ["uno", "due", "tre", "quattro"]
 
-        assertFalse(list.retainAll(collectionToRetain));
-        assertEquals(4, list.size());
-        assertTrue(list.contains("uno"));
-        assertTrue(list.contains("due"));
-        assertTrue(list.contains("tre"));
-        assertTrue(list.contains("quattro"));
+        assertFalse("Il metodo retainAll() dovrebbe restituire false se la lista non è stata modificata.", list.retainAll(collectionToRetain));
+        assertEquals("La dimensione della lista dovrebbe rimanere 4 quando non ci sono modifiche.", 4, list.size());
+        assertTrue("La lista dovrebbe ancora contenere 'uno'.", list.contains("uno"));
+        assertTrue("La lista dovrebbe ancora contenere 'due'.", list.contains("due"));
+        assertTrue("La lista dovrebbe ancora contenere 'tre'.", list.contains("tre"));
+        assertTrue("La lista dovrebbe ancora contenere 'quattro'.", list.contains("quattro"));
     }
 
     /**
      * Test del metodo {@link HList#retainAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code retainAll(HCollection)} svuoti la lista se nessun elemento deve essere mantenuto.
+     * Summary: Verifica che {@code retainAll(HCollection)} **svuoti completamente la lista** se nessun elemento in essa
+     * è presente anche nella collezione specificata.
      * <p>
-     * Test Case Design: Assicurarsi che la lista diventi vuota se la collezione fornita non ha elementi in comune.
+     * Test Case Design: Questo test assicura che il metodo gestisca correttamente il caso in cui la lista e la collezione fornita
+     * non abbiano elementi in comune, risultando nello svuotamento della lista originale. Si verifica che il valore di ritorno
+     * indichi una modifica e che la lista risulti vuota.
      * <p>
-     * Test Description: 1. Crea una collezione con elementi non presenti nella lista.<br />
-     * 2. Chiama {@code retainAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica che la lista sia vuota.
+     * Test Description: 1) Viene creata una nuova istanza di `ListAdapter` (denominata `collectionToRetain`) e popolata
+     *                      con elementi ("cinque", "sei") che non sono presenti nella lista di test.
+     *                   2) Il metodo {@code retainAll()} viene chiamato sulla lista di test, passando `collectionToRetain` come argomento.
+     *                   3) Si verifica che il valore booleano restituito da {@code retainAll()} sia **{@code true}**, indicando che la lista è stata modificata.
+     *                   4) Si assicura che la **dimensione finale della lista sia 0**.
+     *                   5) Si conferma che la lista sia **vuota** utilizzando il metodo {@code isEmpty()}.
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["cinque", "sei"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * La collezione fornita per il confronto contiene elementi non comuni: ["cinque", "sei"].
      * <p>
-     * Postconditions: La lista è vuota.
+     * Postconditions: La lista è stata modificata ed è ora **vuota**.
      * <p>
-     * @expected {@code retainAll()} deve restituire true.
+     * Expected Result: La chiamata a {@code retainAll()} deve restituire {@code true}. La lista deve essere vuota e avere dimensione 0.
      */
     @Test
-    public void testRetainAllClearList()
-    {
+    public void testRetainAllClearList() {
+        // Inizialmente: list = ["uno", "due", "tre", "quattro"]
         ListAdapter collectionToRetain = new ListAdapter();
         collectionToRetain.add("cinque");
         collectionToRetain.add("sei");
+        // collectionToRetain = ["cinque", "sei"] (nessun elemento in comune)
 
         assertTrue(list.retainAll(collectionToRetain));
         assertEquals(0, list.size());
@@ -2779,42 +2785,54 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#retainAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code retainAll(HCollection)} lanci {@code NullPointerException} se la collezione è null.
+     * Summary: Verifica che {@code retainAll(HCollection)} lanci una **{@code NullPointerException}**
+     * quando la collezione fornita come argomento è {@code null}.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
+     * Test Case Design: Questo test assicura che il metodo rispetti il contratto per la gestione di input {@code null}
+     * per la collezione, prevenendo accessi a riferimenti non validi e garantendo un comportamento robusto.
      * <p>
-     * Test Description: 1. Chiama {@code retainAll(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
+     * Test Description: 1) Si tenta di chiamare il metodo {@code retainAll()} sulla lista di test,
+     *                      passando esplicitamente {@code null} come argomento della collezione.
+     *                   2) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
+     *                      Si presume che la lista non venga modificata da un tentativo di operazione non valido.
      * <p>
-     * Preconditions: Lista popolata. Collezione null.
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
+     * La collezione fornita è {@code null}.
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata**. Nessuna modifica viene apportata alla struttura o al contenuto della lista.
      * <p>
-     * @expected {@code NullPointerException}.
+     * Expected Result: Deve essere lanciata una **{@code NullPointerException}**.
      */
     @Test(expected = NullPointerException.class)
     public void testRetainAllNullCollection()
     {
-        list.retainAll(null);
+        ListAdapter list2 = null;
+        list.retainAll(list2);
     }
 
     /**
      * Test del metodo {@link HList#retainAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code retainAll(HCollection)} con una collezione vuota svuoti la lista.
+     * Summary: Verifica che {@code retainAll(HCollection)} **svuoti la lista** quando la collezione fornita è **vuota**.
      * <p>
-     * Test Case Design: Assicurarsi che il comportamento di `retainAll` con una collezione vuota sia di svuotare la lista.
+     * Test Case Design: Questo test assicura che il metodo si comporti correttamente quando non ci sono elementi da mantenere,
+     * risultando nello svuotamento completo della lista originale. Si verifica che il valore di ritorno indichi una modifica
+     * e che la lista diventi effettivamente vuota.
      * <p>
-     * Test Description: 1. Crea una collezione vuota.<br />
-     * 2. Chiama {@code retainAll()} sulla lista popolata.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica che la lista sia vuota.
+     * Test Description: 
+     *                   1) Si crea un'istanza di `HCollection` (un `ListAdapter`) che non contiene alcun elemento, ovvero una collezione vuota.
+     *                   2) Il metodo {@code retainAll()} viene chiamato sulla lista di test, passando questa collezione vuota come argomento.
+     *                   3) Si verifica che il valore booleano restituito da {@code retainAll()} sia **{@code true}**,
+     *                      a indicare che la lista è stata modificata (tutti gli elementi sono stati rimossi).
+     *                   4) Si assicura che la **dimensione finale della lista sia 0**.
+     *                   5) Si conferma che la lista sia **vuota** utilizzando il metodo {@code isEmpty()}.
      * <p>
-     * Preconditions: Lista popolata. Collezione vuota.
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
+     * La collezione fornita per il confronto è vuota.
      * <p>
-     * Postconditions: La lista è vuota.
+     * Postconditions: La lista è stata modificata ed è ora **vuota**.
      * <p>
-     * @expected {@code retainAll()} deve restituire true.
+     * Expected Result: La chiamata a {@code retainAll()} deve restituire {@code true}. La lista deve essere vuota e avere dimensione 0.
      */
     @Test
     public void testRetainAllEmptyCollection()
@@ -2830,21 +2848,29 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#removeAll(HCollection)}.
      * <p>
-     * Summary: Verifica la rimozione di un sottoinsieme di elementi dalla lista.
+     * Summary: Verifica che {@code removeAll(HCollection)} **rimuova tutti gli elementi della lista che sono anche contenuti**
+     * nella collezione specificata.
      * <p>
-     * Test Case Design: Assicurarsi che tutti gli elementi della collezione fornita siano rimossi dalla lista.
+     * Test Case Design: Il motivo di questo test è assicurarsi che tutti gli elementi della lista che corrispondono a quelli
+     * presenti nella collezione fornita vengano effettivamente rimossi, e che la lista venga correttamente aggiornata
+     * in termini di contenuto e dimensione.
      * <p>
-     * Test Description: 1. Crea una collezione con elementi ("due", "quattro").<br />
-     * 2. Chiama {@code removeAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica che la dimensione sia 2.<br />
-     * 5. Verifica che solo "uno" e "tre" siano rimasti nella lista.
+     * Test Description: 1) Viene creata una nuova istanza di `ListAdapter` (denominata `collectionToRemove`) e popolata
+     *                      con gli elementi "due" e "quattro".
+     *                   2) Il metodo {@code removeAll()} viene chiamato sulla lista di test, passando `collectionToRemove` come argomento.
+     *                   3) Si verifica che il valore booleano restituito da {@code removeAll()} sia **{@code true}**, indicando che la lista è stata modificata.
+     *                   4) Si assicura che la **dimensione finale della lista sia 2**, come ci si aspetta dopo la rimozione degli elementi.
+     *                   5) Si verifica che la lista contenga solo gli elementi "uno" e "tre" (usando {@code contains()}).
+     *                   6) Si conferma che gli elementi "due" e "quattro", che erano presenti nella `collectionToRemove`, siano stati **rimossi** dalla lista
+     *                      (usando {@code !contains()}).
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["due", "quattro"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * La collezione fornita per la rimozione contiene: ["due", "quattro"].
      * <p>
-     * Postconditions: Lista: ["uno", "tre"].
+     * Postconditions: La lista è stata modificata per non contenere più gli elementi specificati nella collezione.
+     * La lista finale è: ["uno", "tre"]. La dimensione della lista è 2.
      * <p>
-     * @expected {@code removeAll()} deve restituire true.
+     * Expected Result: La chiamata a {@code removeAll()} deve restituire {@code true}. La lista deve contenere esclusivamente "uno" e "tre" e avere dimensione 2.
      */
     @Test
     public void testRemoveAllCollection()
@@ -2864,20 +2890,29 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#removeAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code removeAll(HCollection)} non modifichi la lista se nessun elemento è da rimuovere.
+     * Summary: Verifica che {@code removeAll(HCollection)} **non modifichi la lista** e restituisca {@code false}
+     * se nessun elemento della collezione fornita è presente nella lista chiamante.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo restituisca false se la lista non contiene nessuno degli elementi della collezione.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il metodo si comporti correttamente quando non ci sono
+     * elementi in comune da rimuovere. Questo convalida che il valore di ritorno {@code false} indichi l'assenza
+     * di modifiche e che la lista mantenga il suo stato originale.
      * <p>
-     * Test Description: 1. Crea una collezione con elementi non presenti nella lista.<br />
-     * 2. Chiama {@code removeAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
+     * Test Description: 1) Viene creata una nuova istanza di `ListAdapter` (denominata `collectionToRemove`) e popolata
+     *                      con elementi ("cinque", "sei") che non sono presenti nella lista di test.
+     *                   2) Il metodo {@code removeAll()} viene chiamato sulla lista di test, passando `collectionToRemove` come argomento.
+     *                   3) Si verifica che il valore booleano restituito da {@code removeAll()} sia **{@code false}**,
+     *                      indicando che la lista non è stata modificata.
+     *                   4) Si assicura che la **dimensione della lista sia rimasta 4**, il suo valore originale.
+     *                   5) Si verifica che almeno un elemento originale ("uno") sia ancora presente nella lista, implicando che l'intera
+     *                      lista non è stata alterata.
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["cinque", "sei"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * La collezione fornita per la rimozione contiene elementi non comuni: ["cinque", "sei"].
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata** in termini di contenuto e dimensione.
      * <p>
-     * @expected {@code removeAll()} deve restituire false.
+     * Expected Result: La chiamata a {@code removeAll()} deve restituire **{@code false}**. La lista deve rimanere
+     * ["uno", "due", "tre", "quattro"] e avere dimensione 4.
      */
     @Test
     public void testRemoveAllNoMatchingElements()
@@ -2894,18 +2929,23 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#removeAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code removeAll(HCollection)} lanci {@code NullPointerException} se la collezione è null.
+     * Summary: Verifica che {@code removeAll(HCollection)} lanci una **{@code NullPointerException}**
+     * quando la collezione fornita come argomento è {@code null}.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il metodo gestisca correttamente un input {@code null}
+     * per la collezione, impedendo l'esecuzione di operazioni su un riferimento non valido e garantendo la robustezza del sistema.
      * <p>
-     * Test Description: 1. Chiama {@code removeAll(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
+     * Test Description: 1) Si tenta di chiamare il metodo {@code removeAll()} sulla lista di test,
+     *                      passando esplicitamente {@code null} come argomento della collezione.
+     *                   2) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
+     *                      Si presume che la lista non venga modificata da un tentativo di operazione non valido.
      * <p>
-     * Preconditions: Lista popolata. Collezione null.
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
+     * La collezione fornita è {@code null}.
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata**. Nessuna modifica viene apportata alla struttura o al contenuto della lista.
      * <p>
-     * @expected {@code NullPointerException}.
+     * Expected Result: Deve essere lanciata una **{@code NullPointerException}**.
      */
     @Test(expected = NullPointerException.class)
     public void testRemoveAllNullCollection()
@@ -2916,28 +2956,39 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#removeAll(HCollection)}.
      * <p>
-     * Summary: Verifica la rimozione di tutti gli elementi dalla lista.
+     * Summary: Verifica che {@code removeAll(HCollection)} **svuoti completamente la lista**
+     * quando la collezione fornita contiene tutti gli elementi attualmente presenti nella lista.
      * <p>
-     * Test Case Design: Assicurarsi che `removeAll` con una collezione contenente tutti gli elementi della lista svuoti la lista.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il metodo sia in grado di rimuovere
+     * tutti gli elementi in un'unica operazione, risultando in una lista vuota. Questo convalida che
+     * {@code removeAll()} funzioni correttamente quando tutti gli elementi della lista rientrano
+     * nel criterio di rimozione.
      * <p>
-     * Test Description: 1. Crea una collezione con tutti gli elementi della lista.<br />
-     * 2. Chiama {@code removeAll()} sulla lista.<br />
-     * 3. Verifica che il risultato sia true.<br />
-     * 4. Verifica che la lista sia vuota.
+     * Test Description: 1) Viene creata una nuova istanza di `ListAdapter` (denominata `collectionToRemove`)
+     *                      e popolata con gli stessi elementi presenti nella lista di test: "uno", "due", "tre", "quattro".
+     *                   2) Il metodo {@code removeAll()} viene chiamato sulla lista di test, passando `collectionToRemove` come argomento.
+     *                   3) Si verifica che il valore booleano restituito da {@code removeAll()} sia **{@code true}**,
+     *                      indicando che la lista è stata modificata (tutti gli elementi sono stati rimossi).
+     *                   4) Si assicura che la **dimensione finale della lista sia 0**.
+     *                   5) Si conferma che la lista sia **vuota** utilizzando il metodo {@code isEmpty()}.
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["uno", "due", "tre", "quattro"].
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * La collezione fornita per la rimozione contiene gli stessi elementi: ["uno", "due", "tre", "quattro"].
      * <p>
-     * Postconditions: La lista è vuota.
+     * Postconditions: La lista è stata modificata ed è ora **vuota**.
      * <p>
-     * @expected {@code removeAll()} deve restituire true.
+     * Expected Result: La chiamata a {@code removeAll()} deve restituire {@code true}. La lista deve essere vuota e avere dimensione 0.
      */
     @Test
-    public void testRemoveAllClearList() {
+    public void testRemoveAllClearList() 
+    {
+        // Inizialmente: list = ["uno", "due", "tre", "quattro"]
         ListAdapter collectionToRemove = new ListAdapter();
         collectionToRemove.add("uno");
         collectionToRemove.add("due");
         collectionToRemove.add("tre");
         collectionToRemove.add("quattro");
+        // collectionToRemove = ["uno", "due", "tre", "quattro"]
 
         assertTrue(list.removeAll(collectionToRemove));
         assertEquals(0, list.size());
@@ -2947,20 +2998,27 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#removeAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code removeAll(HCollection)} con una collezione vuota non modifichi la lista.
+     * Summary: Verifica che {@code removeAll(HCollection)} **non modifichi la lista** e restituisca {@code false}
+     * quando la collezione fornita per la rimozione è **vuota**.
      * <p>
-     * Test Case Design: Assicurarsi che rimuovere una collezione vuota non alteri la lista.
+     * Test Case Design: Il motivo di questo test è assicurarsi che la rimozione di una collezione vuota non alteri
+     * la lista in alcun modo. Questo convalida che il metodo gestisca correttamente un caso di non-operazione,
+     * segnalando l'assenza di modifiche e mantenendo l'integrità della lista.
      * <p>
-     * Test Description: 1. Crea una collezione vuota.<br />
-     * 2. Chiama {@code removeAll()} sulla lista popolata.<br />
-     * 3. Verifica che il risultato sia false.<br />
-     * 4. Verifica che la dimensione e il contenuto della lista non siano cambiati.
+     * Test Description: 1) Si crea un'istanza di `HCollection` (un `ListAdapter`) che non contiene alcun elemento,
+     *                      ovvero una collezione vuota.
+     *                   2) Il metodo {@code removeAll()} viene chiamato sulla lista di test, passando questa collezione vuota come argomento.
+     *                   3) Si verifica che il valore booleano restituito da {@code removeAll()} sia **{@code false}**,
+     *                      a indicare che la lista non è stata modificata.
+     *                   4) Si assicura che la **dimensione della lista sia rimasta 4**, il suo valore originale.
+     *                   5) Si verifica che il contenuto della lista non sia cambiato, controllando un elemento specifico (e.g., "uno" all'indice 0).
      * <p>
-     * Preconditions: Lista popolata. Collezione vuota.
+     * Preconditions: La lista è stata inizializzata e popolata con 4 elementi: ["uno", "due", "tre", "quattro"].
+     * La collezione fornita per la rimozione è vuota.
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata** in termini di contenuto e dimensione.
      * <p>
-     * @expected {@code removeAll()} deve restituire false.
+     * Expected Result: La chiamata a {@code removeAll()} deve restituire **{@code false}**. La lista deve mantenere il suo stato originale e avere dimensione 4.
      */
     @Test
     public void testRemoveAllEmptyCollection()
@@ -2976,18 +3034,25 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#containsAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code containsAll(HCollection)} restituisca true se tutti gli elementi sono presenti.
+     * Summary: Verifica che {@code containsAll(HCollection)} restituisca **{@code true}** se la lista
+     * contiene **tutti gli elementi** della collezione specificata (un sottoinsieme).
      * <p>
-     * Test Case Design: Assicurarsi che il metodo identifichi correttamente quando una lista contiene tutti gli elementi di una collezione.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il metodo identifichi correttamente
+     * quando una lista possiede tutti gli elementi di un'altra collezione. Questo convalida la capacità
+     * del metodo di verificare l'inclusione di un sottoinsieme di elementi.
      * <p>
-     * Test Description: 1. Crea una collezione con un sottoinsieme di elementi della lista.<br />
-     * 2. Chiama {@code containsAll()} e verifica che sia true.
+     * Test Description: 1) Viene creata una nuova istanza di `ListAdapter` (denominata `subset`)
+     *                      e popolata con un sottoinsieme di elementi già presenti nella lista di test: "due" e "quattro".
+     *                   2) Il metodo {@code containsAll()} viene chiamato sulla lista di test, passando `subset` come argomento.
+     *                   3) Si verifica che il valore booleano restituito sia **{@code true}**, confermando che la lista
+     *                      contiene effettivamente tutti gli elementi specificati nel sottoinsieme.
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["due", "quattro"].
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
+     * La collezione fornita contiene un sottoinsieme di questi elementi: ["due", "quattro"].
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata**. L'operazione di verifica non modifica la struttura o il contenuto della lista.
      * <p>
-     * @expected {@code containsAll()} deve restituire true.
+     * Expected Result: La chiamata a {@code containsAll()} deve restituire **{@code true}**.
      */
     @Test
     public void testContainsAllSubset()
@@ -3001,21 +3066,28 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#containsAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code containsAll(HCollection)} restituisca false se alcuni elementi sono assenti.
+     * Summary: Verifica che {@code containsAll(HCollection)} restituisca **{@code false}** se **anche un solo elemento**
+     * della collezione specificata è assente dalla lista.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo identifichi correttamente quando alcuni elementi della collezione non sono nella lista.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il metodo identifichi correttamente quando la lista
+     * *non* contiene tutti gli elementi di un'altra collezione. Questo convalida che il metodo non dia un falso positivo
+     * quando solo alcuni, ma non tutti, gli elementi della collezione sono presenti.
      * <p>
-     * Test Description: 1. Crea una collezione con alcuni elementi presenti e altri assenti ("due", "cinque").<br />
-     * 2. Chiama {@code containsAll()} e verifica che sia false.
+     * Test Description: 1) Viene creata una nuova istanza di `ListAdapter` (denominata `partialSubset`)
+     *                      e popolata con un mix di elementi: "due" (presente nella lista di test) e "cinque" (assente dalla lista di test).
+     *                   2) Il metodo {@code containsAll()} viene chiamato sulla lista di test, passando `partialSubset` come argomento.
+     *                   3) Si verifica che il valore booleano restituito sia **{@code false}**, confermando che la lista
+     *                      non contiene tutti gli elementi specificati nella collezione (a causa della mancanza di "cinque").
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["due", "cinque"].
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
+     * La collezione fornita contiene alcuni elementi presenti e altri assenti: ["due", "cinque"].
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata**. L'operazione di verifica non modifica la struttura o il contenuto della lista.
      * <p>
-     * @expected {@code containsAll()} deve restituire false.
+     * Expected Result: La chiamata a {@code containsAll()} deve restituire **{@code false}**.
      */
     @Test
-    public void testContainsAllPartialSubset()
+    public void testContainsAllPartialSubset() 
     {
         ListAdapter partialSubset = new ListAdapter();
         partialSubset.add("due");
@@ -3026,18 +3098,25 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#containsAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code containsAll(HCollection)} restituisca false se nessun elemento è presente.
+     * Summary: Verifica che {@code containsAll(HCollection)} restituisca **{@code false}** se **nessun elemento**
+     * della collezione specificata è presente nella lista.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo identifichi correttamente quando nessun elemento della collezione è nella lista.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il metodo identifichi correttamente quando la lista
+     * non contiene alcuno degli elementi presenti nella collezione fornita. Questo convalida che il metodo non dia
+     * un falso positivo in assenza totale di corrispondenze.
      * <p>
-     * Test Description: 1. Crea una collezione con elementi non presenti nella lista ("cinque", "sei").<br />
-     * 2. Chiama {@code containsAll()} e verifica che sia false.
+     * Test Description: 1) Viene creata una nuova istanza di `ListAdapter` (denominata `noMatch`)
+     *                      e popolata con elementi ("cinque", "sei") che non sono presenti nella lista di test.
+     *                   2) Il metodo {@code containsAll()} viene chiamato sulla lista di test, passando `noMatch` come argomento.
+     *                   3) Si verifica che il valore booleano restituito sia **{@code false}**, confermando che la lista
+     *                      non contiene nessuno degli elementi specificati nella collezione.
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Collezione: ["cinque", "sei"].
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
+     * La collezione fornita contiene elementi non presenti nella lista: ["cinque", "sei"].
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata**. L'operazione di verifica non modifica la struttura o il contenuto della lista.
      * <p>
-     * @expected {@code containsAll()} deve restituire false.
+     * Expected Result: La chiamata a {@code containsAll()} deve restituire **{@code false}**.
      */
     @Test
     public void testContainsAllNoMatch()
@@ -3051,18 +3130,19 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#containsAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code containsAll(HCollection)} restituisca true per una collezione vuota.
+     * Summary: Verifica che {@code containsAll(HCollection)} restituisca **{@code true}** quando la collezione fornita è **vuota**.
      * <p>
-     * Test Case Design: Assicurarsi che il contratto di `containsAll` sia rispettato per le collezioni vuote (ogni lista contiene una collezione vuota).
+     * Test Case Design: Il motivo di questo test è assicurarsi che il contratto di {@code containsAll} venga rispettato per le collezioni vuote. Per definizione, qualsiasi lista è considerata contenere tutti gli elementi di una collezione vuota, dato che non ci sono elementi da non trovare.
      * <p>
-     * Test Description: 1. Crea una collezione vuota.<br />
-     * 2. Chiama {@code containsAll()} e verifica che sia true.
+     * Test Description: 1) Viene creata un'istanza di {@code HCollection} (un {@code ListAdapter}) che non contiene alcun elemento, ovvero una collezione vuota.
+     *                   2) Il metodo {@code containsAll()} viene chiamato sulla lista di test, passando questa collezione vuota come argomento.
+     *                   3) Si verifica che il valore booleano restituito sia **{@code true}**, confermando il comportamento atteso.
      * <p>
-     * Preconditions: Lista popolata. Collezione vuota.
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (ad esempio, ["uno", "due", "tre", "quattro"]). La collezione fornita è vuota.
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata**. L'operazione di verifica non modifica la struttura o il contenuto della lista.
      * <p>
-     * @expected {@code containsAll()} deve restituire true.
+     * Expected Result: La chiamata a {@code containsAll()} deve restituire **{@code true}**.
      */
     @Test
     public void testContainsAllEmptyCollection()
@@ -3074,18 +3154,23 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#containsAll(HCollection)}.
      * <p>
-     * Summary: Verifica che {@code containsAll(HCollection)} lanci {@code NullPointerException} se la collezione è null.
+     * Summary: Verifica che {@code containsAll(HCollection)} lanci una **{@code NullPointerException}**
+     * quando la collezione fornita come argomento è {@code null}.
      * <p>
-     * Test Case Design: Assicurarsi che il metodo gestisca correttamente l'input null per la collezione.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il metodo gestisca correttamente un input {@code null}
+     * per la collezione, impedendo l'esecuzione di operazioni su un riferimento non valido e garantendo la robustezza del sistema.
      * <p>
-     * Test Description: 1. Chiama {@code containsAll(null)}.<br />
-     * 2. Verifica che venga lanciata {@code NullPointerException}.
+     * Test Description: 1) Si tenta di chiamare il metodo {@code containsAll()} sulla lista di test,
+     *                      passando esplicitamente {@code null} come argomento della collezione.
+     *                   2) (Implicito dal test) Se l'eccezione viene lanciata, il test ha successo; altrimenti, fallisce.
+     *                      Si presume che la lista non venga modificata da un tentativo di operazione non valido.
      * <p>
-     * Preconditions: Lista popolata. Collezione null.
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
+     * La collezione fornita è {@code null}.
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata**. Nessuna modifica viene apportata alla struttura o al contenuto della lista.
      * <p>
-     * @expected {@code NullPointerException}.
+     * Expected Result: Deve essere lanciata una **{@code NullPointerException}**.
      */
     @Test(expected = NullPointerException.class)
     public void testContainsAllNullCollection()
@@ -3098,21 +3183,25 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#hashCode()}.
      * <p>
-     * Summary: Verifica che l'hashCode di due liste popolata identiche sia lo stesso.
+     * Summary: Verifica che l'**hashCode** di due liste popolata identiche sia lo stesso, garantendo **coerenza**.
      * <p>
-     * Test Case Design: Assicurarsi che l'hashCode sia calcolato in modo coerente per liste con gli stessi elementi e ordine.
+     * Test Case Design: Il motivo di questo test è assicurarsi che l'hashCode sia calcolato in modo coerente per liste
+     * che contengono gli stessi elementi nello stesso ordine, in conformità con il contratto generale di {@code Object.hashCode()}.
+     * Questo è fondamentale per il corretto funzionamento delle liste in strutture dati basate su hash.
      * <p>
-     * Test Description: 1. Crea una seconda lista identica alla prima.<br />
-     * 2. Calcola e confronta gli hashCode di entrambe le liste.
+     * Test Description: 1) Si crea una seconda istanza di {@code HList} (denominata `otherList`) e la si popola
+     *                      con gli stessi elementi e nello stesso ordine della lista di test (`list`).
+     *                   2) Si calcola l'hashCode di entrambe le liste (`list.hashCode()` e `otherList.hashCode()`).
+     *                   3) Si confrontano i due valori di hashCode per assicurarsi che siano **uguali**.
      * <p>
-     * Preconditions: Due liste popolate identicamente.
+     * Preconditions: Due liste, `list` e `otherList`, sono popolate identicamente: entrambe ["uno", "due", "tre", "quattro"].
      * <p>
-     * Postconditions: Le liste rimangono invariate.
+     * Postconditions: Le liste rimangono **invariate**. L'operazione di calcolo dell'hashCode non modifica la struttura o il contenuto delle liste.
      * <p>
-     * @expected Gli hashCode devono essere uguali.
+     * Expected Result: Gli hashCode di {@code list} e {@code otherList} devono essere **uguali**.
      */
     @Test
-    public void testHashCodePopulatedListConsistent()
+    public void testHashCodePopulatedListConsistent() 
     {
         HList otherList = new ListAdapter();
         otherList.add("uno");
@@ -3125,21 +3214,33 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#hashCode()}.
      * <p>
-     * Summary: Verifica che l'hashCode di due liste popolata diverse sia diverso.
+     * Summary: Verifica che l'**hashCode** di due liste popolate in modo diverso sia **diverso**.
      * <p>
-     * Test Case Design: Assicurarsi che l'hashCode cambi per liste con elementi o ordine diversi.
+     * Test Case Design: Il motivo di questo test è assicurarsi che l'hashCode cambi per liste
+     * che contengono elementi diversi o lo stesso elemento in un ordine differente. Questo è cruciale
+     * per il rispetto del contratto generale di {@code Object.hashCode()}, il quale stabilisce che se due oggetti
+     * sono considerati diversi (non uguali), i loro hashCode *non devono necessariamente* essere diversi,
+     * ma per le liste è una forte aspettativa per il corretto funzionamento all'interno
+     * di collezioni basate su hash (come {@code HashMap} o {@code HashSet}).
      * <p>
-     * Test Description: 1. Crea una seconda lista diversa dalla prima.<br />
-     * 2. Calcola e confronta gli hashCode di entrambe le liste.
+     * Test Description: 1) Si crea una seconda istanza di {@code HList} (denominata `differentList`)
+     *                      e la si popola in modo che contenga almeno un elemento diverso o un ordine differente rispetto
+     *                      alla lista di test (`list`). Nell'esempio fornito, l'elemento "cinque" sostituisce "due".
+     *                   2) Si calcola l'hashCode di entrambe le liste (`list.hashCode()` e `differentList.hashCode()`).
+     *                   3) Si confrontano i due valori di hashCode per assicurarsi che siano **diversi**.
      * <p>
-     * Preconditions: Due liste popolate in modo diverso.
+     * Preconditions: Sono presenti due liste, `list` e `differentList`, popolate in modo tale che
+     * contengano elementi diversi o che l'ordine degli elementi sia differente
+     * `list` è ["uno", "due", "tre", "quattro"] e `differentList` è ["uno", "cinque", "tre", "quattro"].
      * <p>
-     * Postconditions: Le liste rimangono invariate.
+     * Postconditions: Le liste rimangono **invariate**. L'operazione di calcolo dell'hashCode
+     * non modifica la struttura o il contenuto delle liste.
      * <p>
-     * @expected Gli hashCode devono essere diversi.
+     * Expected Result: Gli hashCode di {@code list} e {@code differentList} devono essere **diversi**.
      */
     @Test
-    public void testHashCodePopulatedListDifferent() {
+    public void testHashCodePopulatedListDifferent() 
+    {
         HList differentList = new ListAdapter();
         differentList.add("uno");
         differentList.add("cinque"); // Elemento diverso
@@ -3148,46 +3249,97 @@ public class TestListAdapterPopulated
         assertNotEquals(list.hashCode(), differentList.hashCode());
     }
 
+    /**
+     * Test del metodo {@link HList#hashCode()}.
+     * <p>
+     * Summary: Verifica che l'**hashCode** di due liste contenenti gli stessi elementi ma in **ordine diverso**
+     * sia **diverso**.
+     * <p>
+     * Test Case Design: Il motivo di questo test è assicurarsi che l'implementazione di {@code hashCode()}
+     * per {@code HList} consideri l'ordine degli elementi. Questo è un requisito chiave per le liste,
+     * in quanto l'ordine è una proprietà intrinseca della loro struttura, e due liste con lo stesso contenuto
+     * ma in sequenza differente non dovrebbero avere lo stesso hash code.
+     * <p>
+     * Test Description: 1) Si crea una seconda istanza di {@code HList} (denominata `reorderedList`).
+     *                   2) La si popola con gli stessi elementi della lista di test (`list`), ma in un **ordine differente**.
+     *                      Ad esempio, se `list` è ["uno", "due", "tre", "quattro"], `reorderedList` potrebbe essere
+     *                      ["uno", "tre", "due", "quattro"].
+     *                   3) Si calcola l'hashCode di entrambe le liste (`list.hashCode()` e `reorderedList.hashCode()`).
+     *                   4) Si confrontano i due valori di hashCode per assicurarsi che siano **diversi**.
+     * <p>
+     * Preconditions: La lista di test (`list`) è popolata. Una seconda lista (`reorderedList`)
+     * viene creata con gli stessi elementi, ma in un ordine differente.
+     * <p>
+     * Postconditions: Entrambe le liste rimangono **invariate**. L'operazione di calcolo dell'hashCode
+     * non modifica la struttura o il contenuto delle liste.
+     * <p>
+     * Expected Result: Gli hashCode di {@code list} e {@code reorderedList} devono essere **diversi**.
+     */
+    @Test
+    public void testHashCodeDifferentOrder() 
+    {
+        HList reorderedList = new ListAdapter();
+        reorderedList.add("uno");
+        reorderedList.add("tre");
+        reorderedList.add("due");
+        reorderedList.add("quattro"); // list = ["uno", "due", "tre", "quattro"]
+
+        // Verifica che gli hashCode siano diversi a causa dell'ordine differente
+        assertNotEquals(list.hashCode(), reorderedList.hashCode());
+    }
+
     //------- TEST DEL METODO equals(Object) ----------
 
     /**
      * Test del metodo {@link HList#equals(Object)}.
      * <p>
-     * Summary: Verifica che una lista popolata sia uguale a se stessa.
+     * Summary: Verifica che una **lista popolata sia uguale a se stessa**.
      * <p>
-     * Test Case Design: Assicurarsi che la riflessività sia rispettata.
+     * Test Case Design: Il motivo di questo test è assicurarsi che la proprietà di **riflessività**
+     * del metodo {@code equals()} sia rispettata, come stabilito dal contratto generale di {@code Object.equals()}.
+     * Ogni oggetto, inclusa una lista, deve essere uguale a se stesso.
      * <p>
-     * Test Description: 1. Confronta la lista con se stessa.
+     * Test Description: 1) Si confronta l'istanza della lista di test (`list`) con se stessa
+     *                      utilizzando il metodo {@code equals(Object)}.
+     *                   2) Si verifica che il risultato di questo confronto sia **{@code true}**.
      * <p>
-     * Preconditions: Lista popolata.
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata**. L'operazione di confronto non modifica la struttura o il contenuto della lista.
      * <p>
-     * @expected {@code equals(list)} deve restituire true.
+     * Expected Result: La chiamata a {@code list.equals(list)} deve restituire **{@code true}**.
      */
     @Test
-    public void testEqualsPopulatedListSelf() {
+    public void testEqualsPopulatedListSelf() 
+    {
         assertTrue(list.equals(list));
     }
 
     /**
      * Test del metodo {@link HList#equals(Object)}.
      * <p>
-     * Summary: Verifica che una lista popolata sia uguale a un'altra lista popolata identicamente.
+     * Summary: Verifica che una **lista popolata sia uguale a un'altra lista popolata identicamente**,
+     * confermando che contengono gli stessi elementi nello stesso ordine.
      * <p>
-     * Test Case Design: Assicurarsi che la simmetria e la transitività siano rispettate per liste identiche.
+     * Test Case Design: Il motivo di questo test è assicurarsi che le proprietà di **simmetria** e (implicitamente) di **transitività**
+     * del metodo {@code equals()} siano rispettate, come stabilito dal contratto generale di {@code Object.equals()}.
+     * Se due liste hanno gli stessi elementi nello stesso ordine, devono essere considerate uguali.
      * <p>
-     * Test Description: 1. Crea un'altra lista con gli stessi elementi e nello stesso ordine.<br />
-     * 2. Confronta la lista originale con la nuova lista.
+     * Test Description: 1) Si crea una seconda istanza di {@code HList} (denominata `otherList`)
+     *                      e la si popola con gli **stessi elementi e nello stesso ordine** della lista di test (`list`).
+     *                   2) Si confronta la lista originale (`list`) con la nuova lista (`otherList`) utilizzando il metodo {@code equals(Object)}.
+     *                   3) Si verifica che il risultato di questo confronto sia **{@code true}**.
      * <p>
-     * Preconditions: Due liste popolate identicamente.
+     * Preconditions: Sono presenti due liste, `list` e `otherList`, entrambe inizializzate e popolate
+     * con gli stessi elementi nello stesso ordine (ad esempio, entrambe ["uno", "due", "tre", "quattro"]).
      * <p>
-     * Postconditions: Le liste rimangono invariate.
+     * Postconditions: Le liste rimangono **invariate**. L'operazione di confronto non modifica la struttura o il contenuto delle liste.
      * <p>
-     * @expected {@code equals(otherList)} deve restituire true.
+     * Expected Result: La chiamata a {@code list.equals(otherList)} deve restituire **{@code true}**.
      */
     @Test
-    public void testEqualsPopulatedListIdentical() {
+    public void testEqualsPopulatedListIdentical() 
+    {
         HList otherList = new ListAdapter();
         otherList.add("uno");
         otherList.add("due");
@@ -3199,61 +3351,78 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#equals(Object)}.
      * <p>
-     * Summary: Verifica che una lista popolata non sia uguale a null.
+     * Summary: Verifica che una **lista popolata non sia uguale a {@code null}**.
      * <p>
-     * Test Case Design: Assicurarsi che il confronto con null restituisca false.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il metodo {@code equals()} gestisca correttamente
+     * il confronto con un riferimento {@code null}. Secondo il contratto generale di {@code Object.equals()},
+     * qualsiasi oggetto non nullo deve restituire {@code false} quando confrontato con {@code null}.
      * <p>
-     * Test Description: 1. Confronta la lista con null.
+     * Test Description: 1) Si tenta di confrontare l'istanza della lista di test (`list`) con {@code null}
+     *                      utilizzando il metodo {@code equals(Object)}.
+     *                   2) Si verifica che il risultato di questo confronto sia **{@code false}**.
      * <p>
-     * Preconditions: Lista popolata.
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata**. L'operazione di confronto non modifica la struttura o il contenuto della lista.
      * <p>
-     * @expected {@code equals(null)} deve restituire false.
+     * Expected Result: La chiamata a {@code list.equals(null)} deve restituire **{@code false}**.
      */
     @Test
-    public void testEqualsPopulatedListNull() {
+    public void testEqualsPopulatedListNull() 
+    {
         assertFalse(list.equals(null));
     }
 
     /**
      * Test del metodo {@link HList#equals(Object)}.
      * <p>
-     * Summary: Verifica che una lista popolata non sia uguale a un oggetto di tipo diverso.
+     * Summary: Verifica che una **lista popolata non sia uguale a un oggetto di tipo diverso**.
      * <p>
-     * Test Case Design: Assicurarsi che il confronto con tipi incompatibili restituisca false.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il metodo {@code equals()} gestisca correttamente
+     * il confronto con oggetti di tipi incompatibili. Una lista non dovrebbe mai essere uguale a un oggetto che non è
+     * un'istanza di {@code HList} o di una sua sottoclasse compatibile.
      * <p>
-     * Test Description: 1. Confronta la lista con un'istanza di `Object`.
+     * Test Description: 1) Si tenta di confrontare l'istanza della lista di test (`list`) con una nuova
+     *                      istanza generica di {@code Object} (ovvero, {@code new Object()}).
+     *                   2) Si verifica che il risultato di questo confronto sia **{@code false}**.
      * <p>
-     * Preconditions: Lista popolata.
+     * Preconditions: La lista è stata inizializzata e popolata con elementi (es. ["uno", "due", "tre", "quattro"]).
      * <p>
-     * Postconditions: La lista rimane invariata.
+     * Postconditions: La lista rimane **invariata**. L'operazione di confronto non modifica la struttura o il contenuto della lista.
      * <p>
-     * @expected {@code equals(new Object())} deve restituire false.
+     * Expected Result: La chiamata a {@code list.equals(new Object())} deve restituire **{@code false}**.
      */
     @Test
-    public void testEqualsPopulatedListDifferentType() {
+    public void testEqualsPopulatedListDifferentType() 
+    {
         assertFalse(list.equals(new Object()));
     }
 
     /**
      * Test del metodo {@link HList#equals(Object)}.
      * <p>
-     * Summary: Verifica che due liste con stessi elementi ma ordine diverso non siano uguali.
+     * Summary: Verifica che due liste che contengono gli stessi elementi ma in **ordine diverso non siano uguali**.
      * <p>
-     * Test Case Design: Assicurarsi che l'ordine degli elementi sia rilevante per l'uguaglianza.
+     * Test Case Design: Il motivo di questo test è assicurarsi che l'**ordine degli elementi sia rilevante per l'uguaglianza**
+     * di due liste. Per una corretta implementazione di una lista, l'ordine è un fattore discriminante fondamentale
+     * per il metodo {@code equals()}.
      * <p>
-     * Test Description: 1. Crea una lista con gli stessi elementi ma in ordine diverso.<br />
-     * 2. Confronta la lista originale con la nuova lista.
+     * Test Description: 1) Si crea una seconda istanza di {@code HList} (denominata `otherList`) e la si popola
+     *                      con gli **stessi elementi** della lista di test (`list`), ma in un **ordine deliberatamente diverso**.
+     *                      Nell'esempio, `otherList` viene popolata al contrario rispetto a `list`.
+     *                   2) Si confronta la lista originale (`list`) con la nuova lista (`otherList`) utilizzando il metodo {@code equals(Object)}.
+     *                   3) Si verifica che il risultato di questo confronto sia **{@code false}**, confermando che l'ordine è stato considerato.
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Altra lista: ["quattro", "tre", "due", "uno"].
+     * Preconditions: Sono presenti due liste: `list` (es. ["uno", "due", "tre", "quattro"]) e `otherList`
+     * (es. ["quattro", "tre", "due", "uno"]). Contengono gli stessi elementi ma in ordine inverso.
      * <p>
-     * Postconditions: Le liste rimangono invariate.
+     * Postconditions: Le liste rimangono **invariate**. L'operazione di confronto non modifica la struttura o il contenuto delle liste.
      * <p>
-     * @expected {@code equals(otherList)} deve restituire false.
+     * Expected Result: La chiamata a {@code list.equals(otherList)} deve restituire **{@code false}**.
      */
     @Test
-    public void testEqualsPopulatedListDifferentOrder() {
+    public void testEqualsPopulatedListDifferentOrder() 
+    {
         HList otherList = new ListAdapter();
         otherList.add("quattro");
         otherList.add("tre");
@@ -3265,18 +3434,26 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#equals(Object)}.
      * <p>
-     * Summary: Verifica che due liste con elementi diversi non siano uguali.
+     * Summary: Verifica che due liste che contengono **elementi diversi non siano uguali**.
      * <p>
-     * Test Case Design: Assicurarsi che il confronto rilevi differenze negli elementi.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il confronto di uguaglianza {@code equals()}
+     * rilevi correttamente le **differenze nel contenuto** degli elementi tra due liste. Se anche un solo elemento
+     * differisce tra due liste, queste non dovrebbero essere considerate uguali.
      * <p>
-     * Test Description: 1. Crea una lista con alcuni elementi diversi.<br />
-     * 2. Confronta la lista originale con la nuova lista.
+     * Test Description: 1) Si crea una seconda istanza di {@code HList} (denominata `otherList`).
+     *                   2) La si popola con alcuni elementi che sono presenti anche nella lista di test (`list`),
+     *                      e con altri elementi che sono **deliberatamente diversi** rispetto a quelli corrispondenti in `list`.
+     *                      Ad esempio, `list` è ["uno", "due", "tre", "quattro"], mentre `otherList` è ["uno", "cinque", "tre", "sei"].
+     *                   3) Si confronta la lista originale (`list`) con la nuova lista (`otherList`) utilizzando il metodo {@code equals(Object)}.
+     *                   4) Si verifica che il risultato di questo confronto sia **{@code false}**, confermando che il metodo
+     *                      ha rilevato le differenze negli elementi.
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Altra lista: ["uno", "cinque", "tre", "sei"].
+     * Preconditions: Sono presenti due liste: `list` (es. ["uno", "due", "tre", "quattro"]) e `otherList`
+     * (es. ["uno", "cinque", "tre", "sei"]). Contengono alcuni elementi uguali e altri diversi, nello stesso ordine per gli elementi comuni.
      * <p>
-     * Postconditions: Le liste rimangono invariate.
+     * Postconditions: Le liste rimangono **invariate**. L'operazione di confronto non modifica la struttura o il contenuto delle liste.
      * <p>
-     * @expected {@code equals(otherList)} deve restituire false.
+     * Expected Result: La chiamata a {@code list.equals(otherList)} deve restituire **{@code false}**.
      */
     @Test
     public void testEqualsPopulatedListDifferentElements() {
@@ -3291,18 +3468,27 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#equals(Object)}.
      * <p>
-     * Summary: Verifica che una lista popolata non sia uguale a una lista di dimensione diversa.
+     * Summary: Verifica che una **lista popolata non sia uguale a una lista di dimensione diversa**.
      * <p>
-     * Test Case Design: Assicurarsi che il confronto rilevi differenze di dimensione.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il confronto di uguaglianza {@code equals()}
+     * rilevi correttamente le **differenze nella dimensione** tra due liste. Due liste di lunghezza differente
+     * non possono essere considerate uguali, a prescindere dal loro contenuto parziale.
      * <p>
-     * Test Description: 1. Crea una lista con dimensione maggiore.<br />
-     * 2. Confronta la lista originale con la nuova lista.
+     * Test Description: 1) Si crea una seconda istanza di {@code HList} (denominata `otherList`).
+     *                   2) La si popola con gli stessi elementi iniziali della lista di test (`list`), ma aggiungendo
+     *                      almeno un elemento in più in modo che `otherList` abbia una dimensione maggiore.
+     *                      Ad esempio, se `list` è ["uno", "due", "tre", "quattro"], `otherList` diventa
+     *                      ["uno", "due", "tre", "quattro", "cinque"].
+     *                   3) Si confronta la lista originale (`list`) con la nuova lista (`otherList`) utilizzando il metodo {@code equals(Object)}.
+     *                   4) Si verifica che il risultato di questo confronto sia **{@code false}**, confermando che il metodo
+     *                      ha rilevato la differenza di dimensione.
      * <p>
-     * Preconditions: Lista: ["uno", "due", "tre", "quattro"]. Altra lista: ["uno", "due", "tre", "quattro", "cinque"].
+     * Preconditions: Sono presenti due liste: `list` (es. ["uno", "due", "tre", "quattro"]) e `otherList`
+     * (es. ["uno", "due", "tre", "quattro", "cinque"]), con `otherList` che ha una dimensione maggiore.
      * <p>
-     * Postconditions: Le liste rimangono invariate.
+     * Postconditions: Le liste rimangono **invariate**. L'operazione di confronto non modifica la struttura o il contenuto delle liste.
      * <p>
-     * @expected {@code equals(otherList)} deve restituire false.
+     * Expected Result: La chiamata a {@code list.equals(otherList)} deve restituire **{@code false}**.
      */
     @Test
     public void testEqualsPopulatedListDifferentSize() {
@@ -3318,18 +3504,27 @@ public class TestListAdapterPopulated
     /**
      * Test del metodo {@link HList#equals(Object)}.
      * <p>
-     * Summary: Verifica che una lista con elementi null sia uguale a un'altra lista con null identicamente posizionati.
+     * Summary: Verifica che una lista contenente elementi {@code null} sia considerata **uguale a un'altra lista**
+     * che ha gli stessi elementi, inclusi i {@code null}, **identicamente posizionati**.
      * <p>
-     * Test Case Design: Assicurarsi che il confronto gestisca correttamente gli elementi null.
+     * Test Case Design: Il motivo di questo test è assicurarsi che il metodo {@code equals()} gestisca correttamente
+     * il confronto tra liste che contengono elementi {@code null}. La presenza di {@code null} non dovrebbe impedire
+     * un confronto accurato, e la posizione di {@code null} dovrebbe essere considerata rilevante per l'uguaglianza.
      * <p>
-     * Test Description: 1. Aggiunge null a entrambe le liste in posizioni corrispondenti.<br />
-     * 2. Confronta le due liste.
+     * Test Description: 1) Si aggiunge un elemento {@code null} a una specifica posizione (indice 1) della lista di test (`list`).
+     *                      La lista diventa: ["uno", null, "due", "tre", "quattro"].
+     *                   2) Si crea una seconda istanza di {@code HList} (denominata `otherList`) e la si popola
+     *                      con gli stessi elementi di `list`, assicurandosi che anche l'elemento {@code null} sia inserito nella **stessa posizione corrispondente**.
+     *                   3) Si confronta la lista originale (`list`) con la nuova lista (`otherList`) utilizzando il metodo {@code equals(Object)}.
+     *                   4) Si verifica che il risultato di questo confronto sia **{@code true}**, confermando che il metodo
+     *                      gestisce correttamente l'uguaglianza quando sono presenti elementi {@code null} in posizioni equivalenti.
      * <p>
-     * Preconditions: Entrambe le liste: ["uno", null, "due", "tre", "quattro"].
+     * Preconditions: Entrambe le liste vengono popolate in modo da contenere elementi identici,
+     * incluso un elemento {@code null} nella stessa posizione (ad esempio, entrambe sono ["uno", null, "due", "tre", "quattro"]).
      * <p>
-     * Postconditions: Le liste rimangono invariate.
+     * Postconditions: Le liste rimangono **invariate**. L'operazione di confronto non modifica la struttura o il contenuto delle liste.
      * <p>
-     * @expected {@code equals(otherList)} deve restituire true.
+     * Expected Result: La chiamata a {@code list.equals(otherList)} deve restituire **{@code true}**.
      */
     @Test
     public void testEqualsWithNullElements() {
@@ -3342,8 +3537,4 @@ public class TestListAdapterPopulated
         otherList.add("quattro");
         assertTrue(list.equals(otherList));
     }
-
-    // Nota: I test per listIterator(int) sono stati inclusi nel file iniziale e sono mantenuti.
-    // Gli altri test specifici per ListIterator sono in TestListIteratorPopulated.java
-    // e quelli per SubList in TestSubListAdapter.java, come da tua organizzazione.
 }

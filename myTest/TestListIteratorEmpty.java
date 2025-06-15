@@ -11,15 +11,19 @@ import myExceptions.IllegalStateException; // Assicurati che questo sia il tuo p
 import java.util.NoSuchElementException; // Per i casi in cui next() o previous() sono chiamati su un iteratore esaurito
 
 /**
- * Suite di test per la classe {@link myAdapter.ListIterator} che implementa {@link myAdapter.HListIterator}.
+ * <b>Summary:</b>
  * <p>
- * Riassunto: Verifica il corretto funzionamento dell'iteratore bidirezionale {@code ListIterator}
- * inclusi i metodi di navigazione, modifica e gestione degli indici, e la corretta
- * emissione delle eccezioni previste, su una lista *vuota*.
+ * Questa classe contiene una suite di test per {@link myAdapter.ListIterator} focalizzata sul comportamento su una lista vuota.
+ * Sono presenti test per tutti i costruttori e i metodi principali dell'iteratore: navigazione (hasNext, next, hasPrevious, previous, nextIndex, previousIndex),
+ * modifica (add, remove, set), gestione di elementi null, e verifica delle eccezioni.
+ * Ogni metodo è testato per il comportamento atteso su una lista vuota e per la corretta gestione di input non validi.
+ * <br>
+ * <b>Test Case Design:</b>
  * <p>
- * Design: Utilizza JUnit 4.13.2. Ogni test case configura uno scenario specifico
- * per l'iteratore e verifica il comportamento atteso. Particolare attenzione è data
- * ai casi limite (liste vuote) e alle condizioni che scatenano eccezioni.
+ * La motivazione di questa suite è assicurare che l'iteratore gestisca correttamente tutti i casi limite e le operazioni su una lista vuota,
+ * senza lanciare eccezioni inattese o restituire risultati errati. Si verifica che le operazioni di aggiunta inizializzino correttamente la lista,
+ * che le ricerche e rimozioni su elementi inesistenti siano sicure, e che le eccezioni siano lanciate dove previsto.
+ * La separazione dai test su liste popolate permette di isolare i comportamenti di bordo e prevenire regressioni.
  */
 public class TestListIteratorEmpty
 {

@@ -7,14 +7,18 @@ import myAdapter.*;
 import java.util.Vector; // Necessario per testare l'interazione con Vector se usi i toArray con array CLDC
 
 /**
- * Suite di test per la classe {@link myAdapter.ListAdapter}.
+ * <b>Summary:</b>
  * <p>
- * Riassunto: Verifica il corretto funzionamento dei metodi della classe {@code ListAdapter} che implementa l'interfaccia {@link myAdapter.HList}.
+ * Questa classe contiene una suite di test per {@link myAdapter.ListAdapter} focalizzata sul comportamento di una lista vuota.
+ * Sono presenti test per tutti i metodi principali: verifica di size, isEmpty, contains, iterator, toArray, add, remove, containsAll, addAll, removeAll, retainAll, clear, equals, hashCode, get, set, subList, e listIterator.
+ * Ogni metodo viene testato sia per il comportamento atteso su una lista vuota, sia per la corretta gestione di input non validi (indici fuori limite, collezioni null, ecc.).
+ * <br>
+ * <b>Test Case Design:</b>
  * <p>
- * Design: Utilizza JUnit 4.13.2<br />
- * La suite include test per metodi di accesso, modifica e interrogazione di una {@link myAdapter.HList}<br />
- * attraverso la classe {@link myAdapter.ListAdapter}, con un'istanza vuota ripopolata prima di ogni test case.<br />
- * Si suppone che la classe {@link myAdapter.ListIterator} funzioni correttamente e sarà testata nella sua propria suite.
+ * La motivazione di questa suite è assicurare che ListAdapter gestisca correttamente tutti i casi limite e le operazioni su una lista vuota,
+ * senza lanciare eccezioni inattese o restituire risultati errati. Si verifica che le operazioni di aggiunta inizializzino correttamente la lista,
+ * che le ricerche e rimozioni su elementi inesistenti siano sicure, e che le eccezioni siano lanciate dove previsto.
+ * La separazione dai test su liste popolate permette di isolare i comportamenti di bordo e prevenire regressioni.
  */
 public class TestListAdapterEmpty
 {

@@ -7,42 +7,19 @@ import myAdapter.*;
 import myExceptions.IllegalStateException;
 
 /**
- * Test di integrazione e unitari per la classe {@link myAdapter.ListIterator} su una lista popolata.
+ * <b>Summary:</b>
  * <p>
- * Questa classe verifica il comportamento di un {@code ListIterator} ottenuto da una {@link myAdapter.ListAdapter}
- * non vuota, testando sia i costruttori che tutti i metodi di navigazione e modifica previsti
- * dall'interfaccia {@code ListIterator}.
+ * Questa classe contiene una suite completa di test per {@link myAdapter.ListIterator} su una lista popolata.
+ * Sono presenti test per tutti i costruttori e i metodi dell'iteratore: navigazione (hasNext, next, hasPrevious, previous, nextIndex, previousIndex),
+ * modifica (add, remove, set), gestione di elementi null, gestione di indici e stato interno, e verifica delle eccezioni.
+ * Ogni metodo è testato sia in condizioni normali che in presenza di errori o casi limite.
+ * <br>
+ * <b>Test Case Design:</b>
  * <p>
- * <b>Obiettivi dei test:</b>
- * <ul>
- *   <li>Verificare la corretta inizializzazione dell'iteratore in diverse posizioni della lista.</li>
- *   <li>Assicurare la corretta gestione dei limiti sugli indici passati al costruttore.</li>
- *   <li>Testare i metodi di navigazione ({@code hasNext()}, {@code next()}, {@code hasPrevious()}, {@code previous()}, {@code nextIndex()}, {@code previousIndex()}) in tutti i casi rilevanti.</li>
- *   <li>Verificare il comportamento dei metodi di modifica ({@code remove()}, {@code set()}, {@code add()}) sia in condizioni normali che in presenza di errori (eccezioni attese).</li>
- *   <li>Assicurare la coerenza dello stato interno dell'iteratore dopo sequenze di operazioni miste.</li>
- *   <li>Verificare la corretta gestione di elementi {@code null} nella lista.</li>
- * </ul>
- * <p>
- * <b>Strategia di test:</b>
- * <ul>
- *   <li>Per ogni metodo pubblico dell'iteratore, sono previsti test sia per il caso base che per i casi limite e di errore.</li>
- *   <li>Le precondizioni e postcondizioni di ciascun test sono documentate nei rispettivi metodi.</li>
- *   <li>Vengono verificati sia gli effetti sulla lista sottostante che lo stato interno dell'iteratore (cursore, indici, lastReturned).</li>
- *   <li>Le eccezioni previste dal contratto sono testate esplicitamente.</li>
- * </ul>
- * <p>
- * <b>Precondizioni generali:</b>
- * <ul>
- *   <li>Salvo dove diversamente specificato, ogni test parte da una lista popolata con tre elementi: "zero", "uno", "due".</li>
- *   <li>Un nuovo {@code ListIterator} viene creato prima di ogni test tramite il metodo {@code setUp()}.</li>
- * </ul>
- * <p>
- * <b>Postcondizioni generali:</b>
- * <ul>
- *   <li>La lista e l'iteratore si trovano nello stato atteso dopo ogni test, oppure viene lanciata l'eccezione prevista.</li>
- * </ul>
- * <p>
- * <b>Nota:</b> Questa classe di test si focalizza su una lista non vuota; per i casi di lista vuota si rimanda a test specifici.
+ * La motivazione di questa suite è assicurare che l'iteratore si comporti correttamente su una lista non vuota,
+ * rispettando le specifiche delle interfacce Java Collections per la navigazione bidirezionale, la modifica sicura della lista,
+ * la gestione dello stato interno (cursore, lastReturned), e la robustezza contro sequenze di operazioni miste e input errati.
+ * La separazione tra lista popolata e vuota permette di coprire sia i casi d'uso tipici che quelli di bordo.
  */
 public class TestListIteratorPopulated 
 {
