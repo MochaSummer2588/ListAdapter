@@ -33,6 +33,15 @@ public class TestListAdapterPopulated
     private HList list; // Utilizza HList per mantenere l'astrazione
 
     /**
+     * Costruttore predefinito per i test di {@code TestListAdapterPopulated}.
+     * Non esegue inizializzazioni specifiche, affidandosi al metodo {@code setup()}.
+     */
+    public TestListAdapterPopulated() 
+    {
+        // Nessuna logica di inizializzazione complessa qui, JUnit si occupa del setup.
+    }
+
+    /**
      * Configura l'ambiente di test popolando la lista che verrà manipolata.
      */
     @Before
@@ -664,7 +673,7 @@ public class TestListAdapterPopulated
      * Postconditions: La lista contiene un elemento in più all'indice specificato, con gli elementi successivi spostati.
      * La dimensione della lista è 5.
      * <p>
-     * @expected L'elemento aggiunto deve trovarsi all'indice casuale generato (tra 1 e {@code initialSize - 2}).
+     * Expected Result: L'elemento aggiunto deve trovarsi all'indice casuale generato (tra 1 e {@code initialSize - 2}).
      * La dimensione finale deve essere la dimensione iniziale + 1.
      * Tutti gli elementi originali prima dell'indice devono rimanere invariati.
      * Tutti gli elementi originali a partire dall'indice devono essere stati spostati di una posizione a destra.
@@ -866,7 +875,7 @@ public class TestListAdapterPopulated
      * Gli elementi che erano originariamente agli indici >= {@code randomIndex} sono stati spostati di una posizione a destra.
      * La dimensione della lista è {@code initialSize + 1}.
      * <p>
-     * @expected L'elemento {@code null} deve trovarsi all'indice casuale generato (tra 1 e {@code initialSize - 2}).
+     * Expected Result: L'elemento {@code null} deve trovarsi all'indice casuale generato (tra 1 e {@code initialSize - 2}).
      * La dimensione finale deve essere {@code initialSize + 1}.
      * Tutti gli elementi originali prima dell'indice devono rimanere invariati.
      * Tutti gli elementi originali a partire dall'indice devono essere stati spostati di una posizione a destra.
@@ -885,7 +894,8 @@ public class TestListAdapterPopulated
 
         // Cattura lo stato della lista prima della modifica per verifiche successive
         Object[] initialContent = new Object[initialSize];
-        for (int i = 0; i < initialSize; i++) {
+        for (int i = 0; i < initialSize; i++) 
+        {
             initialContent[i] = list.get(i);
         }
 
@@ -933,7 +943,8 @@ public class TestListAdapterPopulated
      * a un indice negativo.
      */
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testAddAtIndexNegativePopulatedList() {
+    public void testAddAtIndexNegativePopulatedList() 
+    {
         list.add(-1, "elemento");
     }
 
@@ -1025,13 +1036,14 @@ public class TestListAdapterPopulated
      * La lista ora contiene 3 elementi: ["due", "tre", "quattro"].
      * La dimensione della lista è 3.
      * <p>
-     * @expected {@code remove("uno")} deve restituire {@code true}.
+     * Expected Result: {@code remove("uno")} deve restituire {@code true}.
      * La dimensione finale della lista deve essere 3.
      * L'elemento "uno" non deve più essere presente nella lista.
      * La lista finale deve essere `["due", "tre", "quattro"]`.
      */
     @Test
-    public void testRemoveFirstObjectFromPopulatedList() {
+    public void testRemoveFirstObjectFromPopulatedList() 
+    {
         assertTrue(list.remove("uno"));
         assertEquals(3, list.size());
         assertFalse(list.contains("uno"));
@@ -1402,7 +1414,7 @@ public class TestListAdapterPopulated
      * Gli elementi che erano originariamente agli indici > {@code randomIndex} sono stati spostati di una posizione a sinistra.
      * La dimensione della lista è {@code initialSize - 1}.
      * <p>
-     * @expected Il metodo {@code remove(int)} deve restituire l'elemento che era all'indice {@code randomIndex}.
+     * Expected Result: Il metodo {@code remove(int)} deve restituire l'elemento che era all'indice {@code randomIndex}.
      * La dimensione finale deve essere la dimensione iniziale - 1.
      * Tutti gli elementi originali prima dell'indice rimosso devono rimanere invariati.
      * Tutti gli elementi originali dopo l'indice rimosso devono essere stati spostati di una posizione a sinistra.
@@ -3456,7 +3468,8 @@ public class TestListAdapterPopulated
      * Expected Result: La chiamata a {@code list.equals(otherList)} deve restituire **{@code false}**.
      */
     @Test
-    public void testEqualsPopulatedListDifferentElements() {
+    public void testEqualsPopulatedListDifferentElements() 
+    {
         HList otherList = new ListAdapter();
         otherList.add("uno");
         otherList.add("cinque"); // Elemento diverso
@@ -3491,7 +3504,8 @@ public class TestListAdapterPopulated
      * Expected Result: La chiamata a {@code list.equals(otherList)} deve restituire **{@code false}**.
      */
     @Test
-    public void testEqualsPopulatedListDifferentSize() {
+    public void testEqualsPopulatedListDifferentSize() 
+    {
         HList otherList = new ListAdapter();
         otherList.add("uno");
         otherList.add("due");
@@ -3527,7 +3541,8 @@ public class TestListAdapterPopulated
      * Expected Result: La chiamata a {@code list.equals(otherList)} deve restituire **{@code true}**.
      */
     @Test
-    public void testEqualsWithNullElements() {
+    public void testEqualsWithNullElements() 
+    {
         list.add(1, null); // list: ["uno", null, "due", "tre", "quattro"]
         HList otherList = new ListAdapter();
         otherList.add("uno");

@@ -25,6 +25,16 @@ public class TestListAdapterEmpty
     private ListAdapter list;
 
     /**
+     * Costruttore predefinito per i test di {@code TestListAdapterEmpty}.
+     * Non esegue inizializzazioni specifiche, affidandosi al metodo {@code setup()}.
+     */
+    public TestListAdapterEmpty() 
+    {
+        // Nessuna logica di inizializzazione complessa qui, JUnit si occupa del setup.
+    }
+
+
+    /**
      * Configura l'ambiente di test popolando la lista che verrà manipolata.
      */
     @Before
@@ -32,6 +42,64 @@ public class TestListAdapterEmpty
     {
         // Crea una lista vuota
         list = new ListAdapter();
+    }
+
+    //------- TEST DEL COSTRUTTORE ListAdapter(int) ----------
+
+    /**
+     * Test del costruttore {@link myAdapter.ListAdapter#ListAdapter(int)} con capacità iniziale positiva.
+     * <p>
+     * Summary: Verifica che il costruttore crei correttamente un {@code ListAdapter} con la capacità iniziale specificata
+     * quando la capacità è un valore positivo valido.
+     * <p>
+     * Test Case Design: Questo test valuta il caso nominale di un'inizializzazione con una capacità non negativa,
+     * assicurandosi che la lista venga creata senza errori e che la sua dimensione iniziale sia 0 (poiché la capacità
+     * si riferisce allo spazio allocato, non agli elementi presenti).
+     * <p>
+     * Test Description:
+     * 1) Si istanzia un nuovo {@code ListAdapter} fornendo una capacità iniziale positiva (es. 10).
+     * 2) Si verifica che la lista creata non sia {@code null}.
+     * 3) Si verifica che il metodo {@code size()} della lista restituisca 0, indicando che la lista è vuota di elementi.
+     * <p>
+     * Preconditions: Nessuna.
+     * <p>
+     * Postconditions: Viene creata una nuova istanza di {@code ListAdapter} vuota, ma con una capacità pre-allocata.
+     * <p>
+     * Expected Result: L'istanziazione avviene senza eccezioni e la lista ha dimensione 0.
+     */
+    @Test
+    public void testConstructorWithPositiveInitialCapacity() 
+    {
+        ListAdapter newList = new ListAdapter(10); // Capacità iniziale positiva
+        assertNotNull("La lista non dovrebbe essere null dopo la creazione con capacità.", newList);
+        assertEquals("La lista dovrebbe essere vuota dopo la creazione con capacità.", 0, newList.size());
+        assertTrue("La lista dovrebbe essere vuota dopo la creazione con capacità.", newList.isEmpty());
+    }
+
+    /**
+     * Test del costruttore {@link myAdapter.ListAdapter#ListAdapter(int)} con capacità iniziale negativa.
+     * <p>
+     * Summary: Verifica che il costruttore lanci correttamente una {@link java.lang.IllegalArgumentException}
+     * quando si tenta di creare un {@code ListAdapter} con una capacità iniziale negativa.
+     * <p>
+     * Test Case Design: Questo test copre un caso limite o di errore, assicurandosi che il costruttore
+     * rispetti la specifica che impedisce la creazione di un {@code Vector} (e quindi di un {@code ListAdapter})
+     * con capacità non valida. Si basa sulla propagazione dell'eccezione lanciata dal costruttore di {@link java.util.Vector} di CLDC 1.1.
+     * <p>
+     * Test Description:
+     * 1) Si tenta di istanziare un nuovo {@code ListAdapter} fornendo una capacità iniziale negativa (es. -5).
+     * 2) Si aspetta che, come risultato di questa operazione, venga lanciata una {@link java.lang.IllegalArgumentException}.
+     * <p>
+     * Preconditions: Nessuna.
+     * <p>
+     * Postconditions: Nessuna istanza di {@code ListAdapter} viene creata.
+     * <p>
+     * Expected Result: Viene lanciata una {@link java.lang.IllegalArgumentException}.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorWithNegativeInitialCapacity() 
+    {
+        new ListAdapter(-5); // Capacità iniziale negativa, ci aspettiamo un'eccezione
     }
 
     //------- TEST DEL METODO size() ----------

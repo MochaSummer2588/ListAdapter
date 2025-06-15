@@ -31,6 +31,15 @@ public class TestListIteratorEmpty
     private HListIterator iterator; // Oggetto ListIterator da testare
 
     /**
+     * Costruttore predefinito per i test di {@code TestListIteratorEmpty}.
+     * Non esegue inizializzazioni specifiche, affidandosi al metodo {@code setup()}.
+     */
+    public TestListIteratorEmpty() 
+    {
+        // Nessuna logica di inizializzazione complessa qui, JUnit si occupa del setup.
+    }
+
+    /**
      * Configura l'ambiente di test prima di ogni test case.
      * Inizializza una ListAdapter vuota e un ListIterator.
      */

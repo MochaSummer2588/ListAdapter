@@ -24,6 +24,15 @@ import myExceptions.IllegalStateException;
 public class TestListIteratorPopulated 
 {
 
+    /**
+     * Costruttore predefinito per i test di {@code TestListIteratorPopulated}.
+     * Non esegue inizializzazioni specifiche, affidandosi al metodo {@code setup()}.
+     */
+    public TestListIteratorPopulated() 
+    {
+        // Nessuna logica di inizializzazione complessa qui, JUnit si occupa del setup.
+    }
+
     private ListAdapter list;
     private HListIterator iterator; // Oggetto ListIterator da testare
 
@@ -241,7 +250,7 @@ public class TestListIteratorPopulated
      * corretti e lanci l'eccezione appropriata quando si tenta di andare oltre l'ultimo elemento.
      * <p>
      * Test Description: 1) L'iteratore si trova all'inizio della lista.
-     *                   2) Viene creato un array con dimensione maggiore rispetto a quella della lista in questo modo non si verifica {@cod IndexOutOfBoundsException}. 
+     *                   2) Viene creato un array con dimensione maggiore rispetto a quella della lista in questo modo non si verifica {@code IndexOutOfBoundsException}. 
      *                   3) L'iteratore scorre la lista chiamando {@code next()} e confrontando l'elemento ottenuto con l'elemento nella posizione i-esima della lista tramite 
      *                      e incremento i ad ogni ciclo.
      *                   4) Si verifica che l'iteratore lanci {@code NoSuchElementException} quando si tenta di chiamare {@code next()} dopo l'ultimo elemento.                

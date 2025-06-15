@@ -1,11 +1,18 @@
 package myAdapter;
-/**
- * Implementazione dell'adapter per ListIterator utilizzando Vector di CLDC 1.1.
- * Questa classe implementa sia HIterator che HListIterator.
- */
-
 import myExceptions.IllegalStateException;
-
+/**
+ * Implementazione di un iteratore bidirezionale (ListIterator) per la classe {@link ListAdapter}.
+ * Questa classe consente di attraversare la lista in entrambe le direzioni,
+ * modificare la lista durante l'iterazione e ottenere la posizione corrente dell'iteratore.
+ * Si adatta all'interfaccia {@link HListIterator}, fornendo le funzionalità standard
+ * di un ListIterator come definito nelle collezioni Java (J2SE).
+ *
+ * Le operazioni {@code remove()}, {@code set(Object)} e {@code add(Object)}
+ * modificano la lista sottostante e aggiornano lo stato dell'iteratore di conseguenza.
+ *
+ * @see HListIterator
+ * @see ListAdapter
+ */
 public class ListIterator implements HListIterator
 {
     private ListAdapter list;       // Riferimento alla lista sottostante

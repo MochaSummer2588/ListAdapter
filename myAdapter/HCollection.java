@@ -19,7 +19,7 @@ public interface HCollection
      *
      * @param o elemento di cui deve essere assicurata la presenza in questa collezione
      * @return true se questa collezione è cambiata come risultato della chiamata
-     * @throws UnsupportedOperationException se l'operazione add non è supportata da questa collezione
+     * @throws myExceptions.UnsupportedOperationException se l'operazione add non è supportata da questa collezione
      * @throws ClassCastException se la classe dell'elemento specificato impedisce che sia aggiunto a questa collezione
      * @throws NullPointerException se l'elemento specificato è null e questa collezione non permette elementi null
      * @throws IllegalArgumentException se qualche proprietà dell'elemento impedisce che sia aggiunto a questa collezione
@@ -33,7 +33,7 @@ public interface HCollection
      *
      * @param c collezione contenente elementi da aggiungere a questa collezione
      * @return true se questa collezione è cambiata come risultato della chiamata
-     * @throws UnsupportedOperationException se l'operazione addAll non è supportata da questa collezione
+     * @throws myExceptions.UnsupportedOperationException se l'operazione addAll non è supportata da questa collezione
      * @throws ClassCastException se la classe di un elemento della collezione specificata impedisce che sia aggiunto a questa collezione
      * @throws NullPointerException se la collezione specificata contiene uno o più elementi null e questa collezione non permette elementi null
      * @throws IllegalArgumentException se qualche proprietà di un elemento della collezione specificata impedisce che sia aggiunto a questa collezione
@@ -44,7 +44,7 @@ public interface HCollection
      * Rimuove tutti gli elementi da questa collezione (operazione opzionale).
      * La collezione sarà vuota dopo che questo metodo ritorna.
      *
-     * @throws UnsupportedOperationException se l'operazione clear non è supportata da questa collezione
+     * @throws myExceptions.UnsupportedOperationException se l'operazione clear non è supportata da questa collezione
      */
     void clear();
 
@@ -118,7 +118,7 @@ public interface HCollection
      * @return true se un elemento è stato rimosso come risultato di questa chiamata
      * @throws ClassCastException se il tipo dell'elemento specificato è incompatibile con questa collezione
      * @throws NullPointerException se l'elemento specificato è null e questa collezione non permette elementi null
-     * @throws UnsupportedOperationException se l'operazione remove non è supportata da questa collezione
+     * @throws myExceptions.UnsupportedOperationException se l'operazione remove non è supportata da questa collezione
      */
     boolean remove(Object o);
 
@@ -129,7 +129,7 @@ public interface HCollection
      *
      * @param c collezione contenente elementi da rimuovere da questa collezione
      * @return true se questa collezione è cambiata come risultato della chiamata
-     * @throws UnsupportedOperationException se l'operazione removeAll non è supportata da questa collezione
+     * @throws myExceptions.UnsupportedOperationException se l'operazione removeAll non è supportata da questa collezione
      * @throws ClassCastException se i tipi di uno o più elementi in questa collezione sono incompatibili con la collezione specificata
      * @throws NullPointerException se questa collezione contiene uno o più elementi null e la collezione specificata non supporta elementi null
      */
@@ -142,7 +142,7 @@ public interface HCollection
      *
      * @param c collezione contenente elementi da mantenere in questa collezione
      * @return true se questa collezione è cambiata come risultato della chiamata
-     * @throws UnsupportedOperationException se l'operazione retainAll non è supportata da questa collezione
+     * @throws myExceptions.UnsupportedOperationException se l'operazione retainAll non è supportata da questa collezione
      * @throws ClassCastException se i tipi di uno o più elementi in questa collezione sono incompatibili con la collezione specificata
      * @throws NullPointerException se questa collezione contiene uno o più elementi null e la collezione specificata non supporta elementi null
      */

@@ -1,25 +1,61 @@
-/**
- * Implementazione dell'adapter per l'interfaccia List utilizzando Vector di CLDC 1.1.
- * Questa classe adatta un Vector per implementare le interfacce HList e HCollection.
- */
 package myAdapter;
 
 //===== IMPORTAZIONI =====
 import java.util.Vector;
-
-//NB: LA MIA LISTA ACCETTA ELEMENTI NULL
-
+/**
+ * <b>Summary:</b>
+ * <p>
+ * La classe {@code ListAdapter} fornisce un'implementazione dell'interfaccia {@link myAdapter.HList}
+ * adattando le funzionalità della classe {@link java.util.Vector} di CLDC 1.1.
+ * Questa classe permette di utilizzare un {@code java.util.Vector} come una {@code HList},
+ * fornendo un'interfaccia familiare e conforme al Collections Framework semplificato.
+ * </p>
+ * <p>
+ * <b>Descrizione Dettagliata:</b>
+ * <p>
+ * {@code ListAdapter} funge da "adattatore" per {@link java.util.Vector}, che è una classe
+ * che offre funzionalità di lista dinamica ma appartiene a un framework Java più vecchio
+ * (CLDC 1.1). Attraverso {@code ListAdapter}, le operazioni di base della lista (aggiunta,
+ * rimozione, accesso per indice, iterazione) vengono mappate ai metodi equivalenti di {@code Vector}.
+ * </p>
+ * <p>
+ * Questa implementazione si concentra sulla corretta traduzione delle chiamate ai metodi
+ * dell'interfaccia {@code HList} in operazioni su un'istanza interna di {@code Vector}.
+ * Vengono gestite le eccezioni e le condizioni al contorno (come indici fuori limite)
+ * per garantire un comportamento conforme alla specifica {@code HList}.
+ * </p>
+ * <p>
+ * I costruttori permettono l'inizializzazione di un {@code ListAdapter} vuoto o con
+ * una capacità iniziale specificata.
+ * </p>
+ * <p>
+ * La classe interna {@code SubList} estende le funzionalità
+ * base di {@code ListAdapter} per fornire viste su porzioni
+ * della lista, rispettivamente, mantenendo il "backing" con la {@code Vector} sottostante.
+ * </p>
+ *
+ * @see myAdapter.HList
+ * @see myAdapter.HCollection
+ * @see myAdapter.HIterator
+ * @see myAdapter.HListIterator
+ * @see java.util.Vector
+ */
 public class ListAdapter implements HList
 {
     //===== VARIABILI DI ISTANZA =====
-   // Adaptee - il Vector di CLDC 1.1
+    // Adaptee - il Vector di CLDC 1.1 
 
+    /**
+    * L'istanza di {@link java.util.Vector} che viene adattata per implementare {@link myAdapter.HList}.
+    * Questo è l'adaptee su cui vengono eseguite tutte le operazioni della lista.
+    */
     private Vector vector;
 
     //===== COSTRUTTORI DISCENDENTI DA QUELLI DI VECTOR =====
 
     /**
-     * Costruttore di default che crea un ListAdapter vuoto.
+     * Costruttore di default che crea un {@code ListAdapter} vuoto.
+     * La lista sottostante {@link java.util.Vector} viene inizializzata con la sua capacità predefinita.
      */
     public ListAdapter() 
     {
@@ -27,10 +63,11 @@ public class ListAdapter implements HList
     }
 
     /**
-     * Costruttore che crea un ListAdapter con una capacità iniziale specificata.
-     * 
+     * Costruttore che crea un {@code ListAdapter} con una capacità iniziale specificata.
+     * La {@link java.util.Vector} sottostante viene inizializzata con la {@code initialCapacity} fornita.
+     *
      * @param initialCapacity la capacità iniziale della lista
-     * @throws IllegalArgumentException se la capacità iniziale è negativa
+     * @throws IllegalArgumentException se la capacità iniziale specificata è negativa.
      */
     public ListAdapter(int initialCapacity) 
     {
@@ -41,6 +78,15 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     *
+     * Inserisce l'elemento specificato alla posizione specificata in questa lista (operazione opzionale).
+     * Sposta l'elemento attualmente a quella posizione (se presente) e qualsiasi elemento
+     * successivo a destra (aggiunge uno ai loro indici).
+     *
+     * @param index indice al quale l'elemento specificato deve essere inserito
+     * @param element elemento da inserire
+     * @throws IllegalArgumentException se qualche proprietà dell'elemento impedisce che sia aggiunto a questa lista
+     * @throws IndexOutOfBoundsException se l'indice è fuori intervallo (index &lt; 0 || index &gt; size())
      */
     public void add(int index, Object element)                  
     {
@@ -57,6 +103,17 @@ public class ListAdapter implements HList
 
     /**
      * {@inheritDoc}
+     * Assicura che questa collezione contenga l'elemento specificato (operazione opzionale).
+     * Restituisce true se questa collezione è cambiata come risultato della chiamata.
+     * Le collezioni che supportano questa operazione possono porre limitazioni su quali
+     * elementi possono essere aggiunti a questa collezione.
+     *
+     * @param o elemento di cui deve essere assicurata la presenza in questa collezione
+     * @return true se questa collezione è cambiata come risultato della chiamata
+     * @throws myExceptions.UnsupportedOperationException se l'operazione add non è supportata da questa collezione
+     * @throws ClassCastException se la classe dell'elemento specificato impedisce che sia aggiunto a questa collezione
+     * @throws NullPointerException se l'elemento specificato è null e questa collezione non permette elementi null
+     * @throws IllegalArgumentException se qualche proprietà dell'elemento impedisce che sia aggiunto a questa collezione
      */
     public boolean add(Object o)                            
     {
@@ -67,6 +124,16 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Aggiunge tutti gli elementi nella collezione specificata a questa collezione (operazione opzionale).
+     * Il comportamento di questa operazione è indefinito se la collezione specificata viene modificata
+     * mentre l'operazione è in corso.
+     *
+     * @param c collezione contenente elementi da aggiungere a questa collezione
+     * @return true se questa collezione è cambiata come risultato della chiamata
+     * @throws myExceptions.UnsupportedOperationException se l'operazione addAll non è supportata da questa collezione
+     * @throws ClassCastException se la classe di un elemento della collezione specificata impedisce che sia aggiunto a questa collezione
+     * @throws NullPointerException se la collezione specificata contiene uno o più elementi null e questa collezione non permette elementi null
+     * @throws IllegalArgumentException se qualche proprietà di un elemento della collezione specificata impedisce che sia aggiunto a questa collezione
      */
     public boolean addAll(HCollection c)                            
     {
@@ -91,7 +158,18 @@ public class ListAdapter implements HList
     }
 
     /**
-     * {@inheritDoc}
+     * Inserisce tutti gli elementi nella collezione specificata in questa lista alla
+     * posizione specificata (operazione opzionale). Sposta l'elemento attualmente a
+     * quella posizione (se presente) e qualsiasi elemento successivo a destra (aumenta i loro indici).
+     *
+     * @param index indice al quale inserire il primo elemento dalla collezione specificata
+     * @param c collezione contenente elementi da aggiungere a questa lista
+     * @return true se questa lista è cambiata come risultato della chiamata
+     * @throws myExceptions.UnsupportedOperationException se l'operazione addAll non è supportata da questa lista
+     * @throws ClassCastException se la classe di un elemento della collezione specificata impedisce che sia aggiunto a questa lista
+     * @throws NullPointerException se la collezione specificata contiene uno o più elementi null e questa lista non permette elementi null
+     * @throws IllegalArgumentException se qualche proprietà di un elemento della collezione specificata impedisce che sia aggiunto a questa lista
+     * @throws IndexOutOfBoundsException se l'indice è fuori intervallo (index &lt; 0 || index &gt; size())
      */
     public boolean addAll(int index, HCollection c) 
     {
@@ -122,6 +200,10 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Rimuove tutti gli elementi da questa collezione (operazione opzionale).
+     * La collezione sarà vuota dopo che questo metodo ritorna.
+     *
+     * @throws myExceptions.UnsupportedOperationException se l'operazione clear non è supportata da questa collezione
      */
     public void clear() 
     {
@@ -130,6 +212,14 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Restituisce true se questa collezione contiene l'elemento specificato.
+     * Più formalmente, restituisce true se e solo se questa collezione contiene
+     * almeno un elemento e tale che (o==null ? e==null : o.equals(e)).
+     *
+     * @param o elemento di cui verificare la presenza in questa collezione
+     * @return true se questa collezione contiene l'elemento specificato
+     * @throws ClassCastException se il tipo dell'elemento specificato è incompatibile con questa collezione
+     * @throws NullPointerException se l'elemento specificato è null e questa collezione non permette elementi null
      */
     public boolean contains(Object o) 
     {
@@ -138,6 +228,12 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Restituisce true se questa collezione contiene tutti gli elementi della collezione specificata.
+     *
+     * @param c collezione da verificare per il contenimento in questa collezione
+     * @return true se questa collezione contiene tutti gli elementi della collezione specificata
+     * @throws ClassCastException se i tipi di uno o più elementi nella collezione specificata sono incompatibili con questa collezione
+     * @throws NullPointerException se la collezione specificata contiene uno o più elementi null e questa collezione non permette elementi null
      */
     public boolean containsAll(HCollection c) 
     {
@@ -161,6 +257,13 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Confronta l'oggetto specificato con questa collezione per l'uguaglianza.
+     * Mentre l'interfaccia Collection non aggiunge stipulazioni al contratto generale
+     * per Object.equals, i programmatori che implementano l'interfaccia Collection
+     * "direttamente" devono fare attenzione se scelgono di sovrascrivere Object.equals.
+     *
+     * @param o oggetto da confrontare per l'uguaglianza con questa collezione
+     * @return true se l'oggetto specificato è uguale a questa collezione
      */
     public boolean equals(Object o) 
     {
@@ -209,6 +312,12 @@ public class ListAdapter implements HList
 
     /**
      * {@inheritDoc}
+     *
+     * Restituisce l'elemento alla posizione specificata in questa lista.
+     *
+     * @param index indice dell'elemento da restituire
+     * @return l'elemento alla posizione specificata in questa lista
+     * @throws IndexOutOfBoundsException se l'indice è fuori intervallo (index &lt; 0 || index &gt;= size())
      */
     public Object get(int index)                                    
     {
@@ -224,6 +333,13 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Restituisce il valore del codice hash per questa collezione. Mentre l'interfaccia
+     * Collection non aggiunge stipulazioni al contratto generale per Object.hashCode,
+     * i programmatori devono notare che qualsiasi classe che sovrascrive il metodo
+     * Object.equals deve anche sovrascrivere il metodo Object.hashCode per soddisfare
+     * il contratto generale del metodo Object.hashCode.
+     *
+     * @return il valore del codice hash per questa collezione
      */
     public int hashCode() 
     {
@@ -240,6 +356,15 @@ public class ListAdapter implements HList
 
     /**
      * {@inheritDoc}
+     * Restituisce l'indice della prima occorrenza dell'elemento specificato in questa lista,
+     * o -1 se questa lista non contiene l'elemento. Più formalmente, restituisce l'indice
+     * più basso i tale che (o==null ? get(i)==null : o.equals(get(i))), o -1 se non esiste tale indice.
+     *
+     * @param o elemento da cercare
+     * @return l'indice della prima occorrenza dell'elemento specificato in questa lista,
+     *         o -1 se questa lista non contiene l'elemento
+     * @throws ClassCastException se il tipo dell'elemento specificato è incompatibile con questa lista
+     * @throws NullPointerException se l'elemento specificato è null e questa lista non permette elementi null
      */
     public int indexOf(Object o)                      
     {
@@ -248,6 +373,9 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Restituisce true se questa collezione non contiene elementi.
+     *
+     * @return true se questa collezione non contiene elementi
      */
     public boolean isEmpty() 
     {
@@ -256,6 +384,11 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Restituisce un iteratore sugli elementi in questa collezione. Non ci sono
+     * garanzie riguardo all'ordine in cui gli elementi sono restituiti (a meno che
+     * questa collezione sia un'istanza di qualche classe che fornisce una garanzia).
+     *
+     * @return un HIterator sugli elementi in questa collezione
      */
     public HIterator iterator() 
     {
@@ -264,6 +397,15 @@ public class ListAdapter implements HList
 
     /**
      *{@inheritDoc}
+     * Restituisce l'indice dell'ultima occorrenza dell'elemento specificato in questa lista,
+     * o -1 se questa lista non contiene l'elemento. Più formalmente, restituisce l'indice
+     * più alto i tale che (o==null ? get(i)==null : o.equals(get(i))), o -1 se non esiste tale indice.
+     *
+     * @param o elemento da cercare
+     * @return l'indice dell'ultima occorrenza dell'elemento specificato in questa lista,
+     *         o -1 se questa lista non contiene l'elemento
+     * @throws ClassCastException se il tipo dell'elemento specificato è incompatibile con questa lista
+     * @throws NullPointerException se l'elemento specificato è null e questa lista non permette elementi null
      */
     public int lastIndexOf(Object o) 
     {
@@ -271,7 +413,9 @@ public class ListAdapter implements HList
     }
 
     /**
-     * {@inheritDoc}
+     * Restituisce un iteratore di lista sugli elementi in questa lista (in sequenza corretta).
+     *
+     * @return un iteratore di lista sugli elementi in questa lista (in sequenza corretta)
      */
     public HListIterator listIterator() 
     {
@@ -280,6 +424,14 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Restituisce un iteratore di lista sugli elementi in questa lista (in sequenza corretta),
+     * iniziando alla posizione specificata nella lista. L'indice specificato indica il
+     * primo elemento che sarebbe restituito da una chiamata iniziale a next.
+     *
+     * @param index indice del primo elemento da restituire dall'iteratore di lista
+     * @return un iteratore di lista sugli elementi in questa lista (in sequenza corretta),
+     *         iniziando alla posizione specificata nella lista
+     * @throws IndexOutOfBoundsException se l'indice è fuori intervallo (index &lt; 0 || index &gt; size())
      */
     public HListIterator listIterator(int index) 
     {
@@ -291,7 +443,14 @@ public class ListAdapter implements HList
     }
 
     /**
-     * {@inheritDoc}
+     * Rimuove l'elemento alla posizione specificata in questa lista (operazione opzionale).
+     * Sposta qualsiasi elemento successivo a sinistra (sottrae uno dai loro indici).
+     * Restituisce l'elemento che è stato rimosso dalla lista.
+     *
+     * @param index l'indice dell'elemento da rimuovere
+     * @return l'elemento che è stato rimosso dalla lista
+     * @throws myExceptions.UnsupportedOperationException se l'operazione remove non è supportata da questa lista
+     * @throws IndexOutOfBoundsException se l'indice è fuori intervallo (index &lt; 0 || index &gt;= size())
      */
     public Object remove(int index) 
     {
@@ -309,6 +468,16 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Rimuove una singola istanza dell'elemento specificato da questa collezione,
+     * se è presente (operazione opzionale). Più formalmente, rimuove un elemento e
+     * tale che (o==null ? e==null : o.equals(e)), se questa collezione contiene
+     * uno o più di tali elementi.
+     *
+     * @param o elemento da rimuovere da questa collezione, se presente
+     * @return true se un elemento è stato rimosso come risultato di questa chiamata
+     * @throws ClassCastException se il tipo dell'elemento specificato è incompatibile con questa collezione
+     * @throws NullPointerException se l'elemento specificato è null e questa collezione non permette elementi null
+     * @throws myExceptions.UnsupportedOperationException se l'operazione remove non è supportata da questa collezione
      */
     public boolean remove(Object o) 
     {
@@ -318,6 +487,15 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Rimuove tutti gli elementi di questa collezione che sono anche contenuti
+     * nella collezione specificata (operazione opzionale). Dopo questa chiamata
+     * ritorna, questa collezione non conterrà elementi in comune con la collezione specificata.
+     *
+     * @param c collezione contenente elementi da rimuovere da questa collezione
+     * @return true se questa collezione è cambiata come risultato della chiamata
+     * @throws myExceptions.UnsupportedOperationException se l'operazione removeAll non è supportata da questa collezione
+     * @throws ClassCastException se i tipi di uno o più elementi in questa collezione sono incompatibili con la collezione specificata
+     * @throws NullPointerException se questa collezione contiene uno o più elementi null e la collezione specificata non supporta elementi null
      */
     public boolean removeAll(HCollection c) 
     {
@@ -343,6 +521,15 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Mantiene solo gli elementi in questa collezione che sono contenuti nella
+     * collezione specificata (operazione opzionale). In altre parole, rimuove da
+     * questa collezione tutti i suoi elementi che non sono contenuti nella collezione specificata.
+     *
+     * @param c collezione contenente elementi da mantenere in questa collezione
+     * @return true se questa collezione è cambiata come risultato della chiamata
+     * @throws myExceptions.UnsupportedOperationException se l'operazione retainAll non è supportata da questa collezione
+     * @throws ClassCastException se i tipi di uno o più elementi in questa collezione sono incompatibili con la collezione specificata
+     * @throws NullPointerException se questa collezione contiene uno o più elementi null e la collezione specificata non supporta elementi null
      */
     public boolean retainAll(HCollection c) 
     {
@@ -370,6 +557,17 @@ public class ListAdapter implements HList
 
     /**
      * {@inheritDoc}
+     * Sostituisce l'elemento alla posizione specificata in questa lista con l'elemento
+     * specificato (operazione opzionale).
+     *
+     * @param index indice dell'elemento da sostituire
+     * @param element elemento da memorizzare alla posizione specificata
+     * @return l'elemento precedentemente alla posizione specificata
+     * @throws myExceptions.UnsupportedOperationException se l'operazione set non è supportata da questa lista
+     * @throws ClassCastException se la classe dell'elemento specificato impedisce che sia aggiunto a questa lista
+     * @throws NullPointerException se l'elemento specificato è null e questa lista non permette elementi null
+     * @throws IllegalArgumentException se qualche proprietà dell'elemento impedisce che sia aggiunto a questa lista
+     * @throws IndexOutOfBoundsException se l'indice è fuori intervallo (index &lt; 0 || index &gt;= size())
      */
     public Object set(int index, Object element) 
     {
@@ -386,6 +584,10 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Restituisce il numero di elementi in questa collezione. Se questa collezione
+     * contiene più di Integer.MAX_VALUE elementi, restituisce Integer.MAX_VALUE.
+     *
+     * @return il numero di elementi in questa collezione
      */
     public int size() 
     {
@@ -394,6 +596,16 @@ public class ListAdapter implements HList
 
     /**
      * {@inheritDoc}
+     * Restituisce una vista della porzione di questa lista tra il fromIndex specificato,
+     * incluso, e toIndex, escluso. (Se fromIndex e toIndex sono uguali, la lista restituita
+     * è vuota.) La lista restituita è supportata da questa lista, quindi i cambiamenti
+     * non strutturali nella lista restituita si riflettono in questa lista, e viceversa.
+     *
+     * @param fromIndex endpoint basso (incluso) della subList
+     * @param toIndex endpoint alto (escluso) della subList
+     * @return una vista dell'intervallo specificato all'interno di questa lista
+     * @throws IndexOutOfBoundsException per un valore di indice endpoint illegale
+     *         (fromIndex &lt; 0 || toIndex &gt; size || fromIndex &gt; toIndex)
      */
     public HList subList(int fromIndex, int toIndex) 
     {
@@ -406,6 +618,13 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Restituisce un array contenente tutti gli elementi in questa collezione.
+     * Se questa collezione fornisce garanzie sull'ordine in cui i suoi elementi
+     * sono restituiti dal suo iteratore, questo metodo deve restituire gli elementi
+     * nello stesso ordine. L'array restituito sarà "sicuro" in quanto nessun riferimento
+     * ad esso è mantenuto da questa collezione.
+     *
+     * @return un array contenente tutti gli elementi in questa collezione
      */
     public Object[] toArray()                           
     {
@@ -419,6 +638,16 @@ public class ListAdapter implements HList
     
     /**
      * {@inheritDoc}
+     * Restituisce un array contenente tutti gli elementi in questa collezione;
+     * il tipo runtime dell'array restituito è quello dell'array specificato.
+     * Se la collezione si adatta nell'array specificato, vi viene restituita.
+     * Altrimenti, viene allocato un nuovo array con il tipo runtime dell'array
+     * specificato e la dimensione di questa collezione.
+     *
+     * @param a l'array in cui gli elementi della collezione devono essere memorizzati, se è abbastanza grande
+     * @return un array contenente tutti gli elementi in questa collezione
+     * @throws ArrayStoreException se il tipo runtime dell'array specificato non è un supertipo del tipo runtime di ogni elemento in questa collezione
+     * @throws NullPointerException se l'array specificato è null
      */
     public Object[] toArray(Object[] a) 
     {

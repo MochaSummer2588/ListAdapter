@@ -85,7 +85,7 @@ public interface HListIterator extends HIterator
      * 
      * @throws UnsupportedOperationException se l'operazione remove non è
      *         supportata da questo iteratore di lista.
-     * @throws IllegalStateException se né next né previous sono stati chiamati,
+     * @throws myExceptions.IllegalStateException se né next né previous sono stati chiamati,
      *         oppure remove o add sono stati chiamati dopo l'ultima chiamata
      *         a next o previous.
      */
@@ -105,7 +105,7 @@ public interface HListIterator extends HIterator
      *         che sia aggiunto a questa lista.
      * @throws IllegalArgumentException se qualche proprietà di questo elemento
      *         impedisce che sia aggiunto a questa lista.
-     * @throws IllegalStateException se né next né previous sono stati chiamati,
+     * @throws myExceptions.IllegalStateException se né next né previous sono stati chiamati,
      *         oppure remove o add sono stati chiamati dopo l'ultima chiamata
      *         a next o previous.
      */

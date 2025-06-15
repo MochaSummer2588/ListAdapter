@@ -27,6 +27,15 @@ public class TestSubListAdapter
     private HList subList; // SubList [parent index 1, parent index 2, parent index 3] = ["uno", "due", "tre"]
 
     /**
+     * Costruttore predefinito per i test di {@code TestSubListAdapter}.
+     * Non esegue inizializzazioni specifiche, affidandosi al metodo {@code setup()}.
+     */
+    public TestSubListAdapter() 
+    {
+        // Nessuna logica di inizializzazione complessa qui, JUnit si occupa del setup.
+    }
+
+    /**
      * Configura l'ambiente di test prima di ogni metodo di test.
      * Inizializza una `ListAdapter` popolata e crea una `SubList` su di essa
      * per i test. La `SubList` sarà inizialmente [1, 2, 3].

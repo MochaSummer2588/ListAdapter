@@ -10,7 +10,26 @@ import org.junit.runner.notification.Failure;
  */
 public class TestRunner 
 {
+    /**
+     * Costruttore predefinito per la classe {@code TestRunner}.
+     * Questa classe è un'utility e non richiede un'inizializzazione di stato complessa.
+     */
+    public TestRunner() 
+    {
+        // Il costruttore predefinito non richiede implementazione specifica.
+    }
     
+    /**
+     * Punto di ingresso principale per l'esecuzione dei test JUnit.
+     * Questo metodo può eseguire tutti i test inclusi nella {@link AllTestsSuite}
+     * o una classe di test specifica, se il suo nome completo (incluso il package)
+     * viene fornito come argomento della linea di comando.
+     *
+     * @param args Array di stringhe contenente gli argomenti della linea di comando.
+     * Se vuoto, esegue tutti i test definiti in {@link AllTestsSuite}.
+     * Se contiene un nome di classe (es. "myTest.TestListAdapterEmpty"),
+     * tenta di eseguire solo quella classe di test.
+     */
     public static void main(String[] args) 
     {
         System.out.println("=== ESECUZIONE TEST SUITE ===");
