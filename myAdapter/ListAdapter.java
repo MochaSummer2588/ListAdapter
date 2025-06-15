@@ -6,14 +6,14 @@ import java.util.Vector;
  * <b>Summary:</b>
  * <p>
  * La classe {@code ListAdapter} fornisce un'implementazione dell'interfaccia {@link myAdapter.HList}
- * adattando le funzionalità della classe {@link java.util.Vector} di CLDC 1.1.
+ * adattando le funzionalità della classe java.util.Vector di CLDC 1.1.
  * Questa classe permette di utilizzare un {@code java.util.Vector} come una {@code HList},
  * fornendo un'interfaccia familiare e conforme al Collections Framework semplificato.
  * </p>
  * <p>
  * <b>Descrizione Dettagliata:</b>
  * <p>
- * {@code ListAdapter} funge da "adattatore" per {@link java.util.Vector}, che è una classe
+ * {@code ListAdapter} funge da "adattatore" per  java.util.Vector, che è una classe
  * che offre funzionalità di lista dinamica ma appartiene a un framework Java più vecchio
  * (CLDC 1.1). Attraverso {@code ListAdapter}, le operazioni di base della lista (aggiunta,
  * rimozione, accesso per indice, iterazione) vengono mappate ai metodi equivalenti di {@code Vector}.
@@ -38,7 +38,6 @@ import java.util.Vector;
  * @see myAdapter.HCollection
  * @see myAdapter.HIterator
  * @see myAdapter.HListIterator
- * @see java.util.Vector
  */
 public class ListAdapter implements HList
 {
@@ -46,7 +45,7 @@ public class ListAdapter implements HList
     // Adaptee - il Vector di CLDC 1.1 
 
     /**
-    * L'istanza di {@link java.util.Vector} che viene adattata per implementare {@link myAdapter.HList}.
+    * L'istanza di  java.util.Vector che viene adattata per implementare {@link myAdapter.HList}.
     * Questo è l'adaptee su cui vengono eseguite tutte le operazioni della lista.
     */
     private Vector vector;
@@ -55,7 +54,7 @@ public class ListAdapter implements HList
 
     /**
      * Costruttore di default che crea un {@code ListAdapter} vuoto.
-     * La lista sottostante {@link java.util.Vector} viene inizializzata con la sua capacità predefinita.
+     * La lista sottostante  java.util.Vector viene inizializzata con la sua capacità predefinita.
      */
     public ListAdapter() 
     {
@@ -64,7 +63,7 @@ public class ListAdapter implements HList
 
     /**
      * Costruttore che crea un {@code ListAdapter} con una capacità iniziale specificata.
-     * La {@link java.util.Vector} sottostante viene inizializzata con la {@code initialCapacity} fornita.
+     * La  java.util.Vector sottostante viene inizializzata con la {@code initialCapacity} fornita.
      *
      * @param initialCapacity la capacità iniziale della lista
      * @throws IllegalArgumentException se la capacità iniziale specificata è negativa.
@@ -77,7 +76,7 @@ public class ListAdapter implements HList
     // =============== METODI LISTADAPTER ===============
     
     /**
-     * {@inheritDoc}
+     *
      *
      * Inserisce l'elemento specificato alla posizione specificata in questa lista (operazione opzionale).
      * Sposta l'elemento attualmente a quella posizione (se presente) e qualsiasi elemento
@@ -101,7 +100,7 @@ public class ListAdapter implements HList
     }
 
     /**
-     * {@inheritDoc}
+     *
      * Assicura che questa collezione contenga l'elemento specificato (operazione opzionale).
      * Restituisce true se questa collezione è cambiata come risultato della chiamata.
      * Le collezioni che supportano questa operazione possono porre limitazioni su quali
@@ -118,7 +117,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Aggiunge tutti gli elementi nella collezione specificata a questa collezione (operazione opzionale).
      * Il comportamento di questa operazione è indefinito se la collezione specificata viene modificata
      * mentre l'operazione è in corso.
@@ -188,7 +187,6 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
      * Rimuove tutti gli elementi da questa collezione (operazione opzionale).
      * La collezione sarà vuota dopo che questo metodo ritorna.
      */
@@ -198,7 +196,6 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
      * Restituisce true se questa collezione contiene l'elemento specificato.
      * Più formalmente, restituisce true se e solo se questa collezione contiene
      * almeno un elemento e tale che (o==null ? e==null : o.equals(e)).
@@ -212,7 +209,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Restituisce true se questa collezione contiene tutti gli elementi della collezione specificata.
      *
      * @param c collezione da verificare per il contenimento in questa collezione
@@ -240,7 +237,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Confronta l'oggetto specificato con questa collezione per l'uguaglianza.
      * Mentre l'interfaccia Collection non aggiunge stipulazioni al contratto generale
      * per Object.equals, i programmatori che implementano l'interfaccia Collection
@@ -295,7 +292,7 @@ public class ListAdapter implements HList
     }
 
     /**
-     * {@inheritDoc}
+     *
      *
      * Restituisce l'elemento alla posizione specificata in questa lista.
      *
@@ -316,7 +313,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Restituisce il valore del codice hash per questa collezione. Mentre l'interfaccia
      * Collection non aggiunge stipulazioni al contratto generale per Object.hashCode,
      * i programmatori devono notare che qualsiasi classe che sovrascrive il metodo
@@ -339,7 +336,7 @@ public class ListAdapter implements HList
     
 
     /**
-     * {@inheritDoc}
+     *
      * Restituisce l'indice della prima occorrenza dell'elemento specificato in questa lista,
      * o -1 se questa lista non contiene l'elemento. Più formalmente, restituisce l'indice
      * più basso i tale che (o==null ? get(i)==null : o.equals(get(i))), o -1 se non esiste tale indice.
@@ -354,7 +351,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Restituisce true se questa collezione non contiene elementi.
      *
      * @return true se questa collezione non contiene elementi
@@ -365,7 +362,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Restituisce un iteratore sugli elementi in questa collezione. Non ci sono
      * garanzie riguardo all'ordine in cui gli elementi sono restituiti (a meno che
      * questa collezione sia un'istanza di qualche classe che fornisce una garanzia).
@@ -378,7 +375,7 @@ public class ListAdapter implements HList
     }
 
     /**
-     *{@inheritDoc}
+     *
      * Restituisce l'indice dell'ultima occorrenza dell'elemento specificato in questa lista,
      * o -1 se questa lista non contiene l'elemento. Più formalmente, restituisce l'indice
      * più alto i tale che (o==null ? get(i)==null : o.equals(get(i))), o -1 se non esiste tale indice.
@@ -403,7 +400,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Restituisce un iteratore di lista sugli elementi in questa lista (in sequenza corretta),
      * iniziando alla posizione specificata nella lista. L'indice specificato indica il
      * primo elemento che sarebbe restituito da una chiamata iniziale a next.
@@ -446,7 +443,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Rimuove una singola istanza dell'elemento specificato da questa collezione,
      * se è presente (operazione opzionale). Più formalmente, rimuove un elemento e
      * tale che (o==null ? e==null : o.equals(e)), se questa collezione contiene
@@ -462,7 +459,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Rimuove tutti gli elementi di questa collezione che sono anche contenuti
      * nella collezione specificata (operazione opzionale). Dopo questa chiamata
      * ritorna, questa collezione non conterrà elementi in comune con la collezione specificata.
@@ -494,7 +491,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Mantiene solo gli elementi in questa collezione che sono contenuti nella
      * collezione specificata (operazione opzionale). In altre parole, rimuove da
      * questa collezione tutti i suoi elementi che non sono contenuti nella collezione specificata.
@@ -528,7 +525,7 @@ public class ListAdapter implements HList
     }
 
     /**
-     * {@inheritDoc}
+     *
      * Sostituisce l'elemento alla posizione specificata in questa lista con l'elemento
      * specificato (operazione opzionale).
      *
@@ -551,7 +548,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Restituisce il numero di elementi in questa collezione. Se questa collezione
      * contiene più di Integer.MAX_VALUE elementi, restituisce Integer.MAX_VALUE.
      *
@@ -559,11 +556,14 @@ public class ListAdapter implements HList
      */
     public int size() 
     {
+        // Il metodo vector.size() restituisce già un int, che ha un limite massimo di Integer.MAX_VALUE.
+        // Poiché un Vector non può contenere più di Integer.MAX_VALUE elementi (a causa delle limitazioni degli array sottostanti),
+        // semplicemente restituire il valore di vector.size() è corretto e soddisfa il contratto.
         return vector.size();
     }
 
     /**
-     * {@inheritDoc}
+     *
      * Restituisce una vista della porzione di questa lista tra il fromIndex specificato,
      * incluso, e toIndex, escluso. (Se fromIndex e toIndex sono uguali, la lista restituita
      * è vuota.) La lista restituita è supportata da questa lista, quindi i cambiamenti
@@ -585,7 +585,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Restituisce un array contenente tutti gli elementi in questa collezione.
      * Se questa collezione fornisce garanzie sull'ordine in cui i suoi elementi
      * sono restituiti dal suo iteratore, questo metodo deve restituire gli elementi
@@ -605,7 +605,7 @@ public class ListAdapter implements HList
     }
     
     /**
-     * {@inheritDoc}
+     *
      * Restituisce un array contenente tutti gli elementi in questa collezione;
      * il tipo runtime dell'array restituito è quello dell'array specificato.
      * Se la collezione si adatta nell'array specificato, vi viene restituita.
@@ -720,7 +720,7 @@ public class ListAdapter implements HList
         // =============== METODI OVERRIDE ===============
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce l'elemento nella posizione specificata all'interno di questa sottolista.
          * L'operazione è delegata alla lista padre con l'applicazione dell'offset.
          * @param index l'indice dell'elemento da restituire.
@@ -734,7 +734,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce il numero di elementi in questa sottolista.
          * @return il numero di elementi in questa sottolista.
          */
@@ -744,7 +744,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Sostituisce l'elemento nella posizione specificata in questa sottolista con l'elemento specificato.
          * L'operazione è delegata alla lista padre con l'applicazione dell'offset.
          * @param index l'indice dell'elemento da sostituire.
@@ -759,7 +759,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Inserisce l'elemento specificato nella posizione specificata in questa sottolista.
          * Sposta l'elemento attualmente in quella posizione (se presente) e qualsiasi elemento
          * successivo verso destra (aumenta i loro indici di uno).
@@ -777,7 +777,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Rimuove l'elemento nella posizione specificata in questa sottolista.
          * Sposta qualsiasi elemento successivo verso sinistra (decrementa i loro indici di uno).
          * L'operazione è delegata alla lista padre con l'applicazione dell'offset e la dimensione
@@ -795,7 +795,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Aggiunge l'elemento specificato alla fine di questa sottolista.
          * L'operazione è delegata alla lista padre e la dimensione della sottolista viene aggiornata.
          * @param o l'elemento da aggiungere a questa sottolista.
@@ -809,7 +809,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Aggiunge tutti gli elementi nella collezione specificata alla fine di questa sottolista,
          * nell'ordine in cui sono restituiti dall'iteratore della collezione specificata.
          * L'operazione è delegata alla lista padre e la dimensione della sottolista viene aggiornata.
@@ -822,7 +822,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Inserisce tutti gli elementi nella collezione specificata in questa sottolista,
          * a partire dalla posizione specificata.
          * L'operazione è delegata alla lista padre e la dimensione della sottolista viene aggiornata.
@@ -846,7 +846,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Rimuove tutti gli elementi da questa sottolista. La sottolista sarà vuota dopo questa chiamata.
          * Gli elementi corrispondenti vengono rimossi anche dalla lista padre.
          */
@@ -859,7 +859,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce `true` se questa sottolista contiene l'elemento specificato.
          * @param o l'elemento la cui presenza in questa sottolista deve essere verificata.
          * @return `true` se questa sottolista contiene l'elemento specificato.
@@ -870,7 +870,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce `true` se questa sottolista contiene tutti gli elementi della collezione specificata.
          * @param c la collezione da controllare per la contiguità in questa sottolista.
          * @return `true` se questa sottolista contiene tutti gli elementi della collezione specificata.
@@ -889,7 +889,7 @@ public class ListAdapter implements HList
         }
 
          /**
-         * {@inheritDoc}
+         *
          * Restituisce l'indice della prima occorrenza dell'elemento specificato in questa sottolista,
          * o -1 se questa sottolista non contiene l'elemento.
          * @param o l'elemento da cercare.
@@ -909,7 +909,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce `true` se questa sottolista non contiene elementi.
          * @return `true` se questa sottolista non contiene elementi.
          */
@@ -919,7 +919,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce l'indice dell'ultima occorrenza dell'elemento specificato in questa sottolista,
          * o -1 se questa sottolista non contiene l'elemento.
          * @param o l'elemento da cercare.
@@ -939,7 +939,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce un iteratore sugli elementi in questa sottolista nell'ordine corretto.
          * @return un iteratore sugli elementi in questa sottolista nell'ordine corretto.
          */
@@ -949,7 +949,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce un list iterator sugli elementi in questa sottolista (nell'ordine corretto).
          * @return un list iterator sugli elementi in questa sottolista (nell'ordine corretto).
          */
@@ -959,7 +959,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce un list iterator sugli elementi in questa sottolista (nell'ordine corretto),
          * a partire dalla posizione specificata nella sottolista.
          * @param index l'indice del primo elemento che sarà restituito da `next()`.
@@ -973,7 +973,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Rimuove la prima occorrenza dell'elemento specificato da questa sottolista, se presente.
          * @param o l'elemento da rimuovere da questa sottolista, se presente.
          * @return `true` se questa sottolista conteneva l'elemento specificato.
@@ -990,7 +990,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Rimuove da questa sottolista tutti i suoi elementi che sono contenuti anche nella collezione specificata.
          * @param c la collezione contenente gli elementi da rimuovere da questa sottolista.
          * @return `true` se questa sottolista è stata modificata a seguito della chiamata.
@@ -1011,7 +1011,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Mantiene in questa sottolista solo gli elementi che sono contenuti nella collezione specificata.
          * In altre parole, rimuove da questa sottolista tutti i suoi elementi che non sono contenuti
          * nella collezione specificata.
@@ -1033,7 +1033,7 @@ public class ListAdapter implements HList
         }
 
          /**
-         * {@inheritDoc}
+         *
          * Restituisce una vista della porzione specificata di questa sottolista.
          * Questo crea una sottolista di una sottolista. La nuova sottolista sarà ancora
          * "backed" dalla lista `ListAdapter` originale, con un offset cumulativo.
@@ -1054,7 +1054,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce un array contenente tutti gli elementi di questa sottolista nell'ordine corretto.
          * @return un array contenente tutti gli elementi di questa sottolista nell'ordine corretto.
          */
@@ -1069,7 +1069,7 @@ public class ListAdapter implements HList
         }
 
         /**
-         * {@inheritDoc}
+         *
          * Restituisce un array contenente tutti gli elementi di questa sottolista nell'ordine corretto;
          * il tipo di runtime dell'array restituito è quello dell'array specificato.
          * Se l'array specificato è sufficientemente grande, viene utilizzato; altrimenti,

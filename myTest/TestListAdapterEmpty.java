@@ -88,7 +88,7 @@ public class TestListAdapterEmpty
      * <p>
      * Test Case Design: Questo test copre un caso limite o di errore, assicurandosi che il costruttore
      * rispetti la specifica che impedisce la creazione di un {@code Vector} (e quindi di un {@code ListAdapter})
-     * con capacità non valida. Si basa sulla propagazione dell'eccezione lanciata dal costruttore di {@link java.util.Vector} di CLDC 1.1.
+     * con capacità non valida. Si basa sulla propagazione dell'eccezione lanciata dal costruttore di  java.util.Vector di CLDC 1.1.
      * <p>
      * Test Description:
      * 1) Si tenta di istanziare un nuovo {@code ListAdapter} fornendo una capacità iniziale negativa (es. -5).

@@ -51,24 +51,85 @@ Queste eccezioni vengono lanciate nei metodi dell'adapter dove previsto dalle sp
 
 ```
 .
-├── myAdapter/
-│   ├── HCollection.java
-│   ├── HList.java
-│   ├── HIterator.java
-│   ├── HListIterator.java
-│   ├── ListAdapter.java
-│   └── ListIterator.java
-├── myExceptions/
-│   ├── IllegalStateException.java
-│   └── UnsupportedOperationException.java <-- Aggiunto, se implementato
-└── myTest/
-    ├── AllTestsSuite.java
-    ├── TestListAdapterEmpty.java
-    ├── TestListAdapterPopulated.java
-    ├── TestListIteratorEmpty.java
-    ├── TestListIteratorPopulated.java
-    ├── TestSubListAdapter.java
-    └── TestRunner.java
+│   README.md
+│   README.pdf
+│
+├───bin
+│   ├───myAdapter
+│   │       HCollection.class
+│   │       HIterator.class
+│   │       HList.class
+│   │       HListIterator.class
+│   │       ListAdapter$SubList.class
+│   │       ListAdapter.class
+│   │       ListIterator.class
+│   │
+│   ├───myExceptions
+│   │       IllegalStateException.class
+│   │       UnsupportedOperationException.class
+│   │
+│   └───myTest
+│           AllTestsSuite.class
+│           TestListAdapterEmpty.class
+│           TestListAdapterPopulated.class
+│           TestListIteratorEmpty.class
+│           TestListIteratorPopulated.class
+│           TestRunner.class
+│           TestSubListAdapter.class
+│
+├───doc
+│   │
+│   ├───myAdapter
+│   │       HCollection.html
+│   │       HIterator.html
+│   │       HList.html
+│   │       HListIterator.html
+│   │       ListAdapter.html
+│   │       ListIterator.html
+│   │       package-summary.html
+│   │       package-tree.html
+│   │
+│   ├───myExceptions
+│   │       IllegalStateException.html
+│   │       package-summary.html
+│   │       package-tree.html
+│   │       UnsupportedOperationException.html
+│   │
+│   └───myTest
+│           AllTestsSuite.html
+│           package-summary.html
+│           package-tree.html
+│           TestListAdapterEmpty.html
+│           TestListAdapterPopulated.html
+│           TestListIteratorEmpty.html
+│           TestListIteratorPopulated.html
+│           TestRunner.html
+│           TestSubListAdapter.html
+│
+├───JUnit
+│       hamcrest-core-1.3.jar
+│       junit-4.13.2.jar
+│
+├───myAdapter
+│       HCollection.java
+│       HIterator.java
+│       HList.java
+│       HListIterator.java
+│       ListAdapter.java
+│       ListIterator.java
+│
+├───myExceptions
+│       IllegalStateException.java
+│       UnsupportedOperationException.java
+│
+└───myTest
+        AllTestsSuite.java
+        TestListAdapterEmpty.java
+        TestListAdapterPopulated.java
+        TestListIteratorEmpty.java
+        TestListIteratorPopulated.java
+        TestRunner.java
+        TestSubListAdapter.java
 ```
 
 ## Come Compilare ed Eseguire
