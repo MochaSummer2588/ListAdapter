@@ -31,6 +31,7 @@ Per evitare collisioni e garantire la compatibilità con CLDC 1.1 (che non inclu
 - Implementa l'interfaccia `HList` e incapsula un'istanza di `java.util.Vector` (di CLDC 1.1) come adaptee
 - Tutti i metodi di `HList` sono implementati delegando le operazioni al Vector sottostante, assicurando la conformità alle specifiche di CLDC 1.1
 - Include l'implementazione della sottolista (SubList) come classe interna, che funge da vista coerente sulla ListAdapter genitore
+- Da notare che tra i costruttori sono presenti quello di default e quello con un int size della classe vector
 
 ### Implementazione dell'Iteratore (myAdapter.ListIterator)
 - Implementa `HListIterator` e `HIterator`
@@ -123,13 +124,13 @@ Il progetto include una suite di test esaustiva, situata nel package `myTest`, o
 
 ### Classi di Test
 
-- **TestListAdapterEmpty.java**: Test per ListAdapter su una lista vuota, coprendo i casi limite e la gestione delle eccezioni
-- **TestListAdapterPopulated.java**: Test per ListAdapter su una lista popolata, verificando accesso, modifica, ricerca, conversione in array, gestione di elementi null, indici validi/non validi, aggiunta/rimozione multipla, uguaglianza e hashCode. Include numerosi test dettagliati per ogni metodo
-- **TestListIteratorEmpty.java**: Test per ListIterator su una lista vuota, focalizzandosi sul comportamento dell'iteratore in assenza di elementi
-- **TestListIteratorPopulated.java**: Test per ListIterator su una lista popolata, verificando la navigazione bidirezionale, le operazioni di modifica (add, remove, set) e la gestione dello stato interno
-- **TestSubListAdapter.java**: Test dedicati alla classe interna SubList di ListAdapter, assicurando che si comporti come una vista coerente sulla lista genitore e che le modifiche si propaghino correttamente
-- **AllTestsSuite.java**: Una suite JUnit che aggrega tutti i test sopra menzionati per un'esecuzione combinata
-- **TestRunner.java**: Un'utility per eseguire la AllTestsSuite da riga di comando e presentare i risultati in modo leggibile
+- **TestListAdapterEmpty.java**: Test per ListAdapter su una lista vuota, coprendo i casi limite e la gestione delle eccezioni --> *46 Tests*
+- **TestListAdapterPopulated.java**: Test per ListAdapter su una lista popolata, verificando accesso, modifica, ricerca, conversione in array, gestione di elementi null, indici validi/non validi, aggiunta/rimozione multipla, uguaglianza e hashCode. Include numerosi test dettagliati per ogni metodo --> *90 Tests*
+- **TestListIteratorEmpty.java**: Test per ListIterator su una lista vuota, focalizzandosi sul comportamento dell'iteratore in assenza di elementi --> *15 Tests*
+- **TestListIteratorPopulated.java**: Test per ListIterator su una lista popolata, verificando la navigazione bidirezionale, le operazioni di modifica (add, remove, set) e la gestione dello stato interno --> *28 Tests*
+- **TestSubListAdapter.java**: Test dedicati alla classe interna SubList di ListAdapter, assicurando che si comporti come una vista coerente sulla lista genitore e che le modifiche si propaghino correttamente --> *60 Tests*
+- **AllTestsSuite.java**: Una suite JUnit che aggrega tutti i test sopra menzionati per un'esecuzione combinata 
+- **TestRunner.java**: Un'utility per eseguire la AllTestsSuite da riga di comando e presentare i risultati in modo leggibile 
 
 ### Aspetti Coperti dai Test
 
