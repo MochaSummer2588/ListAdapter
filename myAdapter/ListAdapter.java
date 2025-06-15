@@ -85,7 +85,6 @@ public class ListAdapter implements HList
      *
      * @param index indice al quale l'elemento specificato deve essere inserito
      * @param element elemento da inserire
-     * @throws IllegalArgumentException se qualche proprietà dell'elemento impedisce che sia aggiunto a questa lista
      * @throws IndexOutOfBoundsException se l'indice è fuori intervallo (index &lt; 0 || index &gt; size())
      */
     public void add(int index, Object element)                  
@@ -110,10 +109,6 @@ public class ListAdapter implements HList
      *
      * @param o elemento di cui deve essere assicurata la presenza in questa collezione
      * @return true se questa collezione è cambiata come risultato della chiamata
-     * @throws myExceptions.UnsupportedOperationException se l'operazione add non è supportata da questa collezione
-     * @throws ClassCastException se la classe dell'elemento specificato impedisce che sia aggiunto a questa collezione
-     * @throws NullPointerException se l'elemento specificato è null e questa collezione non permette elementi null
-     * @throws IllegalArgumentException se qualche proprietà dell'elemento impedisce che sia aggiunto a questa collezione
      */
     public boolean add(Object o)                            
     {
@@ -130,10 +125,7 @@ public class ListAdapter implements HList
      *
      * @param c collezione contenente elementi da aggiungere a questa collezione
      * @return true se questa collezione è cambiata come risultato della chiamata
-     * @throws myExceptions.UnsupportedOperationException se l'operazione addAll non è supportata da questa collezione
-     * @throws ClassCastException se la classe di un elemento della collezione specificata impedisce che sia aggiunto a questa collezione
-     * @throws NullPointerException se la collezione specificata contiene uno o più elementi null e questa collezione non permette elementi null
-     * @throws IllegalArgumentException se qualche proprietà di un elemento della collezione specificata impedisce che sia aggiunto a questa collezione
+     * @throws NullPointerException se la collezione specificata e' null
      */
     public boolean addAll(HCollection c)                            
     {
@@ -165,10 +157,7 @@ public class ListAdapter implements HList
      * @param index indice al quale inserire il primo elemento dalla collezione specificata
      * @param c collezione contenente elementi da aggiungere a questa lista
      * @return true se questa lista è cambiata come risultato della chiamata
-     * @throws myExceptions.UnsupportedOperationException se l'operazione addAll non è supportata da questa lista
-     * @throws ClassCastException se la classe di un elemento della collezione specificata impedisce che sia aggiunto a questa lista
-     * @throws NullPointerException se la collezione specificata contiene uno o più elementi null e questa lista non permette elementi null
-     * @throws IllegalArgumentException se qualche proprietà di un elemento della collezione specificata impedisce che sia aggiunto a questa lista
+     * @throws NullPointerException se la collezione specificata e' null
      * @throws IndexOutOfBoundsException se l'indice è fuori intervallo (index &lt; 0 || index &gt; size())
      */
     public boolean addAll(int index, HCollection c) 
@@ -202,8 +191,6 @@ public class ListAdapter implements HList
      * {@inheritDoc}
      * Rimuove tutti gli elementi da questa collezione (operazione opzionale).
      * La collezione sarà vuota dopo che questo metodo ritorna.
-     *
-     * @throws myExceptions.UnsupportedOperationException se l'operazione clear non è supportata da questa collezione
      */
     public void clear() 
     {
@@ -218,8 +205,6 @@ public class ListAdapter implements HList
      *
      * @param o elemento di cui verificare la presenza in questa collezione
      * @return true se questa collezione contiene l'elemento specificato
-     * @throws ClassCastException se il tipo dell'elemento specificato è incompatibile con questa collezione
-     * @throws NullPointerException se l'elemento specificato è null e questa collezione non permette elementi null
      */
     public boolean contains(Object o) 
     {
@@ -232,8 +217,7 @@ public class ListAdapter implements HList
      *
      * @param c collezione da verificare per il contenimento in questa collezione
      * @return true se questa collezione contiene tutti gli elementi della collezione specificata
-     * @throws ClassCastException se i tipi di uno o più elementi nella collezione specificata sono incompatibili con questa collezione
-     * @throws NullPointerException se la collezione specificata contiene uno o più elementi null e questa collezione non permette elementi null
+     * @throws NullPointerException se la collezione specificata e' null
      */
     public boolean containsAll(HCollection c) 
     {
@@ -363,8 +347,6 @@ public class ListAdapter implements HList
      * @param o elemento da cercare
      * @return l'indice della prima occorrenza dell'elemento specificato in questa lista,
      *         o -1 se questa lista non contiene l'elemento
-     * @throws ClassCastException se il tipo dell'elemento specificato è incompatibile con questa lista
-     * @throws NullPointerException se l'elemento specificato è null e questa lista non permette elementi null
      */
     public int indexOf(Object o)                      
     {
@@ -404,8 +386,6 @@ public class ListAdapter implements HList
      * @param o elemento da cercare
      * @return l'indice dell'ultima occorrenza dell'elemento specificato in questa lista,
      *         o -1 se questa lista non contiene l'elemento
-     * @throws ClassCastException se il tipo dell'elemento specificato è incompatibile con questa lista
-     * @throws NullPointerException se l'elemento specificato è null e questa lista non permette elementi null
      */
     public int lastIndexOf(Object o) 
     {
@@ -449,7 +429,6 @@ public class ListAdapter implements HList
      *
      * @param index l'indice dell'elemento da rimuovere
      * @return l'elemento che è stato rimosso dalla lista
-     * @throws myExceptions.UnsupportedOperationException se l'operazione remove non è supportata da questa lista
      * @throws IndexOutOfBoundsException se l'indice è fuori intervallo (index &lt; 0 || index &gt;= size())
      */
     public Object remove(int index) 
@@ -475,9 +454,6 @@ public class ListAdapter implements HList
      *
      * @param o elemento da rimuovere da questa collezione, se presente
      * @return true se un elemento è stato rimosso come risultato di questa chiamata
-     * @throws ClassCastException se il tipo dell'elemento specificato è incompatibile con questa collezione
-     * @throws NullPointerException se l'elemento specificato è null e questa collezione non permette elementi null
-     * @throws myExceptions.UnsupportedOperationException se l'operazione remove non è supportata da questa collezione
      */
     public boolean remove(Object o) 
     {
@@ -493,9 +469,7 @@ public class ListAdapter implements HList
      *
      * @param c collezione contenente elementi da rimuovere da questa collezione
      * @return true se questa collezione è cambiata come risultato della chiamata
-     * @throws myExceptions.UnsupportedOperationException se l'operazione removeAll non è supportata da questa collezione
-     * @throws ClassCastException se i tipi di uno o più elementi in questa collezione sono incompatibili con la collezione specificata
-     * @throws NullPointerException se questa collezione contiene uno o più elementi null e la collezione specificata non supporta elementi null
+     * @throws NullPointerException se la collezione passata come parametro e' "null"
      */
     public boolean removeAll(HCollection c) 
     {
@@ -527,9 +501,7 @@ public class ListAdapter implements HList
      *
      * @param c collezione contenente elementi da mantenere in questa collezione
      * @return true se questa collezione è cambiata come risultato della chiamata
-     * @throws myExceptions.UnsupportedOperationException se l'operazione retainAll non è supportata da questa collezione
-     * @throws ClassCastException se i tipi di uno o più elementi in questa collezione sono incompatibili con la collezione specificata
-     * @throws NullPointerException se questa collezione contiene uno o più elementi null e la collezione specificata non supporta elementi null
+     * @throws NullPointerException se la collezione passata come parametro e' "null"
      */
     public boolean retainAll(HCollection c) 
     {
@@ -563,10 +535,6 @@ public class ListAdapter implements HList
      * @param index indice dell'elemento da sostituire
      * @param element elemento da memorizzare alla posizione specificata
      * @return l'elemento precedentemente alla posizione specificata
-     * @throws myExceptions.UnsupportedOperationException se l'operazione set non è supportata da questa lista
-     * @throws ClassCastException se la classe dell'elemento specificato impedisce che sia aggiunto a questa lista
-     * @throws NullPointerException se l'elemento specificato è null e questa lista non permette elementi null
-     * @throws IllegalArgumentException se qualche proprietà dell'elemento impedisce che sia aggiunto a questa lista
      * @throws IndexOutOfBoundsException se l'indice è fuori intervallo (index &lt; 0 || index &gt;= size())
      */
     public Object set(int index, Object element) 
@@ -646,7 +614,6 @@ public class ListAdapter implements HList
      *
      * @param a l'array in cui gli elementi della collezione devono essere memorizzati, se è abbastanza grande
      * @return un array contenente tutti gli elementi in questa collezione
-     * @throws ArrayStoreException se il tipo runtime dell'array specificato non è un supertipo del tipo runtime di ogni elemento in questa collezione
      * @throws NullPointerException se l'array specificato è null
      */
     public Object[] toArray(Object[] a) 

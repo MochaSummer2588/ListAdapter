@@ -39,9 +39,9 @@ public interface HIterator
      * è non specificato se la collezione sottostante viene modificata durante
      * l'iterazione in qualsiasi modo diverso dalla chiamata di questo metodo.
      * 
-     * @throws UnsupportedOperationException se l'operazione remove non è
+     * @throws myExceptions.UnsupportedOperationException se l'operazione remove non è
      *         supportata da questo iteratore.
-     * @throws IllegalStateException se il metodo next non è ancora stato
+     * @throws myExceptions.IllegalStateException se il metodo next non è ancora stato
      *         chiamato, oppure il metodo remove è già stato chiamato dopo
      *         l'ultima chiamata al metodo next.
      */

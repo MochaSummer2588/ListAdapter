@@ -146,6 +146,9 @@ public class ListIterator implements HListIterator
     /**
      * Rimuove dalla collezione sottostante l'ultimo elemento restituito
      * dall'iteratore.
+     * @throws IllegalStateException se né next né previous sono stati chiamati,
+     *         oppure remove o add sono stati chiamati dopo l'ultima chiamata
+     *         a next o previous.
      */
     public void remove() 
     {
@@ -165,6 +168,11 @@ public class ListIterator implements HListIterator
     /**
      * Sostituisce l'ultimo elemento restituito da next() o previous() con
      * l'elemento specificato.
+     * @param o l'elemento con cui sostituire l'ultimo elemento restituito da
+     *          next o previous.
+     * @throws myExceptions.IllegalStateException se né next né previous sono stati chiamati,
+     *         oppure remove o add sono stati chiamati dopo l'ultima chiamata
+     *         a next o previous.
      */
     public void set(Object o) 
     {
@@ -177,6 +185,7 @@ public class ListIterator implements HListIterator
     
     /**
      * Inserisce l'elemento specificato nella lista.
+     * @param o l'elemento da inserire.
      */
     public void add(Object o) 
     {
