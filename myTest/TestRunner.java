@@ -9,6 +9,8 @@ import org.junit.runner.notification.Failure;
 /**
  * TestRunner per eseguire tutti i test JUnit da linea di comando.
  * Fornisce informazioni su: numero test eseguiti, falliti e tempo di esecuzione.
+ * Versione JUnit: **JUnit 4.13.2**
+ * Versione Hamcrest: **Hamcrest 1.3**
  */
 public class TestRunner 
 {

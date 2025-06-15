@@ -31,6 +31,8 @@ import org.junit.runners.Suite;
  * <p>
  * Non contiene logica di test propria, ma funge da contenitore per l'organizzazione e l'esecuzione collettiva
  * delle singole suite di test.
+ * Versione JUnit: **JUnit 4.13.2**
+ * Versione Hamcrest: **Hamcrest 1.3**
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({

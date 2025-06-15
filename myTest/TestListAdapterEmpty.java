@@ -21,6 +21,8 @@ import java.util.Vector; // Necessario per testare l'interazione con Vector se u
  * senza lanciare eccezioni inattese o restituire risultati errati. Si verifica che le operazioni di aggiunta inizializzino correttamente la lista,
  * che le ricerche e rimozioni su elementi inesistenti siano sicure, e che le eccezioni siano lanciate dove previsto.
  * La separazione dai test su liste popolate permette di isolare i comportamenti di bordo e prevenire regressioni.
+ * Versione JUnit: **JUnit 4.13.2**
+ * Versione Hamcrest: **Hamcrest 1.3**
  */
 public class TestListAdapterEmpty
 {

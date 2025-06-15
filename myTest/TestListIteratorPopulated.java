@@ -22,6 +22,8 @@ import myExceptions.IllegalStateException;
  * rispettando le specifiche delle interfacce Java Collections per la navigazione bidirezionale, la modifica sicura della lista,
  * la gestione dello stato interno (cursore, lastReturned), e la robustezza contro sequenze di operazioni miste e input errati.
  * La separazione tra lista popolata e vuota permette di coprire sia i casi d'uso tipici che quelli di bordo.
+ * Versione JUnit: **JUnit 4.13.2**
+ * Versione Hamcrest: **Hamcrest 1.3**
  */
 public class TestListIteratorPopulated 
 {

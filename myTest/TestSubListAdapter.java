@@ -21,6 +21,8 @@ import myAdapter.*;
  * Si verifica la coerenza tra sottolista e lista padre, la corretta gestione di elementi null, la robustezza contro input errati,
  * e la conformità alle specifiche delle interfacce Java Collections.
  * La divisione tra test di accesso, modifica e interazione con la lista padre permette di coprire tutti i possibili scenari d'uso e di errore.
+ * Versione JUnit: **JUnit 4.13.2**
+ * Versione Hamcrest: **Hamcrest 1.3**
  */
 public class TestSubListAdapter 
 {

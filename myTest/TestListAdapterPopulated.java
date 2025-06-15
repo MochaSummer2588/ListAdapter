@@ -27,6 +27,8 @@ import java.util.Random;
  * sia nei casi standard che nei casi limite. Si verifica la corretta gestione di elementi null, duplicati, inserimenti/rimozioni in posizioni arbitrarie,
  * la propagazione delle modifiche, la robustezza contro input errati (indici fuori limite, collezioni null), e la coerenza tra metodi correlati.
  * La divisione tra lista popolata e vuota permette di isolare i comportamenti attesi in condizioni realistiche e di bordo.
+ * Versione JUnit: **JUnit 4.13.2**
+ * Versione Hamcrest: **Hamcrest 1.3**
  */
 
 public class TestListAdapterPopulated
