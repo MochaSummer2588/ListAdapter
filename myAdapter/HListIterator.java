@@ -1,3 +1,5 @@
+//Alberto Bortoletto 2101761
+
 package myAdapter;
 /**
  * Un iteratore per liste che permette al programmatore di attraversare la lista
